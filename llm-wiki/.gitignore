@@ -1,0 +1,10 @@
+site/
+.venv/
+__pycache__/
+*.pyc
+
+# Obsidian keeps workspace state and caches here; the useful settings are committed
+# explicitly (see README), the rest is per-machine noise.
+wiki/.obsidian/workspace*.json
+wiki/.obsidian/cache
+wiki/.trash/
