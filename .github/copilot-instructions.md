@@ -15,42 +15,71 @@ worse than useless.
 |---|---|---|
 | **Raw sources** | `inbox/` → `raw/` | Immutable. Never edited, never summarised in place. If a page and a source disagree, the source wins. |
 | **The wiki** | `wiki/` | Everything you write. Short linked pages, one fact in one place. |
-| **The schema** | `.github/` | These instructions. Changing them changes how everything is written. |
+| **The schema** | `schema.yml` + `.github/` | The page types, and these instructions. Changing them changes how everything is written. |
 
-## The three operations
+## The four operations
 
 | Operation | Trigger | What it does |
 |---|---|---|
+| **Note** | `/note` | Write down something the owner knows, with no document behind it. The fast path. |
 | **Ingest** | `/ingest` | Read unprocessed material, fold it into the pages it affects, file the original, log it. |
 | **Query** | `/query` | Answer a question from the pages, with links. A durable answer becomes a page. |
 | **Lint** | `/lint` | Re-read the wiki looking for contradictions, staleness, orphans, and gaps. |
 
-Each has a prompt file in `.github/prompts/`. Follow it rather than improvising.
+Nothing enters or leaves the wiki except through these four. Each has a prompt file in
+`.github/prompts/` — follow it rather than improvising.
+
+`/note` and `/ingest` differ in what they take, not in what they produce. Ingest starts from a
+document and must preserve it in `raw/`. Note starts from the owner's own words, which never had
+a document, and anchors them in the month's owner-notes source page instead. Both end with pages
+that cite where they came from.
 
 ## Page types
 
-Every page has exactly one type, and lives in the folder matching it.
+Every page has exactly one type, and lives in the folder matching it. This table is generated
+from `schema.yml` — if you need to change it, change that file and run `make schema`.
 
+<!-- schema-types:start GENERATED from schema.yml by `make schema` — do not edit -->
 | Type | Folder | Holds |
 |---|---|---|
 | `project` | `wiki/projects/` | A piece of work with a goal and an end. What it is for, where it stands, who is involved. |
 | `system` | `wiki/systems/` | A thing that exists and keeps existing — a service, a tool, a process. How it works, how it fails. |
-| `decision` | `wiki/decisions/` | One decision: what was chosen, what was rejected, why, and whether it still holds. |
+| `decision` | `wiki/decisions/` | One decision — what was chosen, what was rejected, why, and whether it still holds. |
 | `person` | `wiki/people/` | Someone you work with. Role, context, what they own, how to work with them. |
 | `org` | `wiki/orgs/` | A company, team, or vendor. What they do, your relationship to them. |
 | `topic` | `wiki/topics/` | A concept that keeps coming up and does not fit the above. |
-| `source` | `wiki/sources/` | What one piece of raw material said, and what it changed. One per item in `raw/`. |
+| `source` | `wiki/sources/` | What one piece of raw material said, and what it changed. One per item in raw/, plus the monthly owner-notes pages. |
+<!-- schema-types:end -->
 
-Two special pages are not typed:
+Three special pages are not typed:
 
-- **`wiki/index.md`** — the catalogue. **Generated** by `make index`; never edit it by hand.
+- **`wiki/index.md`** — the catalogue. **Generated**; never edit it by hand.
+- **`wiki/tags.md`** — every tag and what carries it. **Generated**; never edit it by hand.
 - **`wiki/log.md`** — append-only history of every operation. Add entries at the top; never edit or delete an existing one.
 
-If something genuinely fits no type, put it in `wiki/topics/` and mention it — do not invent a
-new type on your own. Adding a type means adding an instruction file, a template, and a folder.
+**Do not invent a new type.** Adding one fragments the wiki, and it is the owner's call. If
+something genuinely fits no type, put it in `wiki/topics/` and say so.
+
+### Choosing a type — do not ask, decide
+
+Work down this ladder and take the first match:
+
+1. Does it have a goal and an end? → **project**
+2. Does it keep running and need maintaining? → **system**
+3. Was it a choice between options, with something rejected? → **decision**
+4. Is it a person, or a company/team/vendor? → **person** / **org**
+5. Is it what one document said? → **source**
+6. Otherwise → **topic**
+
+Say in one line which you chose and why. Do not stop to ask. If you chose wrong, the owner runs
+`make move PAGE=… TYPE=…`, which re-types the page and rewrites every link to it — so a wrong
+choice costs one command, and a blocking question costs the owner their train of thought.
 
 ## Frontmatter (required on every page)
 
+Generated from `schema.yml`:
+
+<!-- schema-frontmatter:start GENERATED from schema.yml by `make schema` — do not edit -->
 ```yaml
 ---
 title: Human readable name
@@ -62,8 +91,31 @@ tags: [lowercase-kebab, another]
 sources: [sources/some-source.md]   # source pages this page draws on; omit if none
 ---
 ```
+<!-- schema-frontmatter:end -->
 
 `updated` changes every time you touch the page. `created` never changes.
+
+Two optional keys:
+
+- `status:` — `stub`, or `superseded` with a link to what replaced it.
+- `origin: owner` — **on source pages only.** Marks a source page that records what the owner
+  said rather than a document, so `make lint` does not look for a file in `raw/` that was never
+  going to exist. Set it on owner-notes pages and nothing else.
+
+## Provenance: where a claim is allowed to come from
+
+Three origins, and every claim on every page has exactly one:
+
+| Origin | How it is recorded |
+|---|---|
+| A document | It lives in `raw/`, has a source page, and pages citing it list that page in `sources:` |
+| The owner | It goes in `wiki/sources/YYYY-MM-owner-notes.md` with a date, and pages citing it list that page in `sources:` |
+| Another page | Link to it. Do not restate it. |
+
+The monthly owner-notes page is what makes `/note` safe. Without it, "the owner told me" would be
+an unciteable claim indistinguishable from something you made up. With it, every claim in the
+wiki traces to a dated, immutable line somewhere — and that traceability is the entire reason
+this wiki is worth more than a folder of notes. **Append to it, never rewrite it.**
 
 ## Cross-cutting rules
 
@@ -72,12 +124,15 @@ sources: [sources/some-source.md]   # source pages this page draws on; omit if n
 - **Link generously, with plain relative Markdown links**: `[Acme](../orgs/acme.md)`. Not
   wikilinks — relative links work in both Obsidian and the built site with no plugins.
 - **A link to a page that does not exist yet is a bug.** Either create the page (a stub with
-  frontmatter and one line is fine) or do not link it. `make lint` catches these.
+  frontmatter and one line is fine) or do not link it. `make lint` fails on these.
+- **Never edit inside a generated block.** Anything between `<!-- name:start -->` and
+  `<!-- name:end -->` is overwritten by `make index` or `make schema`. Backlink blocks at the
+  foot of a page are generated — the links you write by hand go in `## Related`.
 - **Write for yourself in two years.** Expand abbreviations on first use. Say when something was
   true. "Currently" is banned — write the date instead.
 - **Attribute uncertainty.** Use "as of {date}", "according to {source}", "unconfirmed:".
 - **Short pages beat long pages.** When a page passes roughly 400 words, look for a section that
-  wants to be its own page.
+  wants to be its own page. `make lint` warns at that point.
 - **Never delete knowledge silently.** If something turns out to be wrong, correct it and note the
   correction in `wiki/log.md`. If a page is obsolete, mark it in the frontmatter with
   `status: superseded` and link to what replaced it.
@@ -85,8 +140,16 @@ sources: [sources/some-source.md]   # source pages this page draws on; omit if n
 ## After any change — mandatory
 
 1. ☐ Every page you touched has `updated:` set to today
-2. ☐ Every new page is linked from at least one other page (otherwise it is an orphan nobody will find)
-3. ☐ `wiki/log.md` has an entry describing the operation
-4. ☐ `make lint` passes — this runs `make index` and fails if the catalogue is stale
+2. ☐ Every new page is linked from at least one other page — from the body of a real page, not
+   just the index, which links everything by construction and so proves nothing
+3. ☐ Every claim traces to a source page, the owner-notes page, or another page
+4. ☐ `wiki/log.md` has an entry describing the operation
+5. ☐ `make lint` passes — it regenerates the index, tags and backlinks, then checks
 
 Run `make lint` before telling the owner you are done. Not "I believe it is consistent" — run it.
+
+**Errors fail; warnings do not.** An error means the wiki is wrong — a broken link, a misfiled
+page, a claim citing a source that does not exist. Fix every one before you report back. A
+warning means the wiki is unfinished — an unlinked page, a placeholder summary, an ageing stub.
+Report warnings to the owner, fix the ones you created, and never silence one by deleting the
+thing it points at.

@@ -22,11 +22,11 @@ What "done" means.
 
 ## People
 
-- [Name](../people/name.md) — their role in this
+- [Name](../people/{slug}.md) — their role in this
 
 ## Decisions
 
-- [Decision](../decisions/slug.md) — what it settled
+- [Decision](../decisions/{slug}.md) — what it settled
 
 ## How it is going
 

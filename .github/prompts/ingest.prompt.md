@@ -5,16 +5,20 @@ description: Fold new material from inbox/ (or pasted text) into the wiki, then 
 
 # Ingest
 
-Bring new material into the wiki. Work through the steps in order and do not skip the
-confirmation step — a wrong ingest is expensive to unpick.
+Bring new material into the wiki — a document, an export, a set of minutes, anything with words
+that were not yours. For something the owner simply knows, with no document behind it, use
+`/note` instead: it skips the `raw/` machinery, which exists to preserve wording that would
+otherwise be lost.
 
 ## 1. Find the material
 
 Run `make inbox` to list unprocessed files.
 
 - **Files in `inbox/`** — process all of them unless told otherwise.
-- **Text the owner pasted or dictated** — treat it as a source too. Before anything else, write
-  it verbatim to `inbox/YYYY-MM-DD-slug.md` so the raw record exists. Do not tidy it up.
+- **Text the owner pasted or dictated** — treat it as a source too, if the exact wording matters.
+  Before anything else, write it verbatim to `inbox/YYYY-MM-DD-slug.md` so the raw record exists.
+  Do not tidy it up. If the wording does not matter — the owner telling you a fact in their own
+  words — that is a `/note`, not an ingest. Say so and switch.
 
 If the inbox is empty and nothing was pasted, say so and stop.
 
@@ -27,9 +31,19 @@ For each item, read it fully, then establish:
   Check `wiki/index.md` first, then grep for the proper nouns in the material.
 - What is genuinely new versus a restatement of what you already have?
 
-## 3. Propose before writing
+## 3. Propose in proportion to the risk
 
-Show the owner a short plan and wait for a reply:
+A wrong ingest is expensive to unpick, so a plan is worth it — but not every ingest carries that
+risk, and stopping for approval on a two-page source teaches the owner that the wiki is slow.
+
+**Write first, report after**, when all of these hold:
+
+- it touches no more than about three pages
+- it contradicts nothing already written
+- it creates no page type you had to think hard about
+- nothing in it looks sensitive on a person or org page
+
+**Propose and wait** when any of them fails — especially a contradiction. Show a short plan:
 
 ```
 Source: <what it is, date>
@@ -45,7 +59,9 @@ Questions:
 ```
 
 Ask about anything genuinely ambiguous. Do not ask about things you can decide yourself —
-filing, naming, and wording are your job.
+filing, naming, and wording are your job. **Which type a page should be is not a question**:
+use the ladder in `copilot-instructions.md`, say in one line what you chose, and let the owner
+correct it with `make move`, which re-types the page and rewrites every link to it.
 
 ## 4. Write
 
@@ -72,7 +88,9 @@ The inbox should be empty when you finish.
 ## 6. Record and verify
 
 - Add an entry at the top of `wiki/log.md` (see the format in that file).
-- Run `make lint`. Fix everything it reports.
+- Run `make lint`. **Fix every error.** Report the warnings rather than fixing them silently —
+  an unlinked page or a placeholder summary is often a real question about what the owner wants,
+  and never a reason to delete what the warning points at.
 - Report back: what you created, what you updated, what contradicts what, and what you
   still need from the owner.
 
@@ -84,5 +102,8 @@ a date beats an invented paragraph.
 **When material is huge**, do not try to capture all of it. Capture what is decision-relevant and
 say in the source page what you left out, so a future you knows to reopen the original.
 
-**When you are unsure whether something is a project, a system, or a topic**, ask. Moving pages
-later is cheap; a wiki where the same kind of thing lives in three folders is not.
+**When you are unsure whether something is a project, a system, or a topic**, use the ladder and
+move on. Moving pages later really is cheap now — `make move` re-types the page and rewrites
+every inbound link — so the cost of guessing wrong is one command, while the cost of asking is
+the owner's attention. What is still not cheap is a wiki where the same kind of thing lives in
+three folders, so apply the ladder consistently rather than case by case.

@@ -18,7 +18,7 @@ What the arrangement is, since when, and who holds it on each side.
 
 ## People
 
-- [Name](../people/name.md) — their role there
+- [Name](../people/{slug}.md) — their role there
 
 ## What they do
 

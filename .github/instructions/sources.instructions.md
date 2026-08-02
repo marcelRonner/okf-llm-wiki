@@ -11,6 +11,9 @@ File naming: `YYYY-MM-DD-short-slug.md`, where the date is the date of the mater
 the meeting happened, when the document was written), not the date you ingested it. If the
 material has no date, use the ingest date and say so.
 
+There is one other kind of source page — the monthly **owner notes** — described at the bottom
+of this file. Everything above it describes document sources.
+
 ```markdown
 # {What this source is}
 
@@ -59,3 +62,28 @@ What the source raised but did not settle. Questions for the owner go here.
   possible to ask "where did this claim come from?" later.
 - If a source turns out to be worthless, still create the page and say so in one line. Otherwise
   you will re-ingest it in six months.
+
+## Owner notes — the one source without a document
+
+`wiki/sources/YYYY-MM-owner-notes.md`, one per month, created by `/note`. It records things the
+owner said directly, which never had a document behind them and so have nothing to file in
+`raw/`.
+
+It is a source page because the alternative is worse. Without it, a fact the owner mentioned in
+passing would sit on a page citing nothing, indistinguishable from a fact the assistant invented
+— and the ability to tell those apart is the whole reason this wiki keeps sources at all.
+
+It differs from a document source in four ways, and only these four:
+
+- `origin: owner` in the frontmatter, which exempts it from the `raw/` pairing check. Without
+  that key `make lint` reports E5 and is right to.
+- It **accumulates**. A document source is written once; this one gets an entry appended every
+  time the owner notes something in that month. Append at the bottom, under a `## YYYY-MM-DD`
+  heading, so it reads chronologically.
+- Entries are **quoted as said**, not summarised. The owner's words are the primary record here,
+  exactly as a PDF's words are in `raw/`. Your writing goes on the derived page.
+- It is **append-only**, like anything in `raw/`. If an entry turns out to be wrong, add a dated
+  entry saying so and correct the derived page. Never edit or delete what was said.
+
+Otherwise it behaves normally: derived pages cite it in `sources:`, and it records what it
+changed.

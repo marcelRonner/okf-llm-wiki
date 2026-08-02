@@ -16,7 +16,7 @@ One sentence: what it is, where it came from, and its date.
 
 | | |
 |---|---|
-| **File** | [`raw/FILENAME`](../../raw/FILENAME) |
+| **File** | [`raw/FILENAME`](../../raw/{FILENAME}) |
 | **Kind** | meeting notes / document / article / conversation |
 | **Date** | {{DATE}} |
 | **Author** |  |
@@ -30,7 +30,7 @@ Summary, not interpretation. Preserve numbers, names, dates, commitments.
 
 ## What this changed
 
-- Created [Page](../projects/slug.md) — why
+- Created [Page](../projects/{slug}.md) — why
 
 ## Unresolved
 

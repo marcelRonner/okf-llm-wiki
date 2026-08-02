@@ -25,6 +25,9 @@ and has no context. No heading above it.
 
 ## Related
 - [Another page](../topics/thing.md) — why it is related, in a few words
+
+<!-- backlinks:start -->   ← GENERATED. Never write inside this block; `make index` overwrites it.
+<!-- backlinks:end -->
 ```
 
 Order matters: the orienting sentence comes first, before any detail. Someone skimming should
@@ -65,3 +68,7 @@ Remove the marker once the page says something useful on its own.
 - Do not write a summary of the wiki inside a page. That is what `wiki/index.md` is for.
 - Do not add a "Last updated" line in the body — that is `updated:` in the frontmatter.
 - Do not use headings as facts ("## Migration failed") — headings name topics, bodies make claims.
+- Do not write inside a `<!-- name:start -->` … `<!-- name:end -->` block. `make index` and
+  `make schema` overwrite them wholesale, so anything you put there is lost without warning.
+  Backlinks are generated; the links you choose go in **Related**, and they are what the orphan
+  check actually counts.

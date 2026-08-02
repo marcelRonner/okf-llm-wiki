@@ -22,7 +22,7 @@ Observed preferences only — never inferred character.
 
 ## Involved in
 
-- [Project](../projects/slug.md) — their role in it
+- [Project](../projects/{slug}.md) — their role in it
 
 ## History
 

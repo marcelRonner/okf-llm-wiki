@@ -1,0 +1,86 @@
+# The page types of this wiki — the single authoritative definition.
+#
+# Everything else is derived from this file or checked against it:
+#
+#   scripts/wikilib.py                 loads it (no hardcoded type list anywhere)
+#   .github/copilot-instructions.md    its page-type table and frontmatter example are GENERATED
+#   README.md                          its layout tree is GENERATED
+#   wiki/<folder>/, templates/<type>.md  scaffolded by `make new-type`
+#
+# Run `make schema` after editing. `make build` fails if the generated blocks are stale, so
+# the schema and the assistant's instructions cannot drift apart.
+#
+# Fields:
+#   folder            where pages of this type live, under wiki/
+#   label             heading used for this type in the generated index
+#   holds             one sentence for the assistant: what belongs here (goes in the LLM table)
+#   short             a few words for the README layout tree
+#   dated_filenames   true if filenames are prefixed YYYY-MM-DD- (things that sort by date)
+#   instructions      the file in .github/instructions/ that governs this type (optional)
+
+types:
+  project:
+    folder: projects
+    label: Projects
+    holds: A piece of work with a goal and an end. What it is for, where it stands, who is involved.
+    short: work with a goal and an end
+    dated_filenames: false
+    instructions: projects-systems.instructions.md
+
+  system:
+    folder: systems
+    label: Systems
+    holds: A thing that exists and keeps existing — a service, a tool, a process. How it works, how it fails.
+    short: things that keep running and need maintaining
+    dated_filenames: false
+    instructions: projects-systems.instructions.md
+
+  decision:
+    folder: decisions
+    label: Decisions
+    holds: One decision — what was chosen, what was rejected, why, and whether it still holds.
+    short: what was chosen, what was rejected, why
+    dated_filenames: true
+    instructions: decisions.instructions.md
+
+  person:
+    folder: people
+    label: People
+    holds: Someone you work with. Role, context, what they own, how to work with them.
+    short: who does what
+    dated_filenames: false
+    instructions: people-orgs.instructions.md
+
+  org:
+    folder: orgs
+    label: Organisations
+    holds: A company, team, or vendor. What they do, your relationship to them.
+    short: companies, teams, vendors
+    dated_filenames: false
+    instructions: people-orgs.instructions.md
+
+  topic:
+    folder: topics
+    label: Topics
+    holds: A concept that keeps coming up and does not fit the above.
+    short: concepts that fit nowhere else
+    dated_filenames: false
+    instructions: pages.instructions.md
+
+  source:
+    folder: sources
+    label: Sources
+    holds: What one piece of raw material said, and what it changed. One per item in raw/, plus the monthly owner-notes pages.
+    short: one page per item in raw/, plus monthly owner notes
+    dated_filenames: true
+    instructions: sources.instructions.md
+
+# --------------------------------------------------------------------------------------------
+# Thresholds the mechanical checks use. Changing a number here changes what `make lint` warns
+# about — no code edit needed.
+
+limits:
+  summary_chars: 200        # summaries longer than this crowd the index
+  page_words: 400           # past this, look for a section that wants to be its own page
+  stub_days: 90             # a stub older than this is either worth filling or worth deleting
+  placeholder: "TODO"       # a summary still containing this was never written

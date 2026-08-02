@@ -22,7 +22,7 @@ One sentence: what it does and who depends on it.
 
 ## Who owns it
 
-- [Name](../people/name.md) — and what "owns" means here
+- [Name](../people/{slug}.md) — and what "owns" means here
 
 ## Open questions
 

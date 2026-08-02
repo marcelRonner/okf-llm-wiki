@@ -8,10 +8,12 @@ summary: Catalogue of every page in this wiki, grouped by type.
 
 # Index
 
-Every page in the wiki. 1 pages, 0 of them stubs, last built 2026-08-01.
+Every page in the wiki. 2 pages, 0 of them stubs, last built 2026-08-02.
 
-See [Log](log.md) for what changed and when.
+See [Tags](tags.md) for the same pages grouped by subject, and [Log](log.md) for what changed
+and when.
 
-## Topics (1)
+## Topics (2)
 
-- [How this wiki works](topics/how-this-wiki-works.md) — The three layers, the three operations, and the rules that keep this wiki trustworthy.
+- [Checks and finding things](topics/checks-and-finding-things.md) — What the wiki checks automatically, why errors and warnings are separated, and the three ways to find a page.
+- [How this wiki works](topics/how-this-wiki-works.md) — The three layers, the four operations, and the rules that keep this wiki trustworthy.

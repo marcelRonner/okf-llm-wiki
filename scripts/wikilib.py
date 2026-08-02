@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Shared helpers for the wiki scripts: paths, frontmatter parsing, link extraction."""
+"""Shared helpers for the wiki scripts: the schema, paths, frontmatter, links."""
 
 from __future__ import annotations
 
 import re
+from datetime import date
 from pathlib import Path
 
 try:
@@ -15,30 +16,37 @@ ROOT = Path(__file__).resolve().parent.parent
 WIKI = ROOT / "wiki"
 INBOX = ROOT / "inbox"
 RAW = ROOT / "raw"
+TEMPLATES = ROOT / "templates"
+SCHEMA_FILE = ROOT / "schema.yml"
 
 INDEX = WIKI / "index.md"
 LOG = WIKI / "log.md"
+TAGS = WIKI / "tags.md"
 
-# type -> folder. The single place this mapping is defined.
-TYPES = {
-    "project": "projects",
-    "system": "systems",
-    "decision": "decisions",
-    "person": "people",
-    "org": "orgs",
-    "topic": "topics",
-    "source": "sources",
-}
+# --------------------------------------------------------------------------- the schema
+# Loaded, never hardcoded. schema.yml is the one place a page type is defined; if you find
+# yourself typing a type name into a script, that is the bug this module exists to prevent.
 
-TYPE_LABELS = {
-    "project": "Projects",
-    "system": "Systems",
-    "decision": "Decisions",
-    "person": "People",
-    "org": "Organisations",
-    "topic": "Topics",
-    "source": "Sources",
-}
+
+def _load_schema() -> dict:
+    if not SCHEMA_FILE.exists():
+        raise SystemExit(f"wikilib: {SCHEMA_FILE.relative_to(ROOT)} is missing — it defines the page types")
+    data = yaml.safe_load(SCHEMA_FILE.read_text(encoding="utf-8")) or {}
+    if not data.get("types"):
+        raise SystemExit("wikilib: schema.yml has no `types:` — the wiki has no page types")
+    for name, spec in data["types"].items():
+        for key in ("folder", "label", "holds", "short"):
+            if not spec.get(key):
+                raise SystemExit(f"wikilib: schema.yml type '{name}' is missing `{key}:`")
+    return data
+
+
+SCHEMA = _load_schema()
+TYPE_INFO: dict[str, dict] = SCHEMA["types"]
+LIMITS: dict = SCHEMA.get("limits", {})
+
+TYPES = {name: spec["folder"] for name, spec in TYPE_INFO.items()}
+TYPE_LABELS = {name: spec["label"] for name, spec in TYPE_INFO.items()}
 
 REQUIRED_KEYS = ("title", "type", "summary", "created", "updated")
 
@@ -46,14 +54,26 @@ FRONTMATTER_RE = re.compile(r"\A---\n(.*?)\n---\n?(.*)\Z", re.DOTALL)
 LINK_RE = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
 
+# Blocks written by the scripts. Their contents are regenerated wholesale, so they are stripped
+# before links are counted — otherwise generated backlinks would make every page look connected
+# and the orphan check would silently pass on everything.
+GENERATED_RE = re.compile(
+    r"<!--\s*(\w+):start[^>]*-->.*?<!--\s*\1:end\s*-->", re.DOTALL | re.IGNORECASE
+)
+
+
+def blank_out(text: str, pattern: re.Pattern) -> str:
+    """Replace matches with the same number of newlines, so line numbers stay correct."""
+    return pattern.sub(lambda m: "\n" * m.group(0).count("\n"), text)
+
 
 class Page:
     """A wiki page with parsed frontmatter."""
 
     def __init__(self, path: Path):
         self.path = path
-        text = path.read_text(encoding="utf-8")
-        match = FRONTMATTER_RE.match(text)
+        self.text = path.read_text(encoding="utf-8")
+        match = FRONTMATTER_RE.match(self.text)
         if match:
             try:
                 self.meta = yaml.safe_load(match.group(1)) or {}
@@ -65,7 +85,7 @@ class Page:
                     self.meta = {}
             self.body = match.group(2)
         else:
-            self.meta, self.body, self.error = {}, text, "missing frontmatter"
+            self.meta, self.body, self.error = {}, self.text, "missing frontmatter"
 
     @property
     def rel(self) -> str:
@@ -79,10 +99,15 @@ class Page:
     def get(self, key, default=None):
         return self.meta.get(key, default)
 
-    def links(self) -> list[tuple[int, str]]:
-        """Real (non-template, non-external) link targets with line numbers."""
-        clean = FENCE_RE.sub(lambda m: "\n" * m.group(0).count("\n"), self.body)
-        offset = len(self.path.read_text(encoding="utf-8").splitlines()) - len(clean.splitlines())
+    def links(self, include_generated: bool = False) -> list[tuple[int, str]]:
+        """Real (non-template, non-external) link targets with line numbers.
+
+        Generated blocks are excluded by default: they are bookkeeping, not editorial links.
+        """
+        clean = blank_out(self.body, FENCE_RE)
+        if not include_generated:
+            clean = blank_out(clean, GENERATED_RE)
+        offset = len(self.text.splitlines()) - len(clean.splitlines())
         out = []
         for lineno, line in enumerate(clean.splitlines(), 1):
             for target in LINK_RE.findall(line):
@@ -97,16 +122,60 @@ class Page:
     def resolve(self, target: str) -> Path:
         return (self.path.parent / target.split("#")[0]).resolve()
 
+    def tags(self) -> list[str]:
+        raw = self.get("tags") or []
+        if isinstance(raw, str):
+            raw = [raw]
+        return [str(t).strip() for t in raw if str(t).strip()]
+
+    def word_count(self) -> int:
+        """Prose words only — frontmatter, code fences and generated blocks do not count."""
+        body = blank_out(blank_out(self.body, FENCE_RE), GENERATED_RE)
+        return len(re.findall(r"\b[\w'-]+\b", body))
+
+    def is_generated(self) -> bool:
+        return self.get("type") in ("index", "log", "tags")
+
 
 def pages(include_special: bool = False) -> list[Page]:
-    """All wiki pages, sorted. index.md and log.md are excluded unless asked for."""
-    special = {INDEX.resolve(), LOG.resolve()}
+    """All wiki pages, sorted. The generated catalogues and the log are excluded by default."""
+    special = {INDEX.resolve(), LOG.resolve(), TAGS.resolve()}
     found = []
     for path in sorted(WIKI.rglob("*.md")):
         if not include_special and path.resolve() in special:
             continue
         found.append(Page(path))
     return found
+
+
+def inbound_links(all_pages: list[Page]) -> dict[Path, list[Page]]:
+    """Which pages link to each page, ignoring generated blocks and the generated catalogues."""
+    incoming: dict[Path, list[Page]] = {p.path.resolve(): [] for p in all_pages}
+    for page in all_pages:
+        for _, target in page.links():
+            resolved = page.resolve(target)
+            if resolved.suffix == ".md" and resolved in incoming and resolved != page.path.resolve():
+                incoming[resolved].append(page)
+    return incoming
+
+
+def as_date(value):
+    if isinstance(value, date):
+        return value
+    try:
+        return date.fromisoformat(str(value))
+    except (TypeError, ValueError):
+        return None
+
+
+def replace_block(text: str, name: str, body: str) -> str:
+    """Swap the contents of a <!-- name:start --> … <!-- name:end --> block."""
+    pattern = re.compile(
+        rf"(<!--\s*{name}:start[^>]*-->\n).*?(\n<!--\s*{name}:end\s*-->)", re.DOTALL
+    )
+    if not pattern.search(text):
+        raise SystemExit(f"wikilib: no <!-- {name}:start --> … <!-- {name}:end --> block to fill")
+    return pattern.sub(lambda m: m.group(1) + body + m.group(2), text)
 
 
 def inbox_items() -> list[Path]:
