@@ -21,7 +21,7 @@ help:
 	@echo "make move PAGE=content/topics/x.md TYPE=project     re-type a page, fixing every link"
 	@echo "make new-type TYPE=meeting                       scaffold a type declared in schema.yml"
 	@echo ""
-	@echo "In Copilot chat: /note, /ingest, /query, /lint"
+	@echo "In Copilot or Claude Code: /note, /ingest, /query, /lint"
 
 ## Restamp the generated blocks that restate schema.yml
 schema:

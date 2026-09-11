@@ -24,6 +24,34 @@ Format:
 
 ---
 
+## 2026-09-11 — Schema change: the instructions moved out of .github/
+
+**Operation:** correction
+**Input:** the owner asked for the instructions and prompts to live somewhere less tied to GitHub
+Copilot, so a second assistant could read them
+**Updated:** `AGENTS.md` (was `.github/copilot-instructions.md`), `.claude/rules/` (was
+`.github/instructions/`), `.claude/commands/` (was `.github/prompts/`)
+**Notes:** No rule changed meaning. This is where they live, not what they say.
+
+`AGENTS.md` is the name every agent tool but Claude Code reads, and `CLAUDE.md` is one line that
+imports it — Claude Code's loader looks only for `CLAUDE.md`, `.claude/CLAUDE.md`,
+`CLAUDE.local.md` and `.claude/rules/`, so without that line the contract would be invisible to
+it. The per-folder rules kept their globs: `applyTo:` became `paths:`, which is the same idea in
+the other tool's dialect. The four operations became `.claude/commands/`, so `/note` and the rest
+still work by name.
+
+`.github/` is now **generated** from those files by `make schema`, and `make build` fails if it has
+drifted. The alternative was two hand-maintained copies of every rule, which is the failure this
+repo already had once and built `schema.yml` to stop: when two statements of the same rule
+disagree, the assistant trusts both and resolves it by rewriting pages. Deleting a rule now also
+deletes its mirror, so Copilot cannot go on loading something that no longer exists.
+
+One gap worth knowing: a `paths:` glob attaches only after a file in that folder has been read, so
+it cannot inform the *first* write to a folder. `AGENTS.md` carries a routing table naming which
+rules file to open for which folder, which is the manual version of the same thing.
+
+---
+
 ## 2026-09-11 — Schema change: the person and org types are gone
 
 **Operation:** correction

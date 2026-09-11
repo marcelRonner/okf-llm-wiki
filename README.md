@@ -25,9 +25,9 @@ make serve         # http://localhost:1313
 Nothing is installed globally beyond those three tools: Dart Sass is a project-local npm
 dependency, and `make` puts `node_modules/.bin` on Hugo's PATH so it is found.
 
-**Open this folder directly in VS Code** (not a parent folder). Copilot only loads
-`.github/copilot-instructions.md`, `.github/instructions/` and `.github/prompts/` from the
-workspace root, so opening a parent leaves the assistant with no instructions at all.
+**Open this folder directly in VS Code** (not a parent folder). Both assistants look for their
+instructions at the workspace root — Copilot in `.github/`, Claude Code in `CLAUDE.md` and
+`.claude/` — so opening a parent leaves you with an assistant that has no instructions at all.
 
 ### Obsidian
 
@@ -41,7 +41,7 @@ This matters: the wiki uses ordinary relative Markdown links so the same files w
 
 ## Daily use
 
-**To write down something you know** — `/note` in Copilot chat, followed by the thing. No file,
+**To write down something you know** — `/note` in Copilot or Claude Code, followed by the thing. No file,
 no inbox, no confirmation round-trip. The assistant works out which page it belongs on, writes
 it, and records what you said verbatim in that month's `content/sources/YYYY-MM-owner-notes.md` so
 the claim has a dated anchor like any other. This is the fast path, and most days it is the only
@@ -80,7 +80,10 @@ content/            the vault, and Hugo's content directory
 templates/          the shape of each page type
 scripts/            index generation and the mechanical checks
 schema.yml          the page types — edit here, run `make schema`
-.github/            the schema in prose: instructions and the operation prompts
+AGENTS.md           the schema in prose: layers, operations, provenance, rules
+CLAUDE.md           one line, importing AGENTS.md for Claude Code
+.claude/            rules/ per-folder writing rules, commands/ the four operations
+.github/            GENERATED mirror of the above, in the layout Copilot reads
 hugo.yaml           the site build: Docsy as a Hugo module, and the theme's settings
 layouts/            the one template this site overrides — see _markup/render-link.html
 go.mod  package.json  pinned versions of the theme and its assets
@@ -125,15 +128,24 @@ if you want that.
 | File | What it governs |
 |---|---|
 | `schema.yml` | **The page types.** The one place they are defined; everything else is generated from it |
-| `.github/copilot-instructions.md` | The schema in prose: layers, operations, provenance, frontmatter, cross-cutting rules |
-| `.github/instructions/pages.instructions.md` | How to write any page |
-| `.github/instructions/projects-systems.instructions.md` | Projects and systems |
-| `.github/instructions/decisions.instructions.md` | Decision records |
-| `.github/instructions/sources.instructions.md` | Source pages, their link to `raw/`, and the owner-notes pages |
-| `.github/prompts/` | `/note`, `/ingest`, `/query`, `/lint` |
+| `AGENTS.md` | The schema in prose: layers, operations, provenance, frontmatter, cross-cutting rules |
+| `CLAUDE.md` | One line. Claude Code reads no `AGENTS.md`, so this imports it |
+| `.claude/rules/pages.md` | How to write any page |
+| `.claude/rules/projects-systems.md` | Projects and systems |
+| `.claude/rules/decisions.md` | Decision records |
+| `.claude/rules/sources.md` | Source pages, their link to `raw/`, and the owner-notes pages |
+| `.claude/commands/` | `/note`, `/ingest`, `/query`, `/lint` |
+| `.github/` | **Generated.** The same instructions in the layout Copilot reads |
 
-Each `.instructions.md` file has an `applyTo:` glob, so Copilot loads only the ones relevant to
-the folder being edited rather than all of them on every request.
+Each rules file carries a `paths:` glob, so only the ones relevant to the folder being edited get
+loaded rather than all of them on every request. Because that glob is spelled `applyTo:` in
+Copilot's dialect and the two tools disagree about where any of this lives, `.github/` is
+generated from the files above by `make schema` — the same treatment as every other restatement
+here. Edit the source; `make build` fails if the mirror has drifted.
+
+The one thing a `paths:` glob cannot do is load a rule *before* the first write to a folder, since
+it attaches only once a file there has been read. `AGENTS.md` carries a short routing table for
+that case.
 
 ## Adding a page type
 
@@ -141,7 +153,7 @@ Still rare — a new type fragments the wiki, so prefer an existing one unless y
 sentence why none fits. But it is now one edit rather than six:
 
 1. Declare it in `schema.yml`
-2. `make new-type TYPE=<type>` — creates the folder, the template and the instruction file
+2. `make new-type TYPE=<type>` — creates the folder, the template and the rules file
 3. Write the TODO sections it left you
 4. `make schema && make lint`
 
