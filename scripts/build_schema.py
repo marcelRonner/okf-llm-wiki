@@ -12,16 +12,18 @@ So the schema is declared once in schema.yml and stamped into the files that nee
     README.md                         the content/ layout tree
     content/<folder>/_index.md        the section pages Hugo builds the sidebar from
 
-This script also mirrors the agent instructions into the layout GitHub Copilot reads. The same
-argument applies one level up: the instructions themselves would otherwise exist twice, in two
-tools' dialects, with nothing checking they agreed. So they are written once in the vendor-neutral
-place and translated here:
+This script also mirrors the per-folder writing rules into the layout GitHub Copilot reads:
 
-    AGENTS.md            -> .github/copilot-instructions.md
-    .claude/rules/       -> .github/instructions/*.instructions.md   (`paths:` -> `applyTo:`)
-    .claude/skills/      -> .github/prompts/*.prompt.md              (adds Copilot's `agent:`)
+    .claude/rules/*.md   -> .github/instructions/*.instructions.md   (`paths:` -> `applyTo:`)
 
 Edit the left-hand side. `make build` fails if the right-hand side has drifted.
+
+That is the *only* thing which still needs mirroring. VS Code reads `AGENTS.md` at the workspace
+root and discovers skills from `.claude/skills/` directly, so the contract and the four operations
+need no copy — they are read where they are written. Path-scoped instructions are the exception:
+the `.claude/rules` location Copilot supports is user-profile only (`~/.claude/rules`), so a
+project's scoped rules have to be restated as `.github/instructions/*.instructions.md`. If Copilot
+ever reads project-level `.claude/rules/`, delete this phase and the mirror with it.
 
 Usage:
     python3 scripts/build_schema.py            # write the generated blocks
@@ -38,7 +40,6 @@ INSTRUCTIONS = ROOT / "AGENTS.md"
 README = ROOT / "README.md"
 
 RULES_DIR = ROOT / ".claude" / "rules"
-SKILLS_DIR = ROOT / ".claude" / "skills"
 COPILOT = ROOT / ".github"
 
 GENERATED_NOTE = (
@@ -65,12 +66,7 @@ def copilot_mirror() -> dict:
     """The .github/ tree, rendered from the Claude-native sources. Keyed by path."""
     out = {}
 
-    # The always-on contract: same text, under the name Copilot looks for.
-    out[COPILOT / "copilot-instructions.md"] = (
-        MIRROR_NOTE.format(source="AGENTS.md") + "\n\n" + INSTRUCTIONS.read_text(encoding="utf-8")
-    )
-
-    # Path-scoped rules. Copilot takes one comma-separated string where Hugo-side YAML has a list.
+    # Path-scoped rules. Copilot takes one comma-separated string where the source YAML has a list.
     for src in sorted(RULES_DIR.glob("*.md")):
         fm, body = split_frontmatter(src.read_text(encoding="utf-8"))
         globs = [ln.strip().lstrip("-").strip() for ln in fm.splitlines() if ln.strip().startswith("-")]
@@ -80,19 +76,6 @@ def copilot_mirror() -> dict:
         out[COPILOT / "instructions" / f"{src.stem}.instructions.md"] = (
             f'---\napplyTo: "{",".join(globs)}"\n---\n\n'
             + MIRROR_NOTE.format(source=rel) + "\n" + body
-        )
-
-    # Operations. Copilot needs `agent:`; $ARGUMENTS is Claude Code's placeholder and means
-    # nothing there, so it is dropped — Copilot passes the chat message through anyway.
-    for src in sorted(SKILLS_DIR.glob("*/SKILL.md")):
-        name = src.parent.name
-        fm, body = split_frontmatter(src.read_text(encoding="utf-8"))
-        desc = next(ln.split(":", 1)[1].strip() for ln in fm.splitlines() if ln.startswith("description:"))
-        body = "\n".join(ln for ln in body.splitlines() if "$ARGUMENTS" not in ln)
-        rel = f".claude/skills/{name}/SKILL.md"
-        out[COPILOT / "prompts" / f"{name}.prompt.md"] = (
-            f"---\nagent: agent\ndescription: {desc}\n---\n\n"
-            + MIRROR_NOTE.format(source=rel) + "\n\n" + body.lstrip("\n") + "\n"
         )
 
     return out
@@ -167,7 +150,7 @@ def layout_tree() -> str:
     lines.append("AGENTS.md           the schema in prose: layers, operations, provenance, rules")
     lines.append("CLAUDE.md           one line, importing AGENTS.md for Claude Code")
     lines.append(".claude/            rules/ per-folder writing rules, skills/ the four operations")
-    lines.append(".github/            GENERATED mirror of the above, in the layout Copilot reads")
+    lines.append(".github/            GENERATED — only the scoped rules, which Copilot spells differently")
     lines.append("hugo.yaml           the site build: Docsy as a Hugo module, and the theme's settings")
     lines.append("layouts/            the one template this site overrides — see _markup/render-link.html")
     lines.append("go.mod  package.json  pinned versions of the theme and its assets")
@@ -206,7 +189,7 @@ def main() -> int:
 
     # Anything left in the mirrored directories has no source any more — a rule or operation that
     # was renamed or deleted. Left alone it would go on being loaded by Copilot for ever.
-    for existing in sorted((COPILOT / "instructions").glob("*.md")) + sorted((COPILOT / "prompts").glob("*.md")):
+    for existing in sorted((COPILOT / "instructions").glob("*.md")):
         if existing in wanted_files:
             continue
         if check:

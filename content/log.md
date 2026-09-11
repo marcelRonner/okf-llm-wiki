@@ -24,6 +24,34 @@ Format:
 
 ---
 
+## 2026-09-11 — Schema change: most of the Copilot mirror was redundant
+
+**Operation:** correction
+**Input:** the owner asked why the generator was still producing Copilot prompt files when the
+operations had become skills
+**Updated:** deleted `.github/prompts/` and `.github/copilot-instructions.md`;
+`scripts/build_schema.py` now mirrors only `.claude/rules/`
+**Notes:** The answer was that the generator had been written against Copilot's older prompt-file
+format, which was the only invocable-operation format it had at the time. That is no longer true,
+and it was checked against the VS Code and GitHub documentation rather than assumed.
+
+VS Code reads `AGENTS.md` at the workspace root, and discovers skills from `.github/skills/`,
+`.claude/skills/` and `.agents/skills/`. So the contract and the four operations were already being
+read where they are written, by both tools, and the mirror was copying them for nothing. Five of the
+nine generated files are gone.
+
+What still needs mirroring is exactly one thing: path-scoped rules. The `.claude/rules` location
+Copilot supports is user-profile only (`~/.claude/rules`), so a project's scoped rules must be
+restated as `.github/instructions/*.instructions.md`, where `paths:` is spelled `applyTo:`. If that
+ever changes, the phase and the whole `.github/` directory can go.
+
+One thing given up knowingly: Copilot's prompt files could be invoked by typing `/note`, whereas a
+skill is matched on its description. The four typed doors still exist in Claude Code; in Copilot the
+operations are now triggered by asking for them. Worth re-adding a prompt file as a thin shim if
+typing `/note` there turns out to matter.
+
+---
+
 ## 2026-09-11 — Schema change: the four operations are skills
 
 **Operation:** correction
