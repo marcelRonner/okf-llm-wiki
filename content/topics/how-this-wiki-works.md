@@ -5,7 +5,7 @@ summary: The three layers, the four operations, and the rules that keep this wik
 created: 2026-08-01
 updated: 2026-09-11
 tags: [meta]
-sources: [sources/2026-09-11-agent-instruction-formats.md]
+sources: [sources/2026-09-11-agent-instruction-formats.md, sources/2026-04-04-karpathy-llm-wiki-gist.md]
 ---
 
 # How this wiki works
@@ -13,6 +13,9 @@ sources: [sources/2026-09-11-agent-instruction-formats.md]
 This wiki is a set of short, linked pages maintained mostly by an AI assistant. You decide what
 goes in and what is true; the assistant does the bookkeeping. This page is both the explanation
 and the first worked example of the format.
+
+The three layers and the operations below are an implementation of the
+[LLM Wiki](llm-wiki.md) pattern, which is where they come from.
 
 ## Three layers
 
@@ -99,6 +102,7 @@ Both work because pages use ordinary relative Markdown links rather than wikilin
 
 ## Related
 
+- [LLM Wiki](llm-wiki.md) — the pattern this wiki implements, and the three places it departs from it
 - [Agent instruction formats](agent-instruction-formats.md) — where the schema layer's files live, and which tool reads which
 - [Checks and finding things](checks-and-finding-things.md) — what `make lint` verifies, and the three ways a page gets found
 - [Index](../_index.md) — every page in the wiki, grouped by type
@@ -111,5 +115,7 @@ Both work because pages use ordinary relative Markdown links rather than wikilin
 
 - [Agent instruction formats](agent-instruction-formats.md)
 - [Checks and finding things](checks-and-finding-things.md)
+- [Karpathy's LLM Wiki gist](../sources/2026-04-04-karpathy-llm-wiki-gist.md)
+- [LLM Wiki](llm-wiki.md)
 - [Research note — agent instruction formats](../sources/2026-09-11-agent-instruction-formats.md)
 <!-- backlinks:end -->

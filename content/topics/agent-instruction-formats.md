@@ -58,5 +58,6 @@ In a Hugo repository, per-directory instruction files are a trap: anything named
 ## Linked from
 
 - [How this wiki works](how-this-wiki-works.md)
+- [LLM Wiki](llm-wiki.md)
 - [Research note — agent instruction formats](../sources/2026-09-11-agent-instruction-formats.md)
 <!-- backlinks:end -->

@@ -24,6 +24,33 @@ Format:
 
 ---
 
+## 2026-09-11 — Ingest: the LLM Wiki pattern and the Open Knowledge Format
+
+**Operation:** ingest
+**Input:** two summaries the owner asked for, written from the primary sources —
+[`raw/2026-04-04-karpathy-llm-wiki-gist.md`](../raw/2026-04-04-karpathy-llm-wiki-gist.md) and
+[`raw/2026-06-12-open-knowledge-format.md`](../raw/2026-06-12-open-knowledge-format.md)
+**Created:** [Karpathy's LLM Wiki gist](sources/2026-04-04-karpathy-llm-wiki-gist.md),
+[Open Knowledge Format specification](sources/2026-06-12-open-knowledge-format.md),
+[LLM Wiki](topics/llm-wiki.md), [Open Knowledge Format](topics/open-knowledge-format.md) — both
+`topic`: concepts that keep coming up and fit no other type
+**Updated:** [How this wiki works](topics/how-this-wiki-works.md) — it described the three layers and
+the operations without ever saying where they came from; it now cites the gist
+**Flagged:** this wiki fails one of OKF's three conformance criteria. The five generated section
+pages carry no `type`, so a strict consumer reads them as untyped concepts. Recorded on the topic
+page with the fix; not fixed here, because an ingest records what a source says rather than acting
+on it.
+**Notes:** Five pages, which is past the threshold where `/ingest` says to propose and wait. The
+owner pre-authorised, so the plan was stated and the work done in one pass.
+
+The wiki now describes its own architecture, which is worth saying plainly: the three layers in
+*How this wiki works* were built from this gist, and `schema.yml`'s `type`, the `sources:` key and
+`status:` all match what OKF v0.2 specifies without having been copied from it. Two divergences are
+deliberate rather than accidental — relative links, which keep the files working in Obsidian, and
+`_index.md`, which Hugo requires where the pattern says `index.md`.
+
+---
+
 ## 2026-09-11 — Ingest: agent instruction formats
 
 **Operation:** ingest
