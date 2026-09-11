@@ -16,11 +16,37 @@ Format:
 
 **Operation:** ingest | query | lint | correction
 **Input:** what came in (link the raw file, or quote the question)
-**Created:** [Page](projects/x.md), [Page](people/y.md)
+**Created:** [Page](projects/x.md), [Page](decisions/y.md)
 **Updated:** [Page](systems/z.md) — what changed
 **Flagged:** contradictions found, questions left open
 **Notes:** anything a future reader would want to know
 ```
+
+---
+
+## 2026-09-11 — Schema change: the person and org types are gone
+
+**Operation:** correction
+**Input:** the owner asked for people and orgs to be removed from the wiki entirely
+**Updated:** `schema.yml` — `person` and `org` deleted, five types remain; every generated
+restatement of the schema followed from `make schema`
+**Notes:** Both folders held nothing but scaffolding, so no page was lost and no link broke.
+
+What went with them: `templates/person.md`, `templates/org.md`,
+`.github/instructions/people-orgs.instructions.md`, and the `content/people/` and `content/orgs/`
+folders. The type table in `.github/copilot-instructions.md`, the frontmatter enum, the README
+layout tree and the section pages are generated, so they restamped themselves.
+
+Hand-written prose that named the removed types was rewritten rather than deleted where the point
+it was making still stood: the *Who owns it* section on system pages now asks who to go to instead
+of linking a person page, and the ingest checklist still guards against material that is sensitive
+about a named individual — a source page can quote a meeting full of people without the wiki
+having a page for any of them. What did go is `/lint`'s boundary check, which existed only to
+police person and org pages against a rule file that no longer exists.
+
+The decision ladder in `.github/copilot-instructions.md` lost a rung: there is no longer a
+question to ask about people, so a name that needs recording belongs in whichever project,
+system or decision it turns up in.
 
 ---
 

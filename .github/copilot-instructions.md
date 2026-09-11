@@ -45,8 +45,6 @@ from `schema.yml` — if you need to change it, change that file and run `make s
 | `project` | `content/projects/` | A piece of work with a goal and an end. What it is for, where it stands, who is involved. |
 | `system` | `content/systems/` | A thing that exists and keeps existing — a service, a tool, a process. How it works, how it fails. |
 | `decision` | `content/decisions/` | One decision — what was chosen, what was rejected, why, and whether it still holds. |
-| `person` | `content/people/` | Someone you work with. Role, context, what they own, how to work with them. |
-| `org` | `content/orgs/` | A company, team, or vendor. What they do, your relationship to them. |
 | `topic` | `content/topics/` | A concept that keeps coming up and does not fit the above. |
 | `source` | `content/sources/` | What one piece of raw material said, and what it changed. One per item in raw/, plus the monthly owner-notes pages. |
 <!-- schema-types:end -->
@@ -67,9 +65,8 @@ Work down this ladder and take the first match:
 1. Does it have a goal and an end? → **project**
 2. Does it keep running and need maintaining? → **system**
 3. Was it a choice between options, with something rejected? → **decision**
-4. Is it a person, or a company/team/vendor? → **person** / **org**
-5. Is it what one document said? → **source**
-6. Otherwise → **topic**
+4. Is it what one document said? → **source**
+5. Otherwise → **topic**
 
 Say in one line which you chose and why. Do not stop to ask. If you chose wrong, the owner runs
 `make move PAGE=… TYPE=…`, which re-types the page and rewrites every link to it — so a wrong
@@ -83,7 +80,7 @@ Generated from `schema.yml`:
 ```yaml
 ---
 title: Human readable name
-type: project | system | decision | person | org | topic | source
+type: project | system | decision | topic | source
 summary: One sentence. This is what appears in the index — make it worth reading.
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
@@ -121,7 +118,7 @@ this wiki is worth more than a folder of notes. **Append to it, never rewrite it
 
 - **One fact, one place.** If a fact belongs on another page, link to it instead of repeating it.
   The exception is a one-line orienting summary, which may be restated.
-- **Link generously, with plain relative Markdown links**: `[Acme](../orgs/acme.md)`. Not
+- **Link generously, with plain relative Markdown links**: `[Acme Migration](../projects/acme-migration.md)`. Not
   wikilinks — relative links work in both Obsidian and the built site with no plugins.
 - **A link to a page that does not exist yet is a bug.** Either create the page (a stub with
   frontmatter and one line is fine) or do not link it. `make lint` fails on these.

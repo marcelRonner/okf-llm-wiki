@@ -27,7 +27,7 @@ from wikilib import (INDEX, TAGS, TYPE_LABELS, TYPES, Page, inbound_links,
 # `type: docs` is Hugo's, not this wiki's. Docsy spans the sidebar across every folder only when
 # the home page's type is `docs` (see the theme's _partials/sidebar-args.html); with anything else
 # the nav collapses to whichever folder you happen to be in, and there is no way to get from
-# people/ to projects/. This page is the catalogue, so the whole tree is exactly what it should
+# topics/ to projects/. This page is the catalogue, so the whole tree is exactly what it should
 # show. Nothing reads a `type` here — the page is excluded from the lint and the index by name.
 INDEX_HEADER = """---
 title: Index
@@ -55,7 +55,7 @@ summary: Every tag in use, and the pages carrying it.
 
 # Tags
 
-Tags cut across the type folders — a page about one project and a page about one person can
+Tags cut across the type folders — a page about one project and a page about one decision can
 share a subject. {count} {noun} in use, last built {built}.
 
 See [Index](_index.md) for every page grouped by type instead.

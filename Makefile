@@ -60,7 +60,7 @@ inbox:
 	items = sorted(p for p in Path('inbox').iterdir() if p.is_file() and p.name != '.gitkeep'); \
 	print('\n'.join(f'  {p}' for p in items) if items else '  inbox is empty')"
 
-## Create a page: make new TYPE=person TITLE="Jane Doe" [SUMMARY="..."] [FROM=content/orgs/acme.md]
+## Create a page: make new TYPE=project TITLE="Acme Migration" [SUMMARY="..."] [FROM=content/topics/x.md]
 new:
 	@test -n "$(TYPE)"  || (echo "usage: make new TYPE=project TITLE=\"...\""; exit 1)
 	@test -n "$(TITLE)" || (echo "usage: make new TYPE=project TITLE=\"...\""; exit 1)

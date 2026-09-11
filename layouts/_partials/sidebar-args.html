@@ -4,7 +4,7 @@
   Docsy is built for sites whose pages all live under a single top-level section — its own docs
   are all under `/docs/` — so its sidebar roots at `.FirstSection`. This wiki has seven top-level
   folders, one per page type, which means the stock sidebar shows only the folder you are already
-  in: from people/ there is no way to reach projects/. The theme looks like it intends to allow
+  in: from topics/ there is no way to reach projects/. The theme looks like it intends to allow
   this (`_partials/sidebar-args.html` computes a `navRoot` of `.Site.Home` when the home page's
   type is `docs`) but then overwrites it with `.FirstSection` unconditionally, so that path is
   unreachable. This override restores it.

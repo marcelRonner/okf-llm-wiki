@@ -75,8 +75,6 @@ content/            the vault, and Hugo's content directory
 ├── projects/   work with a goal and an end
 ├── systems/    things that keep running and need maintaining
 ├── decisions/  what was chosen, what was rejected, why
-├── people/     who does what
-├── orgs/       companies, teams, vendors
 ├── topics/     concepts that fit nowhere else
 └── sources/    one page per item in raw/, plus monthly owner notes
 templates/          the shape of each page type
@@ -101,7 +99,7 @@ go.mod  package.json  pinned versions of the theme and its assets
 | `make lint STRICT=1` | The same checks, but warnings fail too — for CI, if you want the higher bar |
 | `make build STRICT=1` | The same, and Hugo's own warnings fail too — an unresolved Markdown link, say |
 | `make inbox` | What is waiting to be ingested |
-| `make new TYPE=person TITLE="Jane Doe" [FROM=content/orgs/acme.md]` | New page from its template, linked from `FROM` |
+| `make new TYPE=project TITLE="Acme Migration" [FROM=content/topics/x.md]` | New page from its template, linked from `FROM` |
 | `make move PAGE=content/topics/x.md TYPE=project` | Re-type or rename a page, rewriting every link to it |
 | `make new-type TYPE=meeting` | Scaffold a type you have declared in `schema.yml` |
 
@@ -131,7 +129,6 @@ if you want that.
 | `.github/instructions/pages.instructions.md` | How to write any page |
 | `.github/instructions/projects-systems.instructions.md` | Projects and systems |
 | `.github/instructions/decisions.instructions.md` | Decision records |
-| `.github/instructions/people-orgs.instructions.md` | People and organisations — **including what not to record** |
 | `.github/instructions/sources.instructions.md` | Source pages, their link to `raw/`, and the owner-notes pages |
 | `.github/prompts/` | `/note`, `/ingest`, `/query`, `/lint` |
 
@@ -164,7 +161,7 @@ stamped into each `content/<folder>/_index.md` by `make schema`.
 Two things in `hugo.yaml` are worth knowing before you change them:
 
 - **`layouts/_markup/render-link.html`.** Pages link to each other with ordinary relative
-  Markdown links (`../people/jane.md`) so the same files work in Obsidian, on GitHub, and in the
+  Markdown links (`../projects/acme.md`) so the same files work in Obsidian, on GitHub, and in the
   built site. MkDocs rewrote those to the published URL by itself; Hugo does not, and would ship
   `href="…jane.md"`, which 404s. This hook resolves them. A link that resolves to no page — one
   into `raw/`, say — is passed through untouched and warns; `make build STRICT=1` makes that fail.
@@ -185,5 +182,5 @@ in order of how much thought they need:
 - **GitHub Pages** — trivial, but the repository and the site are public unless the repo is
   private and Pages is set to private, which needs a paid plan.
 
-Given this wiki will hold notes on people and organisations, decide the hosting question before
-you decide the automation question.
+These are your private notes whatever they are about, so decide the hosting question before you
+decide the automation question.

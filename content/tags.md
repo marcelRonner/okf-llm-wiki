@@ -8,7 +8,7 @@ summary: Every tag in use, and the pages carrying it.
 
 # Tags
 
-Tags cut across the type folders — a page about one project and a page about one person can
+Tags cut across the type folders — a page about one project and a page about one decision can
 share a subject. 1 tag in use, last built 2026-09-11.
 
 See [Index](_index.md) for every page grouped by type instead.

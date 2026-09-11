@@ -11,7 +11,7 @@ Usage:
 
 Examples:
     python3 scripts/move_page.py content/topics/acme-migration.md --type project
-    python3 scripts/move_page.py content/people/jane.md --slug jane-doe
+    python3 scripts/move_page.py content/topics/billing.md --slug billing-pipeline
 """
 
 from __future__ import annotations

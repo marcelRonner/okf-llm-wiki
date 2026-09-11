@@ -41,7 +41,7 @@ summary. If you have an interpretation, put it under *What this changed*.
 
 ## What this changed
 - Created [Page](../projects/x.md) — why
-- Updated [Page](../people/y.md) — what changed in it
+- Updated [Page](../systems/y.md) — what changed in it
 - **Contradicts** [Page](../systems/z.md), which says X — flagged, not resolved
 
 ## Unresolved

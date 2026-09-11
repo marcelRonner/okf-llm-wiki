@@ -75,8 +75,7 @@ tag listing, and the backlinks at the foot of each page. Both are described in
 [Checks and finding things](checks-and-finding-things.md).
 
 `/lint` handles what a script cannot — contradictions between pages, claims that have gone stale,
-structural drift, and whether anything on a person's page crosses the line into information that
-should not be recorded. That split is deliberate: anything a computer can check reliably should
+and structural drift. That split is deliberate: anything a computer can check reliably should
 never depend on an assistant remembering it.
 
 ## Reading it

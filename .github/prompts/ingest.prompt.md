@@ -41,7 +41,7 @@ risk, and stopping for approval on a two-page source teaches the owner that the 
 - it touches no more than about three pages
 - it contradicts nothing already written
 - it creates no page type you had to think hard about
-- nothing in it looks sensitive on a person or org page
+- nothing in it looks sensitive about a named individual
 
 **Propose and wait** when any of them fails — especially a contradiction. Show a short plan:
 
@@ -51,7 +51,7 @@ Source: <what it is, date>
 Pages to create:
   content/projects/x.md      — why
 Pages to update:
-  content/people/y.md        — what changes
+  content/systems/y.md      — what changes
 Contradictions found:
   content/systems/z.md says A, this source says B
 Questions:

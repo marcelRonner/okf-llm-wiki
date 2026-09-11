@@ -40,7 +40,7 @@ Three ways in, all generated from what pages already carry, none hand-maintained
 
 - **[Index](../_index.md)** — every page grouped by type. What exists.
 - **[Tags](../tags.md)** — the same pages grouped by subject, which is the axis that crosses the
-  type folders. A project and a person can share a tag; they can never share a folder.
+  type folders. A project and a decision can share a tag; they can never share a folder.
 - **Backlinks** — the *Linked from* block at the foot of each page, showing what points at it.
   Obsidian gives you this natively; the block exists so the built site has it too.
 

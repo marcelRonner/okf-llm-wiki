@@ -49,7 +49,7 @@ be able to stop after one line and still have learned something.
 
 ## Linking
 
-- Plain relative Markdown links only: `[Acme](../orgs/acme.md)`
+- Plain relative Markdown links only: `[Acme Migration](../projects/acme-migration.md)`
 - Link the first meaningful mention of any entity that has a page, not every mention
 - In the **Related** section, always say *why* — a bare list of links ages into noise
 - Before linking to a page, check it exists. If it should exist but does not, create a stub:

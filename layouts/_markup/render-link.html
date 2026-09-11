@@ -2,10 +2,10 @@
   Resolve relative Markdown links to the target page's URL.
 
   Every page in this wiki links to other pages with an ordinary relative Markdown link
-  (`../people/jane.md`), deliberately: the same files then work unchanged in Obsidian, on GitHub,
+  (`../projects/acme.md`), deliberately: the same files then work unchanged in Obsidian, on GitHub,
   and in the built site. MkDocs rewrote those links to the published URL on its own. Hugo does not
-  — without this hook it emits `href="../people/jane.md"` verbatim, which 404s on the built site
-  because the page is published at `../people/jane/`.
+  — without this hook it emits `href="../projects/acme.md"` verbatim, which 404s on the built site
+  because the page is published at `../projects/acme/`.
 
   A destination that does not resolve to a real page is passed through untouched. That is what
   links into `raw/` are: the originals live outside `content/`, are deliberately unpublished, and

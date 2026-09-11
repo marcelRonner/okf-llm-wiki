@@ -22,9 +22,6 @@ One sentence: what it is meant to achieve, and for whom.
 What "done" means. If nobody has said, write "Not defined as of {date}" — that is
 a finding, not a gap to paper over.
 
-## People
-- [Name](../people/name.md) — their role in this specifically
-
 ## Decisions
 - [Decision title](../decisions/slug.md) — one line on what it settled
 
@@ -57,7 +54,7 @@ The failure modes you have actually seen, each with a date and what was done.
 This is usually the most valuable section on the page — write it even when it is thin.
 
 ## Who owns it
-- [Name](../people/name.md) / [Org](../orgs/org.md) — and what "owns" means here
+- Who to go to, and what "owns" means here
 
 ## Open questions
 

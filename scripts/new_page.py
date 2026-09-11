@@ -9,7 +9,7 @@ Usage:
 
 Examples:
     python3 scripts/new_page.py project "Acme Migration"
-    python3 scripts/new_page.py person "Jane Doe" --summary "Platform lead at Acme"
+    python3 scripts/new_page.py system "Billing pipeline" --summary "Nightly invoice run"
     python3 scripts/new_page.py topic "Event sourcing" --link-from content/projects/acme-migration.md
 
 `--link-from` appends the new page to another page's `Related` section. A page nothing links to

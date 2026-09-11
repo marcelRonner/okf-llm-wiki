@@ -22,7 +22,7 @@ module:
     - path: github.com/google/docsy/theme
       # Docsy's sidebar-and-TOC chrome lives in `layouts/docs/`, which Hugo only reaches for pages
       # whose `type` is `docs`. Every page here already has a `type` — it is this wiki's page type
-      # (`topic`, `person`, `decision`, …), defined in schema.yml — and an explicit `type` makes
+      # (`topic`, `decision`, `source`, …), defined in schema.yml — and an explicit `type` makes
       # Hugo skip section-based lookup, so those pages would fall through to Docsy's bare `all.html`
       # with no sidebar.
       #

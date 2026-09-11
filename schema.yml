@@ -43,21 +43,7 @@ types:
     dated_filenames: true
     instructions: decisions.instructions.md
 
-  person:
-    folder: people
-    label: People
-    holds: Someone you work with. Role, context, what they own, how to work with them.
-    short: who does what
-    dated_filenames: false
-    instructions: people-orgs.instructions.md
 
-  org:
-    folder: orgs
-    label: Organisations
-    holds: A company, team, or vendor. What they do, your relationship to them.
-    short: companies, teams, vendors
-    dated_filenames: false
-    instructions: people-orgs.instructions.md
 
   topic:
     folder: topics

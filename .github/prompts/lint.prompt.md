@@ -17,14 +17,14 @@ Run this monthly, or after a burst of ingestion.
 ## What to look for
 
 **1. Contradictions.** The same fact stated two ways on two pages. Check especially:
-- a person's role or an org relationship stated differently in different places
+- a system's owner or a project's status stated differently in different places
 - a decision page whose `Status` disagrees with how a project page describes the work
 - numbers, dates, and commitments repeated across pages
 - a source page that flagged a contradiction which was never resolved
 
 **2. Staleness.** Pages whose claims have quietly expired:
 - `status: active` projects with no dated note in six months — finished, abandoned, or just unrecorded?
-- statements about people's roles older than a year
+- statements about who owns or runs something, older than a year
 - decisions whose *Revisit if* conditions now appear to be met
 - anything phrased as "currently", "recently", "soon" — these are undated claims in disguise
 
@@ -38,14 +38,10 @@ Run this monthly, or after a burst of ingestion.
 and pages that should reference each other but do not.
 
 **5. Coverage gaps.** Where the wiki is thin in a way that matters — a project with no decisions,
-a system with an empty *How it fails*, a person involved in a lot with almost nothing recorded.
+a system with an empty *How it fails*, a decision nothing links to.
 
 **6. Unapplied conventions.** A rule in `.github/instructions/` that no page follows. Either the
 rule is dead and should go, or the pages are wrong. Say which you think it is.
-
-**7. Boundary check.** Anything on a person or org page that crosses the line set in
-`people-orgs.instructions.md` — personal information, hearsay presented as fact, or a
-characterisation you would not want its subject to read. Flag it prominently.
 
 ## Output
 

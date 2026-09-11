@@ -20,10 +20,6 @@ One sentence: what this is meant to achieve, and for whom.
 
 What "done" means.
 
-## People
-
-- [Name](../people/{slug}.md) — their role in this
-
 ## Decisions
 
 - [Decision](../decisions/{slug}.md) — what it settled
