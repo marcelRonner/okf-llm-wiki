@@ -9,11 +9,18 @@ summary: Every tag in use, and the pages carrying it.
 # Tags
 
 Tags cut across the type folders — a page about one project and a page about one decision can
-share a subject. 1 tag in use, last built 2026-09-11.
+share a subject. 2 tags in use, last built 2026-09-11.
 
 See [Index](_index.md) for every page grouped by type instead.
 
-## meta (2)
+## meta (4)
 
+- [Agent instruction formats](topics/agent-instruction-formats.md) — Topic
 - [Checks and finding things](topics/checks-and-finding-things.md) — Topic
 - [How this wiki works](topics/how-this-wiki-works.md) — Topic
+- [Research note — agent instruction formats](sources/2026-09-11-agent-instruction-formats.md) — Source
+
+## tooling (2)
+
+- [Agent instruction formats](topics/agent-instruction-formats.md) — Topic
+- [Research note — agent instruction formats](sources/2026-09-11-agent-instruction-formats.md) — Source

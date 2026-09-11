@@ -8,12 +8,17 @@ summary: Catalogue of every page in this wiki, grouped by type.
 
 # Index
 
-Every page in the wiki. 2 pages, 0 of them stubs, last built 2026-09-11.
+Every page in the wiki. 4 pages, 0 of them stubs, last built 2026-09-11.
 
 See [Tags](tags.md) for the same pages grouped by subject, and [Log](log.md) for what changed
 and when.
 
-## Topics (2)
+## Topics (3)
 
+- [Agent instruction formats](topics/agent-instruction-formats.md) — The four kinds of agent instruction, and which of them Claude Code and GitHub Copilot each read.
 - [Checks and finding things](topics/checks-and-finding-things.md) — What the wiki checks automatically, why errors and warnings are separated, and the three ways to find a page.
 - [How this wiki works](topics/how-this-wiki-works.md) — The three layers, the four operations, and the rules that keep this wiki trustworthy.
+
+## Sources (1)
+
+- [Research note — agent instruction formats](sources/2026-09-11-agent-instruction-formats.md) — What Claude Code and GitHub Copilot each read as instructions, checked against the binary and the vendor docs on 2026-09-11.

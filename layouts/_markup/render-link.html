@@ -10,6 +10,8 @@
   A destination that does not resolve to a real page is passed through untouched. That is what
   links into `raw/` are: the originals live outside `content/`, are deliberately unpublished, and
   are there for the reader of the repository. They were dead on the built site under MkDocs too.
+  Those are silent, since they are correct; an unresolved link that stays inside `content/` warns,
+  because that one is a typo.
 */ -}}
 
 {{- $dest := .Destination -}}
@@ -43,7 +45,15 @@
     {{- with site.GetPage $lookup -}}
       {{- $href = printf "%s%s" .RelPermalink $frag -}}
     {{- else -}}
-      {{- warnf "render-link: %q in %q does not resolve to a page — left as written" $dest $.Page.File.Path -}}
+      {{- /*
+        A path starting `..` has climbed out of the content directory, which is deliberate: source
+        pages link the original in `raw/`, which is deliberately unpublished. Those links are
+        correct and stay silent. Inside the content directory an unresolved link is a typo worth
+        hearing about, and `make build STRICT=1` turns it into a failure.
+      */ -}}
+      {{- if not (strings.HasPrefix $abs "..") -}}
+        {{- warnf "render-link: %q in %q does not resolve to a page — left as written" $dest $.Page.File.Path -}}
+      {{- end -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}

@@ -24,6 +24,32 @@ Format:
 
 ---
 
+## 2026-09-11 — Ingest: agent instruction formats
+
+**Operation:** ingest
+**Input:** [`raw/2026-09-11-agent-instruction-formats.md`](../raw/2026-09-11-agent-instruction-formats.md)
+— a research note on what Claude Code and GitHub Copilot each read as instructions, written while
+moving this wiki's own instructions out of `.github/`
+**Created:** [Research note — agent instruction formats](sources/2026-09-11-agent-instruction-formats.md),
+[Agent instruction formats](topics/agent-instruction-formats.md) — chose `topic`: it is a concept
+that keeps coming up and fits no other type, which is rung five of the ladder
+**Updated:** [How this wiki works](topics/how-this-wiki-works.md) — its schema layer still said the
+schema lived in `schema.yml` and `.github/`, which stopped being true when the instructions moved;
+it now names `AGENTS.md` and `.claude/rules/` and links the new topic
+**Flagged:** two things the source left unresolved, both recorded on its page — nothing re-checks
+that the vendor behaviour dated here is still true, and whether Copilot can invoke a skill by typed
+name without a prompt file was never settled
+**Notes:** The first ingest with a document behind it, so also the first exercise of the `raw/`
+pairing. Also the first time the wiki's own instructions were loaded while writing to it: `CLAUDE.md`
+imports `AGENTS.md`, and the routing table sent me to `.claude/rules/sources.md` and
+`.claude/rules/pages.md` before the first write to either folder.
+
+Separately, and not from the source: the four operations are typable in Copilot again. Each
+`.github/prompts/*.prompt.md` is now an eleven-line door that names its skill and stops, rather than
+a second copy of the procedure.
+
+---
+
 ## 2026-09-11 — Schema change: most of the Copilot mirror was redundant
 
 **Operation:** correction

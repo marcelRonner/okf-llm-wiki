@@ -62,5 +62,7 @@ pointed at. Three files promised the check was being made while it could not fir
 
 ## Linked from
 
+- [Agent instruction formats](agent-instruction-formats.md)
 - [How this wiki works](how-this-wiki-works.md)
+- [Research note — agent instruction formats](../sources/2026-09-11-agent-instruction-formats.md)
 <!-- backlinks:end -->

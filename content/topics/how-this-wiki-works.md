@@ -3,8 +3,9 @@ title: How this wiki works
 type: topic
 summary: The three layers, the four operations, and the rules that keep this wiki trustworthy.
 created: 2026-08-01
-updated: 2026-08-02
+updated: 2026-09-11
 tags: [meta]
+sources: [sources/2026-09-11-agent-instruction-formats.md]
 ---
 
 # How this wiki works
@@ -21,8 +22,9 @@ source disagree, the source wins — that is the whole reason to keep them.
 **The wiki** is `content/`: everything written *about* those sources, plus everything you know that
 never had a document behind it. This is the only layer that grows.
 
-**The schema** is `schema.yml` and `.github/`: the page types, the required fields, the writing
-rules, and the operations. Changing the schema changes how everything else gets written, so it
+**The schema** is `schema.yml`, `AGENTS.md` and `.claude/rules/`: the page types, the required
+fields, the writing rules, and the operations. Which of those files an assistant actually reads
+depends on which assistant it is — see [Agent instruction formats](agent-instruction-formats.md). Changing the schema changes how everything else gets written, so it
 changes slowly and deliberately. The page types are defined once, in `schema.yml`; every other
 file that lists them is generated from it, because a schema that disagrees with its own
 validator turns the assistant into an agent of data loss.
@@ -97,6 +99,7 @@ Both work because pages use ordinary relative Markdown links rather than wikilin
 
 ## Related
 
+- [Agent instruction formats](agent-instruction-formats.md) — where the schema layer's files live, and which tool reads which
 - [Checks and finding things](checks-and-finding-things.md) — what `make lint` verifies, and the three ways a page gets found
 - [Index](../_index.md) — every page in the wiki, grouped by type
 - [Tags](../tags.md) — every subject in use, and what carries it
@@ -106,5 +109,7 @@ Both work because pages use ordinary relative Markdown links rather than wikilin
 
 ## Linked from
 
+- [Agent instruction formats](agent-instruction-formats.md)
 - [Checks and finding things](checks-and-finding-things.md)
+- [Research note — agent instruction formats](../sources/2026-09-11-agent-instruction-formats.md)
 <!-- backlinks:end -->
