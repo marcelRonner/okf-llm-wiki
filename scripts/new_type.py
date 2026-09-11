@@ -29,7 +29,7 @@ RULES_DIR = ROOT / ".claude" / "rules"
 TEMPLATE = """---
 title: {{{{TITLE}}}}
 type: {name}
-summary: {{{{SUMMARY}}}}
+description: {{{{DESCRIPTION}}}}
 created: {{{{DATE}}}}
 updated: {{{{DATE}}}}
 tags: []

@@ -1,7 +1,8 @@
 ---
 title: {{TITLE}}
 type: source
-summary: {{SUMMARY}}
+description: {{DESCRIPTION}}
+resource:   # the original: its public URL, or ../../raw/<file>
 created: {{DATE}}
 updated: {{DATE}}
 tags: []

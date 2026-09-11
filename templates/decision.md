@@ -1,7 +1,7 @@
 ---
 title: {{TITLE}}
 type: decision
-summary: {{SUMMARY}}
+description: {{DESCRIPTION}}
 created: {{DATE}}
 updated: {{DATE}}
 tags: []

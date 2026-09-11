@@ -48,7 +48,7 @@ LIMITS: dict = SCHEMA.get("limits", {})
 TYPES = {name: spec["folder"] for name, spec in TYPE_INFO.items()}
 TYPE_LABELS = {name: spec["label"] for name, spec in TYPE_INFO.items()}
 
-REQUIRED_KEYS = ("title", "type", "summary", "created", "updated")
+REQUIRED_KEYS = ("title", "type", "description", "created", "updated")
 
 FRONTMATTER_RE = re.compile(r"\A---\n(.*?)\n---\n?(.*)\Z", re.DOTALL)
 LINK_RE = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")

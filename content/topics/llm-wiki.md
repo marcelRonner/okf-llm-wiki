@@ -1,11 +1,15 @@
 ---
 title: LLM Wiki
 type: topic
-summary: The pattern this wiki implements — an assistant compiles raw sources into persistent linked pages, and questions are answered from those rather than from the sources.
+description: The pattern this wiki implements — an assistant compiles raw sources into persistent linked pages, and questions are answered from those rather than from the sources.
 created: 2026-09-11
 updated: 2026-09-11
+generated:
+  by: assistant
+  at: 2026-09-11
 tags: [meta, llm-wiki]
-sources: [sources/2026-04-04-karpathy-llm-wiki-gist.md]
+sources:
+  - resource: sources/2026-04-04-karpathy-llm-wiki-gist.md
 ---
 
 # LLM Wiki

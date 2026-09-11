@@ -1,9 +1,13 @@
 ---
 title: Research note — agent instruction formats
 type: source
-summary: What Claude Code and GitHub Copilot each read as instructions, checked against the binary and the vendor docs on 2026-09-11.
+description: What Claude Code and GitHub Copilot each read as instructions, checked against the binary and the vendor docs on 2026-09-11.
 created: 2026-09-11
 updated: 2026-09-11
+generated:
+  by: assistant
+  at: 2026-09-11
+resource: ../../raw/2026-09-11-agent-instruction-formats.md
 tags: [meta, tooling]
 ---
 

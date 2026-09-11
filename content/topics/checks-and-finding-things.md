@@ -1,9 +1,12 @@
 ---
 title: Checks and finding things
 type: topic
-summary: What the wiki checks automatically, why errors and warnings are separated, and the three ways to find a page.
+description: What the wiki checks automatically, why errors and warnings are separated, and the three ways to find a page.
 created: 2026-08-02
 updated: 2026-08-02
+generated:
+  by: assistant
+  at: 2026-08-02
 tags: [meta]
 ---
 

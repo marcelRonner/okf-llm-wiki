@@ -1,9 +1,13 @@
 ---
 title: Open Knowledge Format specification
 type: source
-summary: Google Cloud's open specification for knowledge as a directory of Markdown files with YAML frontmatter, and its conformance criteria.
+description: Google Cloud's open specification for knowledge as a directory of Markdown files with YAML frontmatter, and its conformance criteria.
 created: 2026-09-11
 updated: 2026-09-11
+generated:
+  by: assistant
+  at: 2026-09-11
+resource: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
 tags: [meta, llm-wiki, standards]
 ---
 

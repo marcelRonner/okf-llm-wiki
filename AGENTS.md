@@ -94,23 +94,52 @@ Generated from `schema.yml`:
 ---
 title: Human readable name
 type: project | system | decision | topic | source
-summary: One sentence. This is what appears in the index — make it worth reading.
+description: One sentence. This is what appears in the index — make it worth reading.
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
+generated:                         # stamped by `make index` — do not write it by hand
+  by: assistant
+  at: YYYY-MM-DD
 tags: [lowercase-kebab, another]
-sources: [sources/some-source.md]   # source pages this page draws on; omit if none
+sources:                            # source pages this page draws on; omit if none
+  - resource: sources/some-source.md
 ---
 ```
 <!-- schema-frontmatter:end -->
 
 `updated` changes every time you touch the page. `created` never changes.
 
-Two optional keys:
+`generated:` is stamped by `make index` from `updated:` — never write it by hand.
 
-- `status:` — `stub`, or `superseded` with a link to what replaced it.
+Optional keys:
+
+- `status:` — `draft`, `stable` or `deprecated`. These are the three values the Open Knowledge
+  Format defines, and `make lint` rejects anything else. `draft` is what this wiki used to call a
+  stub, and the argument for it is unchanged: a draft is a legitimate page, not a failure. Use
+  `deprecated` with a link to whatever replaced the page.
+- `stale_after:` — a date after which the page should be re-read. `make lint` warns once it passes.
+  Use it on anything whose truth has a shelf life; vendor behaviour is the obvious case.
+- `resource:` — **on source pages.** A URI for the original: its public URL if it has one,
+  otherwise `../../raw/<file>`.
 - `origin: owner` — **on source pages only.** Marks a source page that records what the owner
   said rather than a document, so `make lint` does not look for a file in `raw/` that was never
   going to exist. Set it on owner-notes pages and nothing else.
+
+### `verified:` — the owner's key, not yours
+
+```yaml
+verified:
+  - by: owner
+    at: 2026-09-11
+```
+
+**Never write this.** It records that the owner read the page and found it true, and an assistant
+asserting that on the owner's behalf would destroy the only signal in the wiki that separates
+"checked" from "merely written". Add an entry when, and only when, the owner says so; append rather
+than replace, so the history of confirmations survives.
+
+`make lint` reports pages nothing has verified for longer than `unverified_days` in `schema.yml`.
+That warning is a question for the owner, never a thing to silence.
 
 ## Provenance: where a claim is allowed to come from
 

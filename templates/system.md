@@ -1,7 +1,7 @@
 ---
 title: {{TITLE}}
 type: system
-summary: {{SUMMARY}}
+description: {{DESCRIPTION}}
 created: {{DATE}}
 updated: {{DATE}}
 tags: []

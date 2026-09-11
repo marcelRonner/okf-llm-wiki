@@ -1,7 +1,7 @@
 ---
 title: {{TITLE}}
 type: project
-summary: {{SUMMARY}}
+description: {{DESCRIPTION}}
 created: {{DATE}}
 updated: {{DATE}}
 tags: []

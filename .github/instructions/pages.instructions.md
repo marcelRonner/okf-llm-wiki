@@ -60,14 +60,16 @@ be able to stop after one line and still have learned something.
 
 ## Stubs
 
-A stub is a legitimate page, not a failure. It is better to have twenty honest stubs that
+A draft is a legitimate page, not a failure. It is better to have twenty honest drafts that
 capture what you know than five long pages and fifteen facts lost. Mark them:
 
 ```yaml
-status: stub
+status: draft
 ```
 
-Remove the marker once the page says something useful on its own.
+Move it to `stable` once the page says something useful on its own, or `deprecated` with a link if
+something replaced it. Those three values come from the Open Knowledge Format, which `make lint`
+enforces — see [Open Knowledge Format](../../content/topics/open-knowledge-format.md).
 
 ## What not to do
 

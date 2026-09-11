@@ -1,11 +1,15 @@
 ---
 title: Agent instruction formats
 type: topic
-summary: The four kinds of agent instruction, and which of them Claude Code and GitHub Copilot each read.
+description: The four kinds of agent instruction, and which of them Claude Code and GitHub Copilot each read.
 created: 2026-09-11
 updated: 2026-09-11
+generated:
+  by: assistant
+  at: 2026-09-11
 tags: [meta, tooling]
-sources: [sources/2026-09-11-agent-instruction-formats.md]
+sources:
+  - resource: sources/2026-09-11-agent-instruction-formats.md
 ---
 
 # Agent instruction formats

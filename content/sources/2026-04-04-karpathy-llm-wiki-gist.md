@@ -1,9 +1,13 @@
 ---
 title: Karpathy's LLM Wiki gist
 type: source
-summary: The gist that proposed an LLM-maintained wiki compiled from raw sources instead of RAG retrieval, and the pattern this wiki implements.
+description: The gist that proposed an LLM-maintained wiki compiled from raw sources instead of RAG retrieval, and the pattern this wiki implements.
 created: 2026-09-11
 updated: 2026-09-11
+generated:
+  by: assistant
+  at: 2026-09-11
+resource: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
 tags: [meta, llm-wiki]
 ---
 

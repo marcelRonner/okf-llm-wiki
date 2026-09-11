@@ -13,19 +13,21 @@ what made adding a page feel like breaking something.
     E1  frontmatter is missing, invalid, or missing a required key
     E2  `type:` is unknown, or the page is filed in the wrong folder
     E3  a relative link points at a file that does not exist
-    E4  a `sources:` entry is missing, or is not a source page
+    E4  a `sources:` entry is missing, is not a source page, or is not in OKF's shape
     E5  a source page's raw file is missing, or a raw file was never written up
     E6  `updated:` is before `created:`, or either is in the future
     E7  the page breaks OKF conformance — see `content/topics/open-knowledge-format.md`
 
   WARNINGS — the wiki is unfinished. These are reported and do not fail.
     W1  nothing links to this page, so nobody will find it except through the index
-    W2  the summary is still a placeholder, or is too long for the index
-    W3  a stub that has been a stub for a long time
+    W2  the description is still a placeholder, or is too long for the index
+    W3  a draft that has been a draft for a long time
     W4  the page has grown past the length where it wants splitting
     W5  a tag that looks like a typo of an established one
     W6  material sitting unprocessed in inbox/
     W7  a type declared in schema.yml with no template or no folder
+    W8  a source page with no `resource:`, or one pointing at a file that is gone
+    W9  `stale_after:` has passed, or `verified:` is absent on a page old enough to want it
 
 Usage:  python3 scripts/lint_wiki.py [--strict]
         --strict treats warnings as errors. Nothing uses it by default: a site that will not
@@ -47,13 +49,17 @@ from wikilib import (INBOX, INDEX, LIMITS, LOG, RAW, REQUIRED_KEYS, ROOT, TAGS, 
 # Filenames the Open Knowledge Format reserves, and so exempts from needing a `type`.
 OKF_RESERVED = ("index.md", "log.md")
 
+# OKF v0.2 enumerates these. `draft` is this wiki's old `stub`, `deprecated` its `superseded`.
+OKF_STATUS = ("draft", "stable", "deprecated")
+
 errors: list[str] = []
 warnings: list[str] = []
 
 PLACEHOLDER = LIMITS.get("placeholder", "TODO")
-MAX_SUMMARY = LIMITS.get("summary_chars", 200)
+MAX_DESCRIPTION = LIMITS.get("description_chars", 200)
 MAX_WORDS = LIMITS.get("page_words", 400)
 STUB_DAYS = LIMITS.get("stub_days", 90)
+STALE_DAYS = LIMITS.get("unverified_days", 365)
 
 
 def report(bucket: list[str], where, line, check: str, message: str) -> None:
@@ -84,11 +90,11 @@ def check_pages(all_pages: list[Page]) -> None:
         if missing:
             error(page.path, 1, "E1", f"frontmatter missing: {', '.join(missing)}")
 
-        summary = str(page.get("summary") or "")
-        if PLACEHOLDER in summary:
-            warn(page.path, 1, "W2", f"summary is still a placeholder — it is what the index shows")
-        elif len(summary) > MAX_SUMMARY:
-            warn(page.path, 1, "W2", f"summary is {len(summary)} chars — over {MAX_SUMMARY}, keep it to one sentence")
+        description = str(page.get("description") or "")
+        if PLACEHOLDER in description:
+            warn(page.path, 1, "W2", "description is still a placeholder — it is what the index shows")
+        elif len(description) > MAX_DESCRIPTION:
+            warn(page.path, 1, "W2", f"description is {len(description)} chars — over {MAX_DESCRIPTION}, keep it to one sentence")
 
         type_name = page.get("type")
         if type_name and type_name not in TYPES:
@@ -110,14 +116,49 @@ def check_pages(all_pages: list[Page]) -> None:
             if value and value > today:
                 error(page.path, 1, "E6", f"{label} ({value}) is in the future")
 
+        status = page.get("status")
+        if status and status not in OKF_STATUS:
+            error(page.path, 1, "E7", f"status '{status}' is outside OKF v0.2's set: {', '.join(OKF_STATUS)}")
+
         words = page.word_count()
         if words > MAX_WORDS:
             warn(page.path, 1, "W4", f"{words} words — past {MAX_WORDS}, look for a section that wants its own page")
 
-        if page.get("status") == "stub" and updated:
+        if page.get("status") == "draft" and updated:
             age = (today - updated).days
             if age > STUB_DAYS:
-                warn(page.path, 1, "W3", f"stub untouched for {age} days — fill it, or admit it is not needed")
+                warn(page.path, 1, "W3", f"draft untouched for {age} days — fill it, or admit it is not needed")
+
+
+# --------------------------------------------------------------------------- W8, W9
+def check_okf_families(all_pages: list[Page]) -> None:
+    """The OKF v0.2 field families this wiki adopted, checked for the promises they make.
+
+    `resource` and `verified` are only recommended by the spec, never required, so nothing here
+    is an error. They are warnings because each one is a real question about the wiki rather than
+    a defect: a source with no resource cannot be traced to its original, and a page nothing has
+    verified is a page the owner has not yet said is true.
+    """
+    today = date.today()
+    for page in all_pages:
+        if page.get("type") == "source":
+            resource = str(page.get("resource") or "").strip()
+            if not resource:
+                warn(page.path, 1, "W8", "no `resource:` — say where the original is, as a URL or ../raw/<file>")
+            elif "://" not in resource and not (page.path.parent / resource).exists():
+                warn(page.path, 1, "W8", f"resource: '{resource}' does not exist")
+
+        stale_after = as_date(page.get("stale_after"))
+        if page.get("stale_after") and not stale_after:
+            error(page.path, 1, "E6", f"stale_after: '{page.get('stale_after')}' is not a YYYY-MM-DD date")
+        elif stale_after and stale_after < today:
+            warn(page.path, 1, "W9", f"stale_after passed on {stale_after} — re-read it, then move the date or fix the page")
+
+        verified = page.get("verified")
+        updated = as_date(page.get("updated"))
+        if not verified and updated and (today - updated).days > STALE_DAYS:
+            warn(page.path, 1, "W9",
+                 f"nothing has verified this in {(today - updated).days} days — `verified:` records that the owner read it and it was true")
 
 
 # --------------------------------------------------------------------------- E7
@@ -187,13 +228,35 @@ def check_connected(all_pages: list[Page]) -> None:
 
 
 # --------------------------------------------------------------------------- E4
+def source_resources(page: Page) -> list[str]:
+    """The `resource` of every `sources:` entry, in OKF v0.2's shape.
+
+    v0.2 defines `sources` as a list of objects, each with a required `resource`. A bare string
+    is rejected rather than tolerated: this wiki is the only producer of its own frontmatter, and
+    a consumer reading `.resource` off a string silently gets nothing, which is a worse failure
+    than a loud one.
+    """
+    listed = page.get("sources") or []
+    if isinstance(listed, (str, dict)):
+        listed = [listed]
+    out = []
+    for entry in listed:
+        if isinstance(entry, dict):
+            resource = str(entry.get("resource") or "").strip()
+            if not resource:
+                error(page.path, 1, "E4", "sources: an entry has no `resource:` — OKF v0.2 requires one per entry")
+                continue
+            out.append(resource)
+        else:
+            error(page.path, 1, "E4",
+                  f"sources: '{entry}' is a bare string — OKF v0.2 wants `- resource: {entry}`")
+    return out
+
+
 def check_sources_field(all_pages: list[Page]) -> None:
     for page in all_pages:
-        listed = page.get("sources") or []
-        if isinstance(listed, str):
-            listed = [listed]
-        for entry in listed:
-            target = (WIKI / str(entry)).resolve()
+        for entry in source_resources(page):
+            target = (WIKI / entry).resolve()
             if not target.exists():
                 error(page.path, 1, "E4", f"sources: '{entry}' does not exist (paths are relative to content/)")
             elif target.parent.name != TYPES["source"]:
@@ -276,12 +339,13 @@ def main() -> int:
     check_connected(all_pages)
     check_sources_field(all_pages)
     check_okf_conformance()
+    check_okf_families(all_pages)
     check_raw_pairing(all_pages)
     check_tags(all_pages)
     check_inbox()
     check_schema()
 
-    stubs = sum(1 for p in all_pages if p.get("status") == "stub")
+    stubs = sum(1 for p in all_pages if p.get("status") == "draft")
     noun = "page" if len(all_pages) == 1 else "pages"
 
     if not errors and not warnings:

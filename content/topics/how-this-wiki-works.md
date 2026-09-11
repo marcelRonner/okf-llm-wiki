@@ -1,11 +1,16 @@
 ---
 title: How this wiki works
 type: topic
-summary: The three layers, the four operations, and the rules that keep this wiki trustworthy.
+description: The three layers, the four operations, and the rules that keep this wiki trustworthy.
 created: 2026-08-01
 updated: 2026-09-11
+generated:
+  by: assistant
+  at: 2026-09-11
 tags: [meta]
-sources: [sources/2026-09-11-agent-instruction-formats.md, sources/2026-04-04-karpathy-llm-wiki-gist.md]
+sources:
+  - resource: sources/2026-09-11-agent-instruction-formats.md
+  - resource: sources/2026-04-04-karpathy-llm-wiki-gist.md
 ---
 
 # How this wiki works

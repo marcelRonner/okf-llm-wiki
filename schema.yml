@@ -66,7 +66,8 @@ types:
 # about — no code edit needed.
 
 limits:
-  summary_chars: 200        # summaries longer than this crowd the index
+  description_chars: 200    # descriptions longer than this crowd the index
   page_words: 400           # past this, look for a section that wants to be its own page
   stub_days: 90             # a stub older than this is either worth filling or worth deleting
-  placeholder: "TODO"       # a summary still containing this was never written
+  placeholder: "TODO"       # a description still containing this was never written
+  unverified_days: 365      # past this with no `verified:` entry, lint asks the owner to read it

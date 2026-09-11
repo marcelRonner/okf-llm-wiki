@@ -4,12 +4,12 @@
 Saves the assistant (and you) from hand-typing frontmatter and getting the folder wrong.
 
 Usage:
-    python3 scripts/new_page.py <type> "<title>" [--summary "..."] [--slug my-slug] [--stub]
+    python3 scripts/new_page.py <type> "<title>" [--description "..."] [--slug my-slug] [--stub]
                                                  [--link-from content/projects/x.md]
 
 Examples:
     python3 scripts/new_page.py project "Acme Migration"
-    python3 scripts/new_page.py system "Billing pipeline" --summary "Nightly invoice run"
+    python3 scripts/new_page.py system "Billing pipeline" --description "Nightly invoice run"
     python3 scripts/new_page.py topic "Event sourcing" --link-from content/projects/acme-migration.md
 
 `--link-from` appends the new page to another page's `Related` section. A page nothing links to
@@ -58,7 +58,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("type", choices=sorted(TYPES))
     parser.add_argument("title")
-    parser.add_argument("--summary", default="")
+    parser.add_argument("--description", default="")
     parser.add_argument("--slug", default=None)
     parser.add_argument("--stub", action="store_true", help="mark the page as a stub")
     parser.add_argument("--link-from", default=None, metavar="PAGE",
@@ -85,9 +85,9 @@ def main() -> int:
     content = (
         template.read_text(encoding="utf-8")
         .replace("{{TITLE}}", args.title)
-        .replace("{{SUMMARY}}", args.summary or "TODO — one sentence, this appears in the index")
+        .replace("{{DESCRIPTION}}", args.description or "TODO — one sentence, this appears in the index")
         .replace("{{DATE}}", today)
-        .replace("{{STATUS}}", "stub" if args.stub else "")
+        .replace("{{STATUS}}", "draft" if args.stub else "")
     )
     # Drop an empty status line rather than leaving `status:` dangling.
     content = "\n".join(l for l in content.splitlines() if l.strip() != "status:") + "\n"

@@ -34,7 +34,7 @@ If this month's page does not exist, create it:
 title: Owner notes — YYYY-MM
 type: source
 origin: owner
-summary: What the owner said in YYYY-MM that was not written down anywhere else.
+description: What the owner said in YYYY-MM that was not written down anywhere else.
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 tags: [owner-notes]
