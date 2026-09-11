@@ -19,7 +19,7 @@ place and translated here:
 
     AGENTS.md            -> .github/copilot-instructions.md
     .claude/rules/       -> .github/instructions/*.instructions.md   (`paths:` -> `applyTo:`)
-    .claude/commands/    -> .github/prompts/*.prompt.md              (adds Copilot's `agent:`)
+    .claude/skills/      -> .github/prompts/*.prompt.md              (adds Copilot's `agent:`)
 
 Edit the left-hand side. `make build` fails if the right-hand side has drifted.
 
@@ -38,7 +38,7 @@ INSTRUCTIONS = ROOT / "AGENTS.md"
 README = ROOT / "README.md"
 
 RULES_DIR = ROOT / ".claude" / "rules"
-COMMANDS_DIR = ROOT / ".claude" / "commands"
+SKILLS_DIR = ROOT / ".claude" / "skills"
 COPILOT = ROOT / ".github"
 
 GENERATED_NOTE = (
@@ -84,12 +84,13 @@ def copilot_mirror() -> dict:
 
     # Operations. Copilot needs `agent:`; $ARGUMENTS is Claude Code's placeholder and means
     # nothing there, so it is dropped — Copilot passes the chat message through anyway.
-    for src in sorted(COMMANDS_DIR.glob("*.md")):
+    for src in sorted(SKILLS_DIR.glob("*/SKILL.md")):
+        name = src.parent.name
         fm, body = split_frontmatter(src.read_text(encoding="utf-8"))
         desc = next(ln.split(":", 1)[1].strip() for ln in fm.splitlines() if ln.startswith("description:"))
         body = "\n".join(ln for ln in body.splitlines() if "$ARGUMENTS" not in ln)
-        rel = f".claude/commands/{src.name}"
-        out[COPILOT / "prompts" / f"{src.stem}.prompt.md"] = (
+        rel = f".claude/skills/{name}/SKILL.md"
+        out[COPILOT / "prompts" / f"{name}.prompt.md"] = (
             f"---\nagent: agent\ndescription: {desc}\n---\n\n"
             + MIRROR_NOTE.format(source=rel) + "\n\n" + body.lstrip("\n") + "\n"
         )
@@ -165,7 +166,7 @@ def layout_tree() -> str:
     lines.append("schema.yml          the page types — edit here, run `make schema`")
     lines.append("AGENTS.md           the schema in prose: layers, operations, provenance, rules")
     lines.append("CLAUDE.md           one line, importing AGENTS.md for Claude Code")
-    lines.append(".claude/            rules/ per-folder writing rules, commands/ the four operations")
+    lines.append(".claude/            rules/ per-folder writing rules, skills/ the four operations")
     lines.append(".github/            GENERATED mirror of the above, in the layout Copilot reads")
     lines.append("hugo.yaml           the site build: Docsy as a Hugo module, and the theme's settings")
     lines.append("layouts/            the one template this site overrides — see _markup/render-link.html")

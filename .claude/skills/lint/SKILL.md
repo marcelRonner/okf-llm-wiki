@@ -1,4 +1,5 @@
 ---
+name: lint
 description: Semantic health check of the wiki — contradictions, staleness, orphans, gaps. Read-only.
 ---
 

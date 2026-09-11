@@ -1,6 +1,6 @@
 ---
+name: query
 description: Answer a question from the wiki with citations, and offer to keep the answer as a page.
-argument-hint: your question
 ---
 
 # Query

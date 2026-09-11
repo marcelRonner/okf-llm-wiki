@@ -24,6 +24,33 @@ Format:
 
 ---
 
+## 2026-09-11 — Schema change: the four operations are skills
+
+**Operation:** correction
+**Input:** the owner asked why the operations could not be agents, and for the answer to be
+written down rather than left in a chat
+**Updated:** `.claude/skills/<name>/SKILL.md` (was `.claude/commands/<name>.md`), `README.md` —
+new *Why the four operations are skills, and not agents* section
+**Notes:** No operation changed behaviour. `/note`, `/ingest`, `/query` and `/lint` are still typed
+by name and still run in the conversation you type them in.
+
+Skills are a directory rather than a file, so an operation has somewhere to keep a helper script,
+and they load progressively — only the `description` sits in context until the skill runs. That
+makes four operations cost four lines instead of four hundred.
+
+Agents were the real question, and the answer is that they run in a *separate* conversation and
+return a summary. For `/note` that breaks the wiki's foundation: the owner's exact words have to
+reach the month's owner-notes page verbatim, and a summary boundary on the way in is where they
+would stop being verbatim. It also costs the typed door — "nothing enters or leaves the wiki except
+through these four" means four things the owner can type, and an agent cannot be typed.
+
+`/lint` is the exception, and the README says so: read-only, reads every page, keeps nothing
+verbatim, and its output genuinely is a summary. If a full lint ever crowds out the conversation it
+was run from, the move is to keep `/lint` as the skill and have it delegate to an agent. Not needed
+at two pages.
+
+---
+
 ## 2026-09-11 — Schema change: the instructions moved out of .github/
 
 **Operation:** correction

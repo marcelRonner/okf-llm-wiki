@@ -26,8 +26,8 @@ worse than useless.
 | **Query** | `/query` | Answer a question from the pages, with links. A durable answer becomes a page. |
 | **Lint** | `/lint` | Re-read the wiki looking for contradictions, staleness, orphans, and gaps. |
 
-Nothing enters or leaves the wiki except through these four. Each has a command file in
-`.claude/commands/` — follow it rather than improvising.
+Nothing enters or leaves the wiki except through these four. Each is a skill in
+`.claude/skills/` — follow it rather than improvising.
 
 `/note` and `/ingest` differ in what they take, not in what they produce. Ingest starts from a
 document and must preserve it in `raw/`. Note starts from the owner's own words, which never had

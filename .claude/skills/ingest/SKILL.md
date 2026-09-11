@@ -1,4 +1,5 @@
 ---
+name: ingest
 description: Fold new material from inbox/ (or pasted text) into the wiki, then file, log, and reindex it.
 ---
 

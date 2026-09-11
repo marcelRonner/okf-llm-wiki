@@ -82,7 +82,7 @@ scripts/            index generation and the mechanical checks
 schema.yml          the page types — edit here, run `make schema`
 AGENTS.md           the schema in prose: layers, operations, provenance, rules
 CLAUDE.md           one line, importing AGENTS.md for Claude Code
-.claude/            rules/ per-folder writing rules, commands/ the four operations
+.claude/            rules/ per-folder writing rules, skills/ the four operations
 .github/            GENERATED mirror of the above, in the layout Copilot reads
 hugo.yaml           the site build: Docsy as a Hugo module, and the theme's settings
 layouts/            the one template this site overrides — see _markup/render-link.html
@@ -134,7 +134,7 @@ if you want that.
 | `.claude/rules/projects-systems.md` | Projects and systems |
 | `.claude/rules/decisions.md` | Decision records |
 | `.claude/rules/sources.md` | Source pages, their link to `raw/`, and the owner-notes pages |
-| `.claude/commands/` | `/note`, `/ingest`, `/query`, `/lint` |
+| `.claude/skills/` | `/note`, `/ingest`, `/query`, `/lint` — one directory each |
 | `.github/` | **Generated.** The same instructions in the layout Copilot reads |
 
 Each rules file carries a `paths:` glob, so only the ones relevant to the folder being edited get
@@ -146,6 +146,35 @@ here. Edit the source; `make build` fails if the mirror has drifted.
 The one thing a `paths:` glob cannot do is load a rule *before* the first write to a folder, since
 it attaches only once a file there has been read. `AGENTS.md` carries a short routing table for
 that case.
+
+### Why the four operations are skills, and not agents
+
+Claude Code offers three places to put an instruction like `/note`, and the choice is not
+cosmetic — the directory name selects a mechanism.
+
+| | Runs where | Invoked by |
+|---|---|---|
+| `.claude/commands/` | this conversation | you type `/name`; the model may also call it |
+| `.claude/skills/` | this conversation | you type `/name`; the model may also call it |
+| `.claude/agents/` | **a separate conversation** | delegation only — there is no `/name` for an agent |
+
+Commands and skills are near-twins: both put the file's text into the conversation you are already
+having. Skills win on two details, which is why the operations live there. A skill is a directory,
+so `/ingest` has somewhere to keep a helper script if it ever needs one; and a skill loads
+progressively — only its `description` sits in context until it runs, so four operations cost four
+lines rather than four hundred.
+
+Agents are the one that is genuinely different, and wrong for three of the four. An agent gets its
+own blank context and returns a summary. For `/note` that breaks the thing the wiki is built on:
+the owner's exact words have to reach `content/sources/YYYY-MM-owner-notes.md` verbatim, and a
+summary boundary on the way in is precisely where they would stop being verbatim. It also costs
+you the typed door — *nothing enters or leaves the wiki except through these four* means four
+things you can type, and an agent cannot be typed.
+
+`/lint` is the exception worth revisiting. It is read-only, it reads every page, it preserves
+nothing verbatim, and its output genuinely is a summary — the case agents exist for. If the wiki
+grows enough that a full lint crowds out the conversation it was run from, the move is to keep
+`/lint` as the skill and have it delegate the survey to an agent. Not yet needed at this size.
 
 ## Adding a page type
 

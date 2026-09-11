@@ -2,7 +2,7 @@
 """Mechanical consistency checks for the wiki.
 
 Anything a computer can check reliably should not depend on an assistant remembering it.
-This is the deterministic half of the lint operation; `.claude/commands/lint.md`
+This is the deterministic half of the lint operation; `.claude/skills/lint/SKILL.md`
 covers contradictions, staleness and judgement.
 
 Findings come at two severities, because "you have not finished this page yet" and "this page

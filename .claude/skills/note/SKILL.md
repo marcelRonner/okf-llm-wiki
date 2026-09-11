@@ -1,6 +1,6 @@
 ---
+name: note
 description: Write down something the owner knows, with no document behind it. The fast path into the wiki.
-argument-hint: what you know
 ---
 
 # Note
