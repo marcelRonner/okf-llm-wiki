@@ -177,7 +177,7 @@ def layout_tree() -> str:
     lines.append(".claude/            rules/ per-folder writing rules, skills/ the four operations")
     lines.append(".github/            GENERATED — scoped rules in Copilot's dialect, and typed doors")
     lines.append("hugo.yaml           the site build: Docsy as a Hugo module, and the theme's settings")
-    lines.append("layouts/            the one template this site overrides — see _markup/render-link.html")
+    lines.append("layouts/            the four templates this site overrides — each says why in a comment")
     lines.append("go.mod  package.json  pinned versions of the theme and its assets")
     lines.append("```")
     return "\n".join(lines)

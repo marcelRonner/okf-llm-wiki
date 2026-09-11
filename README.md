@@ -85,7 +85,7 @@ CLAUDE.md           one line, importing AGENTS.md for Claude Code
 .claude/            rules/ per-folder writing rules, skills/ the four operations
 .github/            GENERATED — scoped rules in Copilot's dialect, and typed doors
 hugo.yaml           the site build: Docsy as a Hugo module, and the theme's settings
-layouts/            the one template this site overrides — see _markup/render-link.html
+layouts/            the four templates this site overrides — each says why in a comment
 go.mod  package.json  pinned versions of the theme and its assets
 ```
 <!-- schema-layout:end -->
@@ -218,7 +218,12 @@ no `menu:` in `hugo.yaml` on purpose: Docsy builds the sidebar from the folder t
 page never means editing the config. The section titles and their order come from `schema.yml`,
 stamped into each `content/<folder>/_index.md` by `make schema`.
 
-Two things in `hugo.yaml` are worth knowing before you change them:
+Four templates in `layouts/` override the theme, each for one reason and documented in place:
+`_markup/render-link.html` resolves relative Markdown links; `_partials/sidebar-args.html` roots the
+sidebar at the whole wiki rather than one folder; and `_td-content.html` and `list.html` stop the
+page's own `# Heading` being rendered twice.
+
+Two of those are worth explaining here, because they are the ones that would surprise you:
 
 - **`layouts/_markup/render-link.html`.** Pages link to each other with ordinary relative
   Markdown links (`../projects/acme.md`) so the same files work in Obsidian, on GitHub, and in the
@@ -230,6 +235,12 @@ Two things in `hugo.yaml` are worth knowing before you change them:
   wiki's page type — so mounting `layouts/docs` at the layout root makes that chrome the site-wide
   default instead. The other mounts are Docsy's own and have to be restated because declaring any
   replaces them; re-check them against the theme's `hugo.yaml` after `hugo mod get -u`.
+- **Two `<h1>`s, and why there is only one.** Docsy renders the frontmatter `title` as a heading and
+  then the body under it, and every page here opens with its own `# Title` because
+  `.claude/rules/pages.md` requires one — these files have to read correctly in Obsidian and on
+  GitHub, where nothing renders frontmatter. The two content templates test the rendered body for an
+  `<h1>` and add one only if it has none, which is what lets the generated section pages stay
+  headingless while the catalogue keeps its `# Index`.
 
 ## Publishing
 

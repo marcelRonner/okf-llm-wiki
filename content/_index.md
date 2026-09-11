@@ -1,6 +1,6 @@
 ---
 title: Index
-type: docs
+type: index
 summary: Catalogue of every page in this wiki, grouped by type.
 ---
 
