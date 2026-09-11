@@ -1,0 +1,54 @@
+{{- /*
+  Resolve relative Markdown links to the target page's URL.
+
+  Every page in this wiki links to other pages with an ordinary relative Markdown link
+  (`../people/jane.md`), deliberately: the same files then work unchanged in Obsidian, on GitHub,
+  and in the built site. MkDocs rewrote those links to the published URL on its own. Hugo does not
+  — without this hook it emits `href="../people/jane.md"` verbatim, which 404s on the built site
+  because the page is published at `../people/jane/`.
+
+  A destination that does not resolve to a real page is passed through untouched. That is what
+  links into `raw/` are: the originals live outside `content/`, are deliberately unpublished, and
+  are there for the reader of the repository. They were dead on the built site under MkDocs too.
+*/ -}}
+
+{{- $dest := .Destination -}}
+{{- $isRemote := or (urls.Parse $dest).Scheme (strings.HasPrefix $dest "//") -}}
+
+{{- /* Split off a #fragment so `page.md#section` resolves and keeps its anchor. */ -}}
+{{- $path := $dest -}}
+{{- $frag := "" -}}
+{{- if and (not $isRemote) (strings.Contains $dest "#") -}}
+  {{- $parts := split $dest "#" -}}
+  {{- $path = index $parts 0 -}}
+  {{- $frag = printf "#%s" (delimit (after 1 $parts) "#") -}}
+{{- end -}}
+
+{{- $href := $dest -}}
+
+{{- if and (not $isRemote) (strings.HasSuffix $path ".md") -}}
+  {{- with .Page.File -}}
+    {{- /* Normalise the link against the linking page's directory: path.Join collapses `..`. */ -}}
+    {{- $abs := path.Join (path.Dir .Path) $path -}}
+
+    {{- /* A link to a branch bundle names the file; Hugo knows that page by its directory. */ -}}
+    {{- $lookup := $abs -}}
+    {{- if eq (path.Base $abs) "_index.md" -}}
+      {{- $lookup = path.Dir $abs -}}
+      {{- if eq $lookup "." -}}
+        {{- $lookup = "/" -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- with site.GetPage $lookup -}}
+      {{- $href = printf "%s%s" .RelPermalink $frag -}}
+    {{- else -}}
+      {{- warnf "render-link: %q in %q does not resolve to a page — left as written" $dest $.Page.File.Path -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+<a href="{{ $href }}"
+  {{- with .Title }} title="{{ . }}"{{ end -}}
+  {{- if $isRemote }} rel="noopener"{{ end -}}
+>{{ .Text }}</a>

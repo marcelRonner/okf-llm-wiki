@@ -1,6 +1,6 @@
 ---
 title: Index
-type: index
+type: docs
 summary: Catalogue of every page in this wiki, grouped by type.
 ---
 
@@ -8,7 +8,7 @@ summary: Catalogue of every page in this wiki, grouped by type.
 
 # Index
 
-Every page in the wiki. 2 pages, 0 of them stubs, last built 2026-08-02.
+Every page in the wiki. 2 pages, 0 of them stubs, last built 2026-09-11.
 
 See [Tags](tags.md) for the same pages grouped by subject, and [Log](log.md) for what changed
 and when.

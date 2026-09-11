@@ -18,7 +18,7 @@ and the first worked example of the format.
 **Raw sources** live in `raw/`, exactly as they arrived, and are never edited. If a page and a
 source disagree, the source wins — that is the whole reason to keep them.
 
-**The wiki** is `wiki/`: everything written *about* those sources, plus everything you know that
+**The wiki** is `content/`: everything written *about* those sources, plus everything you know that
 never had a document behind it. This is the only layer that grows.
 
 **The schema** is `schema.yml` and `.github/`: the page types, the required fields, the writing
@@ -83,7 +83,7 @@ never depend on an assistant remembering it.
 
 Two ways, over the same files:
 
-- **Obsidian** — open `wiki/` as a vault. No build step, instant search, backlinks, graph view,
+- **Obsidian** — open `content/` as a vault. No build step, instant search, backlinks, graph view,
   works on a phone. This is the day-to-day way in.
 - **`make serve`** — a searchable website, for sharing or reading on something without Obsidian.
 
@@ -99,7 +99,7 @@ Both work because pages use ordinary relative Markdown links rather than wikilin
 ## Related
 
 - [Checks and finding things](checks-and-finding-things.md) — what `make lint` verifies, and the three ways a page gets found
-- [Index](../index.md) — every page in the wiki, grouped by type
+- [Index](../_index.md) — every page in the wiki, grouped by type
 - [Tags](../tags.md) — every subject in use, and what carries it
 - [Log](../log.md) — what has been ingested, changed and corrected
 

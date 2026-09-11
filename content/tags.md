@@ -9,9 +9,9 @@ summary: Every tag in use, and the pages carrying it.
 # Tags
 
 Tags cut across the type folders — a page about one project and a page about one person can
-share a subject. 1 tag in use, last built 2026-08-02.
+share a subject. 1 tag in use, last built 2026-09-11.
 
-See [Index](index.md) for every page grouped by type instead.
+See [Index](_index.md) for every page grouped by type instead.
 
 ## meta (2)
 

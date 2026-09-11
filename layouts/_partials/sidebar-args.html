@@ -1,0 +1,33 @@
+{{/*
+  Root the sidebar at the whole wiki instead of at one folder.
+
+  Docsy is built for sites whose pages all live under a single top-level section — its own docs
+  are all under `/docs/` — so its sidebar roots at `.FirstSection`. This wiki has seven top-level
+  folders, one per page type, which means the stock sidebar shows only the folder you are already
+  in: from people/ there is no way to reach projects/. The theme looks like it intends to allow
+  this (`_partials/sidebar-args.html` computes a `navRoot` of `.Site.Home` when the home page's
+  type is `docs`) but then overwrites it with `.FirstSection` unconditionally, so that path is
+  unreachable. This override restores it.
+
+  It deliberately drops the theme's `sidebar_root_for` handling, which narrows the nav to a
+  subtree. Nothing here sets it, and this wiki wants the opposite. If a future Docsy changes what
+  sidebar-tree.html expects back, the nav will break loudly rather than quietly — re-check this
+  file against the theme's own after `hugo mod get -u`.
+*/ -}}
+
+{{ $sidebarCacheLimit := .Site.Params.ui.sidebar_cache_limit | default 2000 -}}
+{{ $cacheSidebar := ge (len .Site.Pages) $sidebarCacheLimit -}}
+{{ if eq (.Param "td.chrome") "shared" -}}
+  {{ $cacheSidebar = true -}}
+{{ end -}}
+
+{{ $root := cond (eq .Site.Home.Type "docs") .Site.Home .FirstSection -}}
+
+{{ return dict
+    "context" .
+    "cacheSidebar" $cacheSidebar
+    "sidebarRoot" $root
+    "sidebarRootID" $root.RelPermalink
+    "navRoot" $root
+    "scoped" false
+-}}
