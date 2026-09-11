@@ -9,12 +9,21 @@ years' time.
 
 ## Setup
 
+The site is built with [Hugo](https://gohugo.io/) and the [Docsy](https://www.docsy.dev/) theme.
+Docsy is a Hugo module, so it needs Go to fetch it and Node to build its stylesheets — Hugo
+itself must be the *extended* build.
+
 ```bash
+brew install hugo go node                        # hugo must be the extended build
 python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt                  # PyYAML, for the scripts in scripts/
+npm install                                      # Docsy's assets, and Dart Sass for Hugo
 make lint          # should pass on the empty wiki
-make serve         # http://127.0.0.1:8000
+make serve         # http://localhost:1313
 ```
+
+Nothing is installed globally beyond those three tools: Dart Sass is a project-local npm
+dependency, and `make` puts `node_modules/.bin` on Hugo's PATH so it is found.
 
 **Open this folder directly in VS Code** (not a parent folder). Copilot only loads
 `.github/copilot-instructions.md`, `.github/instructions/` and `.github/prompts/` from the
@@ -22,7 +31,7 @@ workspace root, so opening a parent leaves the assistant with no instructions at
 
 ### Obsidian
 
-Open `wiki/` as a vault. Then in **Settings → Files and links**:
+Open `content/` as a vault. Then in **Settings → Files and links**:
 
 - **Use [[Wikilinks]]** → **off**
 - **New link format** → **Relative path to file**
@@ -34,7 +43,7 @@ This matters: the wiki uses ordinary relative Markdown links so the same files w
 
 **To write down something you know** — `/note` in Copilot chat, followed by the thing. No file,
 no inbox, no confirmation round-trip. The assistant works out which page it belongs on, writes
-it, and records what you said verbatim in that month's `wiki/sources/YYYY-MM-owner-notes.md` so
+it, and records what you said verbatim in that month's `content/sources/YYYY-MM-owner-notes.md` so
 the claim has a dated anchor like any other. This is the fast path, and most days it is the only
 one you need.
 
@@ -59,8 +68,8 @@ as a page.
 ```
 inbox/              drop new material here — should be empty when you are done
 raw/                originals, immutable, never edited
-wiki/               the vault, and the site's docs_dir
-├── index.md    GENERATED catalogue — do not edit, run `make index`
+content/            the vault, and Hugo's content directory
+├── _index.md   GENERATED catalogue — do not edit, run `make index`
 ├── tags.md     GENERATED tag listing — every tag, and what carries it
 ├── log.md      append-only history of every operation
 ├── projects/   work with a goal and an end
@@ -74,6 +83,9 @@ templates/          the shape of each page type
 scripts/            index generation and the mechanical checks
 schema.yml          the page types — edit here, run `make schema`
 .github/            the schema in prose: instructions and the operation prompts
+hugo.yaml           the site build: Docsy as a Hugo module, and the theme's settings
+layouts/            the one template this site overrides — see _markup/render-link.html
+go.mod  package.json  pinned versions of the theme and its assets
 ```
 <!-- schema-layout:end -->
 
@@ -82,14 +94,15 @@ schema.yml          the page types — edit here, run `make schema`
 | | |
 |---|---|
 | `make lint` | Regenerate the catalogue, then check the wiki. **Errors fail, warnings are reported.** |
-| `make index` | Regenerate `wiki/index.md`, `wiki/tags.md` and the backlink blocks |
+| `make index` | Regenerate `content/_index.md`, `content/tags.md` and the backlink blocks |
 | `make schema` | Restamp the type tables in `.github/` and this README from `schema.yml` |
-| `make serve` | Live-reload site |
+| `make serve` | Live-reload site at <http://localhost:1313> |
 | `make build` | Check nothing is stale or broken, then build the site into `site/` |
 | `make lint STRICT=1` | The same checks, but warnings fail too — for CI, if you want the higher bar |
+| `make build STRICT=1` | The same, and Hugo's own warnings fail too — an unresolved Markdown link, say |
 | `make inbox` | What is waiting to be ingested |
-| `make new TYPE=person TITLE="Jane Doe" [FROM=wiki/orgs/acme.md]` | New page from its template, linked from `FROM` |
-| `make move PAGE=wiki/topics/x.md TYPE=project` | Re-type or rename a page, rewriting every link to it |
+| `make new TYPE=person TITLE="Jane Doe" [FROM=content/orgs/acme.md]` | New page from its template, linked from `FROM` |
+| `make move PAGE=content/topics/x.md TYPE=project` | Re-type or rename a page, rewriting every link to it |
 | `make new-type TYPE=meeting` | Scaffold a type you have declared in `schema.yml` |
 
 ### Errors versus warnings
@@ -140,6 +153,26 @@ assistant, and you — with nothing checking they agreed. That is worse than unt
 `.github/` and the linter disagreed about which types existed, the assistant trusted both and
 resolved the contradiction by rewriting *pages* to satisfy the linter. Now `schema.yml` is the
 only definition, and `make build` fails if any generated restatement of it has drifted.
+
+## How the site is built
+
+Hugo renders `content/` with Docsy, pulled in as a Hugo module and pinned in `go.mod`. There is
+no `menu:` in `hugo.yaml` on purpose: Docsy builds the sidebar from the folder tree, so adding a
+page never means editing the config. The section titles and their order come from `schema.yml`,
+stamped into each `content/<folder>/_index.md` by `make schema`.
+
+Two things in `hugo.yaml` are worth knowing before you change them:
+
+- **`layouts/_markup/render-link.html`.** Pages link to each other with ordinary relative
+  Markdown links (`../people/jane.md`) so the same files work in Obsidian, on GitHub, and in the
+  built site. MkDocs rewrote those to the published URL by itself; Hugo does not, and would ship
+  `href="…jane.md"`, which 404s. This hook resolves them. A link that resolves to no page — one
+  into `raw/`, say — is passed through untouched and warns; `make build STRICT=1` makes that fail.
+- **The `mounts:` under the Docsy import.** Docsy's sidebar chrome lives in `layouts/docs/`, which
+  Hugo only reaches for pages whose `type` is `docs`. Every page here already has a `type` — this
+  wiki's page type — so mounting `layouts/docs` at the layout root makes that chrome the site-wide
+  default instead. The other mounts are Docsy's own and have to be restated because declaring any
+  replaces them; re-check them against the theme's `hugo.yaml` after `hugo mod get -u`.
 
 ## Publishing
 

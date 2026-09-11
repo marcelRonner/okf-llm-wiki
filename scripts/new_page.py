@@ -5,12 +5,12 @@ Saves the assistant (and you) from hand-typing frontmatter and getting the folde
 
 Usage:
     python3 scripts/new_page.py <type> "<title>" [--summary "..."] [--slug my-slug] [--stub]
-                                                 [--link-from wiki/projects/x.md]
+                                                 [--link-from content/projects/x.md]
 
 Examples:
     python3 scripts/new_page.py project "Acme Migration"
     python3 scripts/new_page.py person "Jane Doe" --summary "Platform lead at Acme"
-    python3 scripts/new_page.py topic "Event sourcing" --link-from wiki/projects/acme-migration.md
+    python3 scripts/new_page.py topic "Event sourcing" --link-from content/projects/acme-migration.md
 
 `--link-from` appends the new page to another page's `Related` section. A page nothing links to
 is one you will never find again, so it is worth the extra flag at creation time rather than a

@@ -28,7 +28,7 @@ For each item, read it fully, then establish:
 
 - What kind of material is this, who produced it, and what date does it describe?
 - Which existing pages does it touch? Search the wiki — do not assume it is all new.
-  Check `wiki/index.md` first, then grep for the proper nouns in the material.
+  Check `content/_index.md` first, then grep for the proper nouns in the material.
 - What is genuinely new versus a restatement of what you already have?
 
 ## 3. Propose in proportion to the risk
@@ -49,11 +49,11 @@ risk, and stopping for approval on a two-page source teaches the owner that the 
 Source: <what it is, date>
 
 Pages to create:
-  wiki/projects/x.md      — why
+  content/projects/x.md      — why
 Pages to update:
-  wiki/people/y.md        — what changes
+  content/people/y.md        — what changes
 Contradictions found:
-  wiki/systems/z.md says A, this source says B
+  content/systems/z.md says A, this source says B
 Questions:
   - …
 ```
@@ -65,7 +65,7 @@ correct it with `make move`, which re-types the page and rewrites every link to 
 
 ## 4. Write
 
-- Create the **source page** in `wiki/sources/` first — it is the anchor everything else cites.
+- Create the **source page** in `content/sources/` first — it is the anchor everything else cites.
 - Then create or update the derived pages, following the instructions for each type.
 - Add `sources:` frontmatter on every page you touched, pointing at the source page.
 - Set `updated:` to today on every page you touched.
@@ -87,7 +87,7 @@ The inbox should be empty when you finish.
 
 ## 6. Record and verify
 
-- Add an entry at the top of `wiki/log.md` (see the format in that file).
+- Add an entry at the top of `content/log.md` (see the format in that file).
 - Run `make lint`. **Fix every error.** Report the warnings rather than fixing them silently —
   an unlinked page or a placeholder summary is often a real question about what the owner wants,
   and never a reason to delete what the warning points at.

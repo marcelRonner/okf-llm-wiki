@@ -1,5 +1,5 @@
 ---
-applyTo: "wiki/people/**,wiki/orgs/**"
+applyTo: "content/people/**,content/orgs/**"
 ---
 
 # People and organisations

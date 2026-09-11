@@ -31,7 +31,7 @@ Run this monthly, or after a burst of ingestion.
 **3. Structural drift.**
 - pages that have grown past ~400 words and contain a section wanting to be its own page
 - the same idea explained on several pages instead of one page others link to
-- `wiki/topics/` accumulating pages that are really projects, systems, or decisions
+- `content/topics/` accumulating pages that are really projects, systems, or decisions
 - stubs that have been stubs for months — either fill them or admit they are not needed
 
 **4. Missing links.** Entities mentioned by name across several pages with no page of their own,

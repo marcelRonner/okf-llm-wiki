@@ -12,10 +12,10 @@ the wiki actually supports it**.
 
 Do not answer from memory of this conversation. Search the files:
 
-- Start with `wiki/index.md` to see what exists.
+- Start with `content/_index.md` to see what exists.
 - Grep for the proper nouns and key terms in the question, including likely synonyms.
 - Follow links out from whatever you find — the answer is often one hop away.
-- Check `wiki/sources/` too. Something may have been ingested but not yet promoted to a page.
+- Check `content/sources/` too. Something may have been ingested but not yet promoted to a page.
 
 ## 2. Answer
 
@@ -24,7 +24,7 @@ Structure:
 > **Short answer** — one or two sentences.
 >
 > **Detail** — what the wiki says, with a link on every claim:
-> "The migration was paused in March ([Acme Migration](wiki/projects/acme-migration.md))."
+> "The migration was paused in March ([Acme Migration](content/projects/acme-migration.md))."
 >
 > **Confidence** — one of:
 > - **Well supported** — several pages or a primary source agree
@@ -43,7 +43,7 @@ If pages contradict each other, say so and give both, with dates. Do not average
 If the answer took real work — several pages joined, a contradiction untangled, a conclusion
 that is not written anywhere — offer to write it down:
 
-> This isn't recorded anywhere. Want me to add it as `wiki/topics/…`?
+> This isn't recorded anywhere. Want me to add it as `content/topics/…`?
 
 Only if the owner agrees. Then follow the normal page rules, add a log entry, and run `make lint`.
 

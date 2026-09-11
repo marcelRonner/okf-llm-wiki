@@ -14,7 +14,7 @@ worse than useless.
 | Layer | Where | Rule |
 |---|---|---|
 | **Raw sources** | `inbox/` → `raw/` | Immutable. Never edited, never summarised in place. If a page and a source disagree, the source wins. |
-| **The wiki** | `wiki/` | Everything you write. Short linked pages, one fact in one place. |
+| **The wiki** | `content/` | Everything you write. Short linked pages, one fact in one place. |
 | **The schema** | `schema.yml` + `.github/` | The page types, and these instructions. Changing them changes how everything is written. |
 
 ## The four operations
@@ -42,23 +42,23 @@ from `schema.yml` — if you need to change it, change that file and run `make s
 <!-- schema-types:start GENERATED from schema.yml by `make schema` — do not edit -->
 | Type | Folder | Holds |
 |---|---|---|
-| `project` | `wiki/projects/` | A piece of work with a goal and an end. What it is for, where it stands, who is involved. |
-| `system` | `wiki/systems/` | A thing that exists and keeps existing — a service, a tool, a process. How it works, how it fails. |
-| `decision` | `wiki/decisions/` | One decision — what was chosen, what was rejected, why, and whether it still holds. |
-| `person` | `wiki/people/` | Someone you work with. Role, context, what they own, how to work with them. |
-| `org` | `wiki/orgs/` | A company, team, or vendor. What they do, your relationship to them. |
-| `topic` | `wiki/topics/` | A concept that keeps coming up and does not fit the above. |
-| `source` | `wiki/sources/` | What one piece of raw material said, and what it changed. One per item in raw/, plus the monthly owner-notes pages. |
+| `project` | `content/projects/` | A piece of work with a goal and an end. What it is for, where it stands, who is involved. |
+| `system` | `content/systems/` | A thing that exists and keeps existing — a service, a tool, a process. How it works, how it fails. |
+| `decision` | `content/decisions/` | One decision — what was chosen, what was rejected, why, and whether it still holds. |
+| `person` | `content/people/` | Someone you work with. Role, context, what they own, how to work with them. |
+| `org` | `content/orgs/` | A company, team, or vendor. What they do, your relationship to them. |
+| `topic` | `content/topics/` | A concept that keeps coming up and does not fit the above. |
+| `source` | `content/sources/` | What one piece of raw material said, and what it changed. One per item in raw/, plus the monthly owner-notes pages. |
 <!-- schema-types:end -->
 
 Three special pages are not typed:
 
-- **`wiki/index.md`** — the catalogue. **Generated**; never edit it by hand.
-- **`wiki/tags.md`** — every tag and what carries it. **Generated**; never edit it by hand.
-- **`wiki/log.md`** — append-only history of every operation. Add entries at the top; never edit or delete an existing one.
+- **`content/_index.md`** — the catalogue. **Generated**; never edit it by hand.
+- **`content/tags.md`** — every tag and what carries it. **Generated**; never edit it by hand.
+- **`content/log.md`** — append-only history of every operation. Add entries at the top; never edit or delete an existing one.
 
 **Do not invent a new type.** Adding one fragments the wiki, and it is the owner's call. If
-something genuinely fits no type, put it in `wiki/topics/` and say so.
+something genuinely fits no type, put it in `content/topics/` and say so.
 
 ### Choosing a type — do not ask, decide
 
@@ -109,7 +109,7 @@ Three origins, and every claim on every page has exactly one:
 | Origin | How it is recorded |
 |---|---|
 | A document | It lives in `raw/`, has a source page, and pages citing it list that page in `sources:` |
-| The owner | It goes in `wiki/sources/YYYY-MM-owner-notes.md` with a date, and pages citing it list that page in `sources:` |
+| The owner | It goes in `content/sources/YYYY-MM-owner-notes.md` with a date, and pages citing it list that page in `sources:` |
 | Another page | Link to it. Do not restate it. |
 
 The monthly owner-notes page is what makes `/note` safe. Without it, "the owner told me" would be
@@ -134,7 +134,7 @@ this wiki is worth more than a folder of notes. **Append to it, never rewrite it
 - **Short pages beat long pages.** When a page passes roughly 400 words, look for a section that
   wants to be its own page. `make lint` warns at that point.
 - **Never delete knowledge silently.** If something turns out to be wrong, correct it and note the
-  correction in `wiki/log.md`. If a page is obsolete, mark it in the frontmatter with
+  correction in `content/log.md`. If a page is obsolete, mark it in the frontmatter with
   `status: superseded` and link to what replaced it.
 
 ## After any change — mandatory
@@ -143,7 +143,7 @@ this wiki is worth more than a folder of notes. **Append to it, never rewrite it
 2. ☐ Every new page is linked from at least one other page — from the body of a real page, not
    just the index, which links everything by construction and so proves nothing
 3. ☐ Every claim traces to a source page, the owner-notes page, or another page
-4. ☐ `wiki/log.md` has an entry describing the operation
+4. ☐ `content/log.md` has an entry describing the operation
 5. ☐ `make lint` passes — it regenerates the index, tags and backlinks, then checks
 
 Run `make lint` before telling the owner you are done. Not "I believe it is consistent" — run it.

@@ -1,5 +1,5 @@
 ---
-applyTo: "wiki/projects/**,wiki/systems/**"
+applyTo: "content/projects/**,content/systems/**"
 ---
 
 # Projects and systems

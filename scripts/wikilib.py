@@ -13,13 +13,13 @@ except ImportError:  # pragma: no cover
     raise SystemExit("PyYAML is required — run: pip install -r requirements.txt")
 
 ROOT = Path(__file__).resolve().parent.parent
-WIKI = ROOT / "wiki"
+WIKI = ROOT / "content"
 INBOX = ROOT / "inbox"
 RAW = ROOT / "raw"
 TEMPLATES = ROOT / "templates"
 SCHEMA_FILE = ROOT / "schema.yml"
 
-INDEX = WIKI / "index.md"
+INDEX = WIKI / "_index.md"
 LOG = WIKI / "log.md"
 TAGS = WIKI / "tags.md"
 
@@ -93,7 +93,7 @@ class Page:
 
     @property
     def wiki_rel(self) -> str:
-        """Path relative to the wiki root — how MkDocs and Obsidian refer to it."""
+        """Path relative to the wiki root — how Hugo and Obsidian refer to it."""
         return str(self.path.relative_to(WIKI))
 
     def get(self, key, default=None):
@@ -138,11 +138,18 @@ class Page:
 
 
 def pages(include_special: bool = False) -> list[Page]:
-    """All wiki pages, sorted. The generated catalogues and the log are excluded by default."""
-    special = {INDEX.resolve(), LOG.resolve(), TAGS.resolve()}
+    """All wiki pages, sorted. The generated catalogues and the log are excluded by default.
+
+    So is every `_index.md`. Those are Hugo section pages — the titles and ordering behind the
+    site's sidebar, stamped from schema.yml by `make schema`. They are furniture, not content:
+    they carry no claim, cite no source, and should not appear in the catalogue or collect
+    backlinks. The root `_index.md` is the generated catalogue itself, and is covered by the
+    same rule.
+    """
+    special = {LOG.resolve(), TAGS.resolve()}
     found = []
     for path in sorted(WIKI.rglob("*.md")):
-        if not include_special and path.resolve() in special:
+        if not include_special and (path.name == "_index.md" or path.resolve() in special):
             continue
         found.append(Page(path))
     return found

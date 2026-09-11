@@ -51,7 +51,7 @@ type close to this one for how much detail is worth asking for.
 """
 
 INSTRUCTION = """---
-applyTo: "wiki/{folder}/**"
+applyTo: "content/{folder}/**"
 ---
 
 # {label}
@@ -88,7 +88,7 @@ def main() -> int:
     if not folder.exists():
         folder.mkdir(parents=True)
         (folder / ".gitkeep").touch()
-        created.append(f"wiki/{spec['folder']}/")
+        created.append(f"content/{spec['folder']}/")
 
     template = TEMPLATES / f"{name}.md"
     if not template.exists():

@@ -93,7 +93,7 @@ def check_pages(all_pages: list[Page]) -> None:
             expected = TYPES[type_name]
             actual = page.path.relative_to(WIKI).parts[0]
             if actual != expected:
-                error(page.path, 1, "E2", f"type '{type_name}' belongs in wiki/{expected}/, but page is in wiki/{actual}/ — `make move` fixes this and the links")
+                error(page.path, 1, "E2", f"type '{type_name}' belongs in content/{expected}/, but page is in content/{actual}/ — `make move` fixes this and the links")
 
         created, updated = as_date(page.get("created")), as_date(page.get("updated"))
         if page.get("created") and not created:
@@ -166,7 +166,7 @@ def check_sources_field(all_pages: list[Page]) -> None:
         for entry in listed:
             target = (WIKI / str(entry)).resolve()
             if not target.exists():
-                error(page.path, 1, "E4", f"sources: '{entry}' does not exist (paths are relative to wiki/)")
+                error(page.path, 1, "E4", f"sources: '{entry}' does not exist (paths are relative to content/)")
             elif target.parent.name != TYPES["source"]:
                 error(page.path, 1, "E4", f"sources: '{entry}' is not a source page")
 
@@ -234,7 +234,7 @@ def check_schema() -> None:
             warn(TEMPLATES / f"{name}.md", 1, "W7", f"type '{name}' is declared in schema.yml but has no template")
         folder = WIKI / spec["folder"]
         if not folder.is_dir():
-            warn(folder, 1, "W7", f"type '{name}' is declared in schema.yml but wiki/{spec['folder']}/ does not exist")
+            warn(folder, 1, "W7", f"type '{name}' is declared in schema.yml but content/{spec['folder']}/ does not exist")
 
 
 # --------------------------------------------------------------------- main

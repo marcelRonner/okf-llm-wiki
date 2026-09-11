@@ -1,5 +1,5 @@
 ---
-applyTo: "wiki/decisions/**"
+applyTo: "content/decisions/**"
 ---
 
 # Decision pages

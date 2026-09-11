@@ -1,5 +1,5 @@
 ---
-applyTo: "wiki/sources/**"
+applyTo: "content/sources/**"
 ---
 
 # Source pages
@@ -65,7 +65,7 @@ What the source raised but did not settle. Questions for the owner go here.
 
 ## Owner notes — the one source without a document
 
-`wiki/sources/YYYY-MM-owner-notes.md`, one per month, created by `/note`. It records things the
+`content/sources/YYYY-MM-owner-notes.md`, one per month, created by `/note`. It records things the
 owner said directly, which never had a document behind them and so have nothing to file in
 `raw/`.
 

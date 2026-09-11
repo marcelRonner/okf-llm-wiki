@@ -3,8 +3,8 @@
 
 Three artefacts, all regenerated wholesale, none ever edited by hand:
 
-    wiki/index.md    the catalogue — what exists, grouped by type
-    wiki/tags.md     the same pages grouped by tag, which is the axis that crosses types
+    content/_index.md    the catalogue — what exists, grouped by type
+    content/tags.md     the same pages grouped by tag, which is the axis that crosses types
     a `Linked from` block at the foot of each page — backlinks, so the site has what
                      Obsidian gives you for free
 
@@ -24,9 +24,14 @@ from datetime import date
 from wikilib import (INDEX, TAGS, TYPE_LABELS, TYPES, Page, inbound_links,
                      pages, replace_block)
 
+# `type: docs` is Hugo's, not this wiki's. Docsy spans the sidebar across every folder only when
+# the home page's type is `docs` (see the theme's _partials/sidebar-args.html); with anything else
+# the nav collapses to whichever folder you happen to be in, and there is no way to get from
+# people/ to projects/. This page is the catalogue, so the whole tree is exactly what it should
+# show. Nothing reads a `type` here — the page is excluded from the lint and the index by name.
 INDEX_HEADER = """---
 title: Index
-type: index
+type: docs
 summary: Catalogue of every page in this wiki, grouped by type.
 ---
 
@@ -53,7 +58,7 @@ summary: Every tag in use, and the pages carrying it.
 Tags cut across the type folders — a page about one project and a page about one person can
 share a subject. {count} {noun} in use, last built {built}.
 
-See [Index](index.md) for every page grouped by type instead.
+See [Index](_index.md) for every page grouped by type instead.
 """
 
 EMPTY = """
@@ -145,7 +150,7 @@ def backlinks_body(page: Page, incoming: list[Page]) -> str:
 
 
 def relative(source, target) -> str:
-    """A relative Markdown link between two pages — the form both Obsidian and MkDocs read."""
+    """A relative Markdown link between two pages — the form both Obsidian and Hugo read."""
     import os
     return os.path.relpath(target, source.parent).replace(os.sep, "/")
 
@@ -201,8 +206,8 @@ def main() -> int:
             print(f"index: backlinks updated on {len(touched)} page(s)")
         all_pages = pages()
 
-    write(INDEX, render_index(all_pages), check, "wiki/index.md", stale)
-    write(TAGS, render_tags(all_pages), check, "wiki/tags.md", stale)
+    write(INDEX, render_index(all_pages), check, "content/_index.md", stale)
+    write(TAGS, render_tags(all_pages), check, "content/tags.md", stale)
 
     if stale:
         print(f"index: STALE — run `make index` ({'; '.join(stale)})", file=sys.stderr)

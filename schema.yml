@@ -5,13 +5,13 @@
 #   scripts/wikilib.py                 loads it (no hardcoded type list anywhere)
 #   .github/copilot-instructions.md    its page-type table and frontmatter example are GENERATED
 #   README.md                          its layout tree is GENERATED
-#   wiki/<folder>/, templates/<type>.md  scaffolded by `make new-type`
+#   content/<folder>/, templates/<type>.md  scaffolded by `make new-type`
 #
 # Run `make schema` after editing. `make build` fails if the generated blocks are stale, so
 # the schema and the assistant's instructions cannot drift apart.
 #
 # Fields:
-#   folder            where pages of this type live, under wiki/
+#   folder            where pages of this type live, under content/
 #   label             heading used for this type in the generated index
 #   holds             one sentence for the assistant: what belongs here (goes in the LLM table)
 #   short             a few words for the README layout tree

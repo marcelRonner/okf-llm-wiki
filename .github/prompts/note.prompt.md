@@ -23,7 +23,7 @@ said; what goes in the wiki page is your writing.
 ## 2. Anchor it
 
 Every claim in this wiki has to trace back to something dated. For a note, that anchor is the
-month's owner-notes source page: `wiki/sources/YYYY-MM-owner-notes.md`.
+month's owner-notes source page: `content/sources/YYYY-MM-owner-notes.md`.
 
 If this month's page does not exist, create it:
 
@@ -61,8 +61,8 @@ because it is a record and not a catalogue.
 
 Search before writing — a note is usually about something already in the wiki.
 
-- Check `wiki/index.md`, then grep for the proper nouns in the note.
-- Check `wiki/tags.md` if the note is about a subject rather than a named thing.
+- Check `content/_index.md`, then grep for the proper nouns in the note.
+- Check `content/tags.md` if the note is about a subject rather than a named thing.
 
 Then decide: does this update an existing page, or need a new one? Updating is more common than
 the owner expects. Prefer it.
@@ -78,7 +78,7 @@ which you chose. **Do not ask which type to use.** If you get it wrong the owner
 - Attribute the claim inline where it is not obvious: "the event store runs on Postgres
   (owner, 2026-08-02)".
 - Set `updated:` to today.
-- Link the page from somewhere real. `make new TYPE=… TITLE=… FROM=wiki/…` does this for you.
+- Link the page from somewhere real. `make new TYPE=… TITLE=… FROM=content/…` does this for you.
 - Create honest stubs for anything the note implies exists but says little about.
 
 **Stop and ask only if the note contradicts what a page already says.** That is the one case
@@ -87,7 +87,7 @@ raise it. Everything else — filing, naming, wording, which page — is your jo
 
 ## 5. Record and verify
 
-- Add an entry at the top of `wiki/log.md` with `**Operation:** note`.
+- Add an entry at the top of `content/log.md` with `**Operation:** note`.
 - Run `make lint`. Fix every error. Report the warnings.
 - Report back in a few lines: what you wrote, where, and what you were unsure about.
 

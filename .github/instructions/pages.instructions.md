@@ -1,5 +1,5 @@
 ---
-applyTo: "wiki/**"
+applyTo: "content/**"
 ---
 
 # How to write any page
@@ -41,6 +41,11 @@ be able to stop after one line and still have learned something.
 - **Bullets for lists of things, prose for reasoning.** Do not bullet an argument into fragments.
 - **No filler headings.** If a section would have one line under it, it is not a section.
 - **British or American spelling — pick one and never mix.** This wiki uses British.
+- **To call something out, use a blockquote alert** — `> [!WARNING]` on its own line, then the
+  text as an ordinary quote. It renders as a callout on the site and in Obsidian, and still reads
+  as plain Markdown everywhere else. Available types: `NOTE`, `TIP`, `IMPORTANT`, `WARNING`,
+  `CAUTION`. Do not reach for the theme's `{{% alert %}}` shortcode — it renders nowhere but the
+  built site, and these pages have to stay readable as files.
 
 ## Linking
 
@@ -65,7 +70,7 @@ Remove the marker once the page says something useful on its own.
 ## What not to do
 
 - Do not restate another page. Link to it.
-- Do not write a summary of the wiki inside a page. That is what `wiki/index.md` is for.
+- Do not write a summary of the wiki inside a page. That is what `content/_index.md` is for.
 - Do not add a "Last updated" line in the body — that is `updated:` in the frontmatter.
 - Do not use headings as facts ("## Migration failed") — headings name topics, bodies make claims.
 - Do not write inside a `<!-- name:start -->` … `<!-- name:end -->` block. `make index` and

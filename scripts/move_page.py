@@ -10,8 +10,8 @@ Usage:
     python3 scripts/move_page.py <page> [--type <type>] [--slug <new-slug>]
 
 Examples:
-    python3 scripts/move_page.py wiki/topics/acme-migration.md --type project
-    python3 scripts/move_page.py wiki/people/jane.md --slug jane-doe
+    python3 scripts/move_page.py content/topics/acme-migration.md --type project
+    python3 scripts/move_page.py content/people/jane.md --slug jane-doe
 """
 
 from __future__ import annotations
@@ -50,7 +50,7 @@ def rewrite_links(old: Path, new: Path) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("page", help="path to the page, e.g. wiki/topics/thing.md")
+    parser.add_argument("page", help="path to the page, e.g. content/topics/thing.md")
     parser.add_argument("--type", dest="new_type", choices=sorted(TYPES), default=None)
     parser.add_argument("--slug", default=None)
     args = parser.parse_args()
@@ -110,7 +110,7 @@ def main() -> int:
     if args.new_type:
         print(f"  type is now '{new_type}'")
     print(f"  rewrote links on {len(changed)} page(s)" + (f": {', '.join(changed)}" if changed else ""))
-    print("  run `make index`, and add a line to wiki/log.md saying why it moved")
+    print("  run `make index`, and add a line to content/log.md saying why it moved")
     return 0
 
 
