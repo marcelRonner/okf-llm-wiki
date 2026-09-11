@@ -1,5 +1,6 @@
 ---
 title: Projects
+type: section
 description: A piece of work with a goal and an end. What it is for, where it stands, who is involved.
 weight: 10
 ---

@@ -16,6 +16,7 @@ what made adding a page feel like breaking something.
     E4  a `sources:` entry is missing, or is not a source page
     E5  a source page's raw file is missing, or a raw file was never written up
     E6  `updated:` is before `created:`, or either is in the future
+    E7  the page breaks OKF conformance — see `content/topics/open-knowledge-format.md`
 
   WARNINGS — the wiki is unfinished. These are reported and do not fail.
     W1  nothing links to this page, so nobody will find it except through the index
@@ -42,6 +43,9 @@ from datetime import date
 
 from wikilib import (INBOX, INDEX, LIMITS, LOG, RAW, REQUIRED_KEYS, ROOT, TAGS, TEMPLATES,
                      TYPE_INFO, TYPES, WIKI, Page, as_date, inbound_links, inbox_items, pages)
+
+# Filenames the Open Knowledge Format reserves, and so exempts from needing a `type`.
+OKF_RESERVED = ("index.md", "log.md")
 
 errors: list[str] = []
 warnings: list[str] = []
@@ -114,6 +118,31 @@ def check_pages(all_pages: list[Page]) -> None:
             age = (today - updated).days
             if age > STUB_DAYS:
                 warn(page.path, 1, "W3", f"stub untouched for {age} days — fill it, or admit it is not needed")
+
+
+# --------------------------------------------------------------------------- E7
+def check_okf_conformance() -> None:
+    """The three conformance criteria of OKF v0.2, §11.
+
+    This walks `content/` directly rather than using `pages()`, because the criteria apply to
+    every file in the bundle — including the generated section pages, which `pages()` excludes as
+    furniture. Those are exactly where conformance was broken when it was first measured, so a
+    check that skipped them would be worthless.
+
+    Criterion 3, that reserved files follow the spec's structure, is not mechanically checkable
+    beyond their presence and parseability; `log.md` being genuinely chronological is a judgement
+    the `/lint` skill makes, not this script.
+    """
+    for path in sorted(WIKI.rglob("*.md")):
+        page = Page(path)
+        rel = path.relative_to(WIKI)
+        if page.error:
+            error(path, 1, "E7", f"OKF criterion 1: {page.error} — every file in the bundle needs parseable frontmatter")
+            continue
+        if path.name in OKF_RESERVED:
+            continue
+        if not str(page.get("type") or "").strip():
+            error(path, 1, "E7", f"OKF criterion 2: no `type:` — every file that is not {' or '.join(OKF_RESERVED)} needs one")
 
 
 # --------------------------------------------------------------------------- E3
@@ -246,6 +275,7 @@ def main() -> int:
     check_links(all_pages)
     check_connected(all_pages)
     check_sources_field(all_pages)
+    check_okf_conformance()
     check_raw_pairing(all_pages)
     check_tags(all_pages)
     check_inbox()

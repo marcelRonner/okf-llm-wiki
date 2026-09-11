@@ -1,5 +1,6 @@
 ---
 title: Topics
+type: section
 description: A concept that keeps coming up and does not fit the above.
 weight: 40
 ---

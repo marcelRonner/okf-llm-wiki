@@ -1,5 +1,6 @@
 ---
 title: Decisions
+type: section
 description: One decision — what was chosen, what was rejected, why, and whether it still holds.
 weight: 30
 ---

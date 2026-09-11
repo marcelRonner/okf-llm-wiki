@@ -1,5 +1,6 @@
 ---
 title: Systems
+type: section
 description: A thing that exists and keeps existing — a service, a tool, a process. How it works, how it fails.
 weight: 20
 ---

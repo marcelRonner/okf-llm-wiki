@@ -1,5 +1,6 @@
 ---
 title: Sources
+type: section
 description: What one piece of raw material said, and what it changed. One per item in raw/, plus the monthly owner-notes pages.
 weight: 50
 ---

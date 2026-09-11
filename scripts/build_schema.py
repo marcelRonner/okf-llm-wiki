@@ -140,9 +140,13 @@ def section_pages() -> dict:
     out = {}
     for i, spec in enumerate(TYPE_INFO.values(), start=1):
         path = WIKI / spec["folder"] / "_index.md"
+        # `type: section` is for OKF conformance, which requires a non-empty `type` on every file
+        # that is not one of its reserved names. These pages are OKF's `index.md` — directory
+        # listings — under the name Hugo insists on, so they are not reserved and do need a type.
         out[path] = "\n".join([
             "---",
             f"title: {spec['label']}",
+            "type: section",
             f"description: {spec['holds']}",
             f"weight: {i * 10}",
             "---",
