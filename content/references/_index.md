@@ -1,7 +1,7 @@
 ---
-title: Raw material
+title: References
 type: section
-description: The originals the wiki was written from, kept as received.
+description: The raw originals the wiki was written from, kept as received.
 weight: 60
 ---
 

@@ -44,7 +44,7 @@ from collections import Counter
 from difflib import get_close_matches
 from datetime import date, datetime
 
-from wikilib import (FENCE_RE, INDEX, LIMITS, LOG, RAW, REQUIRED_KEYS, ROOT, TAGS, TEMPLATES,
+from wikilib import (FENCE_RE, INDEX, LIMITS, LOG, REFERENCES, REQUIRED_KEYS, ROOT, TAGS, TEMPLATES,
                      TYPE_INFO, TYPES, WIKI, Page, as_date, blank_out, inbound_links, inbox_items,
                      pages)
 
@@ -148,7 +148,7 @@ def check_okf_families(all_pages: list[Page]) -> None:
         if page.get("type") == "source":
             resource = str(page.get("resource") or "").strip()
             if not resource:
-                warn(page.path, 1, "W8", "no `resource:` — say where the original is, as a URL or ../raw/<file>")
+                warn(page.path, 1, "W8", "no `resource:` — say where the original is, as a URL or ../references/<file>")
             elif "://" not in resource and not (page.path.parent / resource).exists():
                 warn(page.path, 1, "W8", f"resource: '{resource}' does not exist")
 
@@ -339,7 +339,7 @@ def check_raw_pairing(all_pages: list[Page]) -> None:
 
     Source pages with `origin: owner` are exempt: they record what the owner said in a `/note`,
     which never had a document behind it. That exemption is the whole reason the field exists —
-    an owner statement is anchored and citable without a fabricated file in content/raw/.
+    an owner statement is anchored and citable without a fabricated file in content/references/.
     """
     source_pages = [p for p in all_pages if p.get("type") == "source"]
 
@@ -347,17 +347,17 @@ def check_raw_pairing(all_pages: list[Page]) -> None:
     for page in source_pages:
         if page.get("origin") == "owner":
             continue
-        raw_links = [t for _, t in page.links() if "/raw/" in t or t.startswith("raw/")]
+        raw_links = [t for _, t in page.links() if "/references/" in t or t.startswith("references/")]
         if not raw_links:
-            error(page.path, 1, "E5", "source page does not link to its file in content/raw/ (or set `origin: owner` if it never had one)")
+            error(page.path, 1, "E5", "source page does not link to its file in content/references/ (or set `origin: owner` if it never had one)")
         for target in raw_links:
             referenced.add(page.resolve(target).resolve())
 
-    for item in sorted(RAW.iterdir()):
+    for item in sorted(REFERENCES.iterdir()):
         if not item.is_file() or item.name in (".gitkeep", "_index.md"):
             continue
         if item.resolve() not in referenced:
-            error(item, 1, "E5", "file in content/raw/ has no source page — it was filed but never written up")
+            error(item, 1, "E5", "file in content/references/ has no source page — it was filed but never written up")
 
 
 # --------------------------------------------------------------------------- W5

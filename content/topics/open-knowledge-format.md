@@ -3,14 +3,15 @@ title: Open Knowledge Format
 type: topic
 description: Google Cloud's specification for knowledge as Markdown with YAML frontmatter, its three conformance criteria, and where this wiki stands against them.
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 generated:
   by: wiki-keeper/1.0
-  at: 2026-09-11T00:00:00Z
+  at: 2026-09-12T00:00:00Z
 tags: [meta, llm-wiki, standards]
 sources:
   - resource: sources/2026-06-12-open-knowledge-format.md
   - resource: sources/2026-09-11-okf-v0-2-conformance-checklist.md
+  - resource: sources/2026-09-12-okf-v0-2-conformance-assessment.md
 ---
 
 # Open Knowledge Format
@@ -34,8 +35,16 @@ low and interoperability the point.
 
 ## Applying the format here
 
-This wiki uses several of the format’s recommended metadata conventions, but no scope-specific
-conformance assessment is retained on this page. The [2026-09-11 conformance checklist](../sources/2026-09-11-okf-v0-2-conformance-checklist.md) records its scope, the criteria, the evidence, and the follow-up work.
+This wiki is conformant as of 2026-09-12. The current assessment is the
+[2026-09-12 conformance assessment](../sources/2026-09-12-okf-v0-2-conformance-assessment.md), which
+works through every numbered check in the register and records the evidence for each; the earlier
+[2026-09-11 conformance checklist](../sources/2026-09-11-okf-v0-2-conformance-checklist.md) is kept
+for the record. Page status and findings live there, not here, so this page does not go stale with
+each reassessment.
+
+One recommendation is deliberately not followed: links are relative rather than bundle-absolute,
+which keeps the files working in Obsidian. Directory listings are Hugo's `_index.md` rather than
+OKF's reserved `index.md`; since the spec makes `index.md` optional, that costs nothing.
 
 ## Related
 
@@ -48,6 +57,7 @@ conformance assessment is retained on this page. The [2026-09-11 conformance che
 
 - [Karpathy's LLM Wiki gist](../sources/2026-04-04-karpathy-llm-wiki-gist.md)
 - [LLM Wiki](llm-wiki.md)
+- [OKF v0.2 conformance assessment, 2026-09-12](../sources/2026-09-12-okf-v0-2-conformance-assessment.md)
 - [OKF v0.2 conformance checklist](../sources/2026-09-11-okf-v0-2-conformance-checklist.md)
 - [Open Knowledge Format specification](../sources/2026-06-12-open-knowledge-format.md)
 <!-- backlinks:end -->

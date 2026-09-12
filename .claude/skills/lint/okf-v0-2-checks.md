@@ -5,7 +5,7 @@ specification it comes from. This file holds the **checks**; an assessment holds
 and refers to a check by its ID. Used by the reassessment prompt in [SKILL.md](SKILL.md#okf-v02-conformance-reassessment).
 
 **Normative source:** [OKF SPEC.md v0.2](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md).
-Every `§` link below points into it. `content/raw/2026-06-12-open-knowledge-format.md` in this repo is a
+Every `§` link below points into it. `content/references/2026-06-12-open-knowledge-format.md` in this repo is a
 **summary** of that specification, not the normative text — it is too short to settle a check, and
 several checks here rest on clauses it does not mention. Its wiki page is
 [Open Knowledge Format](../../../content/topics/open-knowledge-format.md). There is no offline copy

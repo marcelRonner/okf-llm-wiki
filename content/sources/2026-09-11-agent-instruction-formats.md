@@ -7,7 +7,7 @@ updated: 2026-09-12
 generated:
   by: wiki-keeper/1.0
   at: 2026-09-12T00:00:00Z
-resource: ../raw/2026-09-11-agent-instruction-formats.md
+resource: ../references/2026-09-11-agent-instruction-formats.md
 tags: [meta, tooling]
 ---
 
@@ -20,7 +20,7 @@ of the two assistants reads as instructions as of 2026-09-11.
 
 | | |
 |---|---|
-| **File** | [`2026-09-11-agent-instruction-formats.md`](../raw/2026-09-11-agent-instruction-formats.md) |
+| **File** | [`2026-09-11-agent-instruction-formats.md`](../references/2026-09-11-agent-instruction-formats.md) |
 | **Kind** | research note |
 | **Date** | 2026-09-11 |
 | **Author** | the assistant, from the Claude Code binary and the VS Code documentation |

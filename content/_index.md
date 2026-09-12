@@ -8,7 +8,7 @@ description: Catalogue of every page in this wiki, grouped by type.
 
 # Index
 
-Every page in the wiki. 9 pages, 0 of them stubs, last built 2026-09-11.
+Every page in the wiki. 10 pages, 0 of them stubs, last built 2026-09-12.
 
 See [Tags](tags.md) for the same pages grouped by subject, and [Log](log.md) for what changed
 and when.
@@ -21,9 +21,10 @@ and when.
 - [LLM Wiki](topics/llm-wiki.md) — The pattern this wiki implements — an assistant compiles raw sources into persistent linked pages, and questions are answered from those rather than from the sources.
 - [Open Knowledge Format](topics/open-knowledge-format.md) — Google Cloud's specification for knowledge as Markdown with YAML frontmatter, its three conformance criteria, and where this wiki stands against them.
 
-## Sources (4)
+## Sources (5)
 
 - [Karpathy's LLM Wiki gist](sources/2026-04-04-karpathy-llm-wiki-gist.md) — The gist that proposed an LLM-maintained wiki compiled from raw sources instead of RAG retrieval, and the pattern this wiki implements.
+- [OKF v0.2 conformance assessment, 2026-09-12](sources/2026-09-12-okf-v0-2-conformance-assessment.md) — The first assessment keyed by check ID — conformant, 26 of 41 checks met, one partial, and each check linked to its clause.
 - [OKF v0.2 conformance checklist](sources/2026-09-11-okf-v0-2-conformance-checklist.md) — A 2026-09-11 assessment of this wiki’s Open Knowledge Format v0.2 conformance checks, findings, and follow-up work.
 - [Open Knowledge Format specification](sources/2026-06-12-open-knowledge-format.md) — Google Cloud's open specification for knowledge as a directory of Markdown files with YAML frontmatter, and its conformance criteria.
 - [Research note — agent instruction formats](sources/2026-09-11-agent-instruction-formats.md) — What Claude Code and GitHub Copilot each read as instructions, checked against the binary and the vendor docs on 2026-09-11.

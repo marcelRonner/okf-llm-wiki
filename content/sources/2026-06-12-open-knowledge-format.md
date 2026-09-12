@@ -20,7 +20,7 @@ the first vendor-neutral formalisation of the LLM-wiki pattern.
 
 | | |
 |---|---|
-| **File** | [`2026-06-12-open-knowledge-format.md`](../raw/2026-06-12-open-knowledge-format.md) |
+| **File** | [`2026-06-12-open-knowledge-format.md`](../references/2026-06-12-open-knowledge-format.md) |
 | **Kind** | summary of a specification |
 | **Date** | 2026-06-12 (v0.1 publication; the v0.2 text read does not date itself) |
 | **Author** | Google Cloud; summarised here on 2026-09-11 |

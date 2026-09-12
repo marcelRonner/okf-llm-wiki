@@ -22,7 +22,7 @@ page gets found once it exists. The editorial half — contradictions, staleness
 
 **Errors — the wiki is wrong.** Frontmatter missing or invalid, unknown type, page filed in the
 wrong folder, a link that resolves to nothing, a `sources:` entry pointing at a page that does
-not exist, a file in `content/raw/` never written up, dates that contradict each other.
+not exist, a file in `content/references/` never written up, dates that contradict each other.
 
 **Warnings — the wiki is unfinished.** Nothing links here, the summary is still a placeholder, a
 stub has sat untouched for months, a page has grown past the length where it wants splitting, a

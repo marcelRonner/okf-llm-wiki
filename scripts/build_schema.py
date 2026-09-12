@@ -168,8 +168,9 @@ def layout_tree() -> str:
         ("log.md", "append-only history of every operation"),
     ]
     entries += [(f"{spec['folder']}/", spec["short"]) for spec in TYPE_INFO.values()]
-    # raw/ lives inside the bundle so an OKF consumer receives the evidence, not just the pages.
-    entries.append(("raw/", "the originals — only ever gains a frontmatter header"))
+    # The originals live inside the bundle, under the directory name OKF §6.3 gives mirrored
+    # external material, so a consumer receives the evidence and knows what it is looking at.
+    entries.append(("references/", "the originals — only ever gains a frontmatter header"))
 
     width = max(len(name) for name, _ in entries) + 2
     lines = ["```"]

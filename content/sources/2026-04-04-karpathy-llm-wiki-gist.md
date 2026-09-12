@@ -20,7 +20,7 @@ persistent Markdown wiki, and answers from the wiki rather than the sources.
 
 | | |
 |---|---|
-| **File** | [`2026-04-04-karpathy-llm-wiki-gist.md`](../raw/2026-04-04-karpathy-llm-wiki-gist.md) |
+| **File** | [`2026-04-04-karpathy-llm-wiki-gist.md`](../references/2026-04-04-karpathy-llm-wiki-gist.md) |
 | **Kind** | summary of a public gist |
 | **Date** | 2026-04-04 |
 | **Author** | Andrej Karpathy; summarised here on 2026-09-11 |

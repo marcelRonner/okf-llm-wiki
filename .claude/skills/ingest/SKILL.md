@@ -7,7 +7,7 @@ description: Fold new material from inbox/ (or pasted text) into the wiki, then 
 
 Bring new material into the wiki — a document, an export, a set of minutes, anything with words
 that were not yours. For something the owner simply knows, with no document behind it, use
-`/note` instead: it skips the `content/raw/` machinery, which exists to preserve wording that would
+`/note` instead: it skips the `content/references/` machinery, which exists to preserve wording that would
 otherwise be lost.
 
 ## 1. Find the material
@@ -77,13 +77,13 @@ source page, and raise it.
 
 ## 5. File the original
 
-Move each processed file from `inbox/` to `content/raw/`, renaming it to match its source page slug:
+Move each processed file from `inbox/` to `content/references/`, renaming it to match its source page slug:
 
 ```
-git mv inbox/notes.pdf content/raw/2026-08-01-acme-kickoff.pdf
+git mv inbox/notes.pdf content/references/2026-08-01-acme-kickoff.pdf
 ```
 
-A **Markdown** original needs a frontmatter header before it is filed, because `content/raw/` is
+A **Markdown** original needs a frontmatter header before it is filed, because `content/references/` is
 inside the Open Knowledge Format bundle and OKF requires every `.md` file in it to carry parseable
 frontmatter with a `type` — `make lint` fails on one without. Add this at the very top, and touch
 nothing below it:

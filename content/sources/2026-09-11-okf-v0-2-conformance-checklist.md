@@ -2,7 +2,7 @@
 title: OKF v0.2 conformance checklist
 type: source
 description: A 2026-09-11 assessment of this wiki’s Open Knowledge Format v0.2 conformance checks, findings, and follow-up work.
-resource: ../raw/2026-09-11-okf-v0-2-conformance-checklist.md
+resource: ../references/2026-09-11-okf-v0-2-conformance-checklist.md
 created: 2026-09-11
 updated: 2026-09-11
 generated:
@@ -21,7 +21,7 @@ A 2026-09-11 assessment of the Markdown bundle under `content/` against Open Kno
 
 | | |
 |---|---|
-| **File** | [content/raw/2026-09-11-okf-v0-2-conformance-checklist.md](../raw/2026-09-11-okf-v0-2-conformance-checklist.md) |
+| **File** | [`2026-09-11-okf-v0-2-conformance-checklist.md`](../references/2026-09-11-okf-v0-2-conformance-checklist.md) |
 | **Kind** | conformance assessment |
 | **Date** | 2026-09-11 |
 | **Author** | assistant, using the OKF specification and repository checks |
@@ -49,5 +49,6 @@ The assessment records optional features that are not adopted: per-claim source 
 
 ## Linked from
 
+- [OKF v0.2 conformance assessment, 2026-09-12](2026-09-12-okf-v0-2-conformance-assessment.md)
 - [Open Knowledge Format](../topics/open-knowledge-format.md)
 <!-- backlinks:end -->

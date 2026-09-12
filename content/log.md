@@ -25,6 +25,33 @@ reserved `log.md` (§9). The detail of an entry goes underneath it, indented:
 
 ## 2026-09-12
 
+- **Ingest:** the 2026-09-12 OKF v0.2 conformance assessment
+  - **Input:** the owner asked for the reassessment to be added to the wiki, after acting on its
+    findings
+  - **Created:** [OKF v0.2 conformance assessment, 2026-09-12](sources/2026-09-12-okf-v0-2-conformance-assessment.md)
+    — `source`: it is what one document said — and its original,
+    [`2026-09-12-okf-v0-2-conformance-assessment.md`](references/2026-09-12-okf-v0-2-conformance-assessment.md)
+  - **Updated:** [Open Knowledge Format](topics/open-knowledge-format.md) — points at this assessment
+    as current, and now states the two deliberate divergences
+  - **Flagged:** the filed assessment is a re-run after the fixes below, not the run first reported
+    in conversation, which was never filed. It lists the three checks that changed between the two.
+  - **Notes:** conformant; 26 meets, 1 partial, 7 not adopted, 1 deviates, 6 n/a.
+
+- **Correction:** Renamed `content/raw/` to `content/references/`, and rewrote one link inside an
+  original.
+  - **Input:** the owner asked for `OKF-LNK-05` to pass, which wants mirrored external material under
+    `references/`, and explicitly instructed the link fix despite the rule against editing originals
+  - **Updated:** every file naming the folder — `AGENTS.md`, `README.md`, `schema.yml`, the rules,
+    skills, register, template, scripts and render hook, and the source pages; link targets in this
+    log. Entry prose above that says `raw/` is left as written, because it was true when written.
+  - **Flagged:** **an original's body was edited.** In
+    [`2026-09-11-okf-v0-2-conformance-checklist.md`](references/2026-09-11-okf-v0-2-conformance-checklist.md),
+    the link to the reassessment prompt changed from `../.claude/skills/lint/SKILL.md#…` to
+    `../../.claude/skills/lint/SKILL.md#…`. It had been written for the file's first location and
+    stopped resolving when the folder moved inside `content/`. This was the owner's call, made
+    knowing the rule; it is the only change to that body, and nothing else in it was touched.
+  - **Notes:** the site section is now titled *References*, at `/references/`.
+
 - **Correction:** Moved the raw originals inside the Open Knowledge Format bundle, from `raw/` to
   `content/raw/`, and gave each Markdown original a frontmatter header.
   - **Input:** the owner asked for the assessed scope to include the raw folder, after the
@@ -83,7 +110,7 @@ reserved `log.md` (§9). The detail of an entry goes underneath it, indented:
 ## 2026-09-11
 
 - **Correction:** Clarified the distinction between immutable `raw/` evidence and the linked summaries in `content/sources/` in [README.md](../README.md).
-- **Ingest:** Filed the [OKF v0.2 conformance checklist](raw/2026-09-11-okf-v0-2-conformance-checklist.md), created its source page, and linked the scoped assessment from [Open Knowledge Format](topics/open-knowledge-format.md).
+- **Ingest:** Filed the [OKF v0.2 conformance checklist](references/2026-09-11-okf-v0-2-conformance-checklist.md), created its source page, and linked the scoped assessment from [Open Knowledge Format](topics/open-knowledge-format.md).
 - **Correction:** Added a reusable OKF v0.2 conformance reassessment prompt to the `lint` skill and linked it from the assessment checklist in `inbox/`.
 - **Correction:** Normalised this log into date groups containing only Markdown list entries, and strengthened E7 to enforce that required OKF structure.
 - **Correction:** Added OKF reader acceptance checks for unknown types and extra metadata, missing optional metadata, and broken links; `make build` now runs them.
@@ -91,8 +118,8 @@ reserved `log.md` (§9). The detail of an entry goes underneath it, indented:
 
 - **Ingest:** the LLM Wiki pattern and the Open Knowledge Format
   - **Input:** two summaries the owner asked for, written from the primary sources —
-    [`raw/2026-04-04-karpathy-llm-wiki-gist.md`](raw/2026-04-04-karpathy-llm-wiki-gist.md) and
-    [`raw/2026-06-12-open-knowledge-format.md`](raw/2026-06-12-open-knowledge-format.md)
+    [`raw/2026-04-04-karpathy-llm-wiki-gist.md`](references/2026-04-04-karpathy-llm-wiki-gist.md) and
+    [`raw/2026-06-12-open-knowledge-format.md`](references/2026-06-12-open-knowledge-format.md)
   - **Created:** [Karpathy's LLM Wiki gist](sources/2026-04-04-karpathy-llm-wiki-gist.md),
     [Open Knowledge Format specification](sources/2026-06-12-open-knowledge-format.md),
     [LLM Wiki](topics/llm-wiki.md), [Open Knowledge Format](topics/open-knowledge-format.md) — both
@@ -113,7 +140,7 @@ reserved `log.md` (§9). The detail of an entry goes underneath it, indented:
   `_index.md`, which Hugo requires where the pattern says `index.md`.
 
 - **Ingest:** agent instruction formats
-  - **Input:** [`raw/2026-09-11-agent-instruction-formats.md`](raw/2026-09-11-agent-instruction-formats.md)
+  - **Input:** [`raw/2026-09-11-agent-instruction-formats.md`](references/2026-09-11-agent-instruction-formats.md)
     — a research note on what Claude Code and GitHub Copilot each read as instructions, written while
     moving this wiki's own instructions out of `.github/`
   - **Created:** [Research note — agent instruction formats](sources/2026-09-11-agent-instruction-formats.md),

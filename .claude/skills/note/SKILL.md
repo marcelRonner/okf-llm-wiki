@@ -6,7 +6,7 @@ description: Write down something the owner knows, with no document behind it. T
 # Note
 
 The owner knows something and wants it in the wiki. There is no document, no file in `inbox/`,
-nothing to file in `content/raw/` — just what they said.
+nothing to file in `content/references/` — just what they said.
 
 What they said: $ARGUMENTS
 
@@ -43,7 +43,7 @@ tags: [owner-notes]
 # Owner notes — YYYY-MM
 
 Things the owner said directly, with no document behind them. Each entry is dated and quoted as
-said. **Append only** — entries are never edited or removed, exactly like anything in `content/raw/`.
+said. **Append only** — entries are never edited or removed, exactly like anything in `content/references/`.
 This page is what lets a page written from a note cite something instead of asserting it.
 
 ## YYYY-MM-DD
@@ -53,7 +53,7 @@ This page is what lets a page written from a note cite something instead of asse
 Written up as: [Page](../topics/x.md)
 ```
 
-`origin: owner` matters — it tells `make lint` not to look for a file in `content/raw/` that was never
+`origin: owner` matters — it tells `make lint` not to look for a file in `content/references/` that was never
 going to exist. Without it you get an E5 error.
 
 Then append this note's entry, under today's date, at the **bottom** of the page. Chronological,
@@ -102,5 +102,5 @@ successful `/note` — do not inflate it into a new page to look productive.
 with a rejected option and a date, not a line on the org page. Write the page the note deserves.
 
 **If the note is really a document** — the owner pasting three pages of meeting minutes — say so
-and switch to `/ingest`, which will preserve it in `content/raw/` properly. The dividing line is whether
+and switch to `/ingest`, which will preserve it in `content/references/` properly. The dividing line is whether
 losing the exact wording would lose anything.

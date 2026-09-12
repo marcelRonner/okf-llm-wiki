@@ -22,7 +22,7 @@ that the feature is missing.
 
 ## Reassessment method
 
-This checklist was produced using the reusable [OKF v0.2 conformance reassessment prompt](../.claude/skills/lint/SKILL.md#okf-v02-conformance-reassessment) in the `lint` skill. The prompt requires the
+This checklist was produced using the reusable [OKF v0.2 conformance reassessment prompt](../../.claude/skills/lint/SKILL.md#okf-v02-conformance-reassessment) in the `lint` skill. The prompt requires the
 specification source, a declared scope, a normative-level table, evidence-backed findings, and the
 `make test`, `make lint`, and `make build` validation sequence. Re-run that prompt when the bundle
 or the assessment scope changes.
