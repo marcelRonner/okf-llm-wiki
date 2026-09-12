@@ -55,11 +55,10 @@ and must preserve it in `content/references/`. Note starts from your own words, 
 anchors them in that month's `sources/YYYY-MM-owner-notes.md` instead. Use ingest when losing the
 exact wording would lose something; otherwise note.
 
-There were three operations at first, and the missing one showed. Everything had to arrive as a
-document, so writing down something you simply knew meant manufacturing a file to put in `inbox/`
-— four artefacts for one fact. The fast path was added on 2026-08-02 rather than loosening the
-rule that every claim is traceable, which is why owner notes are a source page and not an
-exemption.
+Note exists because not everything arrives as a document. Without it, writing down something you
+simply know would mean manufacturing a file to put in `inbox/` — four artefacts for one fact. The
+fast path keeps the rule that every claim is traceable rather than loosening it, which is why owner
+notes are a source page and not an exemption.
 
 ## Why the rules are what they are
 

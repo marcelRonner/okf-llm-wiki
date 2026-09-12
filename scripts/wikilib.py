@@ -153,8 +153,8 @@ class Page:
     def is_stale(self, now: datetime | None = None) -> bool:
         """Whether `stale_after` has arrived — OKF v0.2 §5.5: stale once `now >= stale_after`.
 
-        An instant compared as an instant. Comparing dates instead flags a page up to a day early,
-        which is the bug this replaced. Absent or malformed means not stale: a malformed value is
+        An instant compared as an instant. Comparing dates instead would flag a page up to a day
+        early. Absent or malformed means not stale: a malformed value is
         the validator's to report, not a reason to call the page out of date.
         """
         instant = okf_datetime(self.get("stale_after"))

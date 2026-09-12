@@ -3,10 +3,10 @@ title: LLM Wiki
 type: topic
 description: The pattern this wiki implements — an assistant compiles raw sources into persistent linked pages, and questions are answered from those rather than from the sources.
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 generated:
   by: wiki-keeper/1.0
-  at: 2026-09-11T00:00:00Z
+  at: 2026-09-12T00:00:00Z
 tags: [meta, llm-wiki]
 sources:
   - resource: sources/2026-04-04-karpathy-llm-wiki-gist.md
@@ -40,13 +40,13 @@ lives.
 
 ## Where this wiki departs from it
 
-- **A fourth operation.** `/note` was added on 2026-08-02 for things the owner simply knows. The
-  gist assumes every fact arrives as a document; the monthly owner-notes page is what keeps such a
-  fact citable.
+- **A fourth operation.** `/note` records things the owner simply knows. The gist assumes every
+  fact arrives as a document; the monthly owner-notes page is what keeps such a fact citable.
 - **Typed pages.** `schema.yml` fixes five page types and the folder each lives in. The gist leaves
   categories to the implementer.
-- **No entity pages.** The gist's wiki layer holds entity pages alongside concept pages. The
-  `person` and `org` types were removed on 2026-09-11, so "who does what" now has no home of its own.
+- **No entity pages.** The gist's wiki layer holds entity pages alongside concept pages. This wiki
+  has no person or organisation type, so "who does what" is recorded on the project, system or
+  decision it concerns.
 
 ## Related
 

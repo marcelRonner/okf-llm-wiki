@@ -219,18 +219,18 @@ grows enough that a full lint crowds out the conversation it was run from, the m
 ## Adding a page type
 
 Still rare — a new type fragments the wiki, so prefer an existing one unless you can say in a
-sentence why none fits. But it is now one edit rather than six:
+sentence why none fits. It takes one declaration:
 
 1. Declare it in `schema.yml`
 2. `make new-type TYPE=<type>` — creates the folder, the template and the rules file
 3. Write the TODO sections it left you
 4. `make schema && make lint`
 
-The type list used to live in six places read by three different audiences — the scripts, the
-assistant, and you — with nothing checking they agreed. That is worse than untidy: when
-`.github/` and the linter disagreed about which types existed, the assistant trusted both and
-resolved the contradiction by rewriting *pages* to satisfy the linter. Now `schema.yml` is the
-only definition, and `make build` fails if any generated restatement of it has drifted.
+The type list is read by three different audiences — the scripts, the assistant, and you — so it
+is declared exactly once. Separate copies would drift, and that is worse than untidy: when
+`.github/` and the linter disagree about which types exist, the assistant trusts both and resolves
+the contradiction by rewriting *pages* to satisfy the linter. So `schema.yml` is the only
+definition, and `make build` fails if any generated restatement of it has drifted.
 
 ## How the site is built
 
@@ -248,9 +248,10 @@ Two of those are worth explaining here, because they are the ones that would sur
 
 - **`layouts/_markup/render-link.html`.** Pages link to each other with ordinary relative
   Markdown links (`../projects/acme.md`) so the same files work in Obsidian, on GitHub, and in the
-  built site. MkDocs rewrote those to the published URL by itself; Hugo does not, and would ship
-  `href="…jane.md"`, which 404s. This hook resolves them. A link that resolves to no page — one
-  into `content/references/`, say — is passed through untouched and warns; `make build STRICT=1` makes that fail.
+  built site. Hugo does not rewrite those to the published URL, and would ship `href="…acme.md"`,
+  which 404s. This hook resolves them. A link inside `content/` that resolves to no page is passed
+  through untouched and warns; `make build STRICT=1` makes that fail. A link that leaves `content/`
+  — to a repository file such as `README.md` — is passed through silently, since it is correct.
 - **The `mounts:` under the Docsy import.** Docsy's sidebar chrome lives in `layouts/docs/`, which
   Hugo only reaches for pages whose `type` is `docs`. Every page here already has a `type` — this
   wiki's page type — so mounting `layouts/docs` at the layout root makes that chrome the site-wide

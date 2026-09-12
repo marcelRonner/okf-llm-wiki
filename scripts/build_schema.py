@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Regenerate everything that restates the page types, from schema.yml.
 
-The type list used to exist in six places read by three different audiences — the scripts, the
-assistant, and you — with nothing checking they agreed. That is a worse bug than it sounds: when
-`.github/` and the linter disagree about which types exist, the assistant trusts both, and
-resolves the contradiction by rewriting your *pages* to satisfy the linter.
+The type list is read by three different audiences — the scripts, the assistant, and you — and
+separate copies of it would drift. That is a worse bug than it sounds: when `.github/` and the
+linter disagree about which types exist, the assistant trusts both, and resolves the contradiction
+by rewriting your *pages* to satisfy the linter.
 
 So the schema is declared once in schema.yml and stamped into the files that need to restate it:
 

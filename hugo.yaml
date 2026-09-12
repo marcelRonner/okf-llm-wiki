@@ -73,7 +73,7 @@ markup:
 params:
   description: A personal knowledge wiki, maintained with an AI assistant
 
-  # Docsy's built-in client-side search — the equivalent of the MkDocs `search` plugin.
+  # Docsy's built-in client-side search.
   offlineSearch: true
   offlineSearchSummaryLength: 70
   offlineSearchMaxResults: 10

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Scaffold a new page type: its folder, its template, and its instruction file.
 
-Adding a type used to mean six edits across five files, with nothing checking they agreed. Now
+Adding a type by hand means edits across several files, with nothing checking they agree. Instead
 the type is declared once in schema.yml and this script creates what the declaration implies.
 
 The parts this cannot do for you are the parts worth doing: describing what belongs in the type

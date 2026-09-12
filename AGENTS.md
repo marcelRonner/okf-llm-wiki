@@ -117,9 +117,8 @@ Its `by` value follows OKF's `<producer>/<version>` actor convention, and its `a
 Optional keys:
 
 - `status:` — `draft`, `stable` or `deprecated`. These are the three values the Open Knowledge
-  Format defines, and `make lint` rejects anything else. `draft` is what this wiki used to call a
-  stub, and the argument for it is unchanged: a draft is a legitimate page, not a failure. Use
-  `deprecated` with a link to whatever replaced the page.
+  Format defines, and `make lint` rejects anything else. A draft is a legitimate page, not a
+  failure. Use `deprecated` with a link to whatever replaced the page.
 - `stale_after:` — the instant after which the page should be re-read, as an ISO 8601 datetime with
   an explicit UTC offset: `stale_after: 2027-03-11T00:00:00Z`. A bare date is rejected, because OKF
   defines staleness as `now >= stale_after` and a date has no instant to compare. `make lint` warns

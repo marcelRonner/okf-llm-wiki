@@ -56,16 +56,16 @@ so they cannot inform a first write to a folder; and in a Hugo repository a nest
 ## What this changed
 
 - Created [Agent instruction formats](../topics/agent-instruction-formats.md) — the durable version
-  of the landscape, which this wiki's own layout now follows
-- Updated [How this wiki works](../topics/how-this-wiki-works.md) — its schema layer now names
-  `AGENTS.md` and `.claude/rules/`, so it links to the topic explaining why
+  of the landscape, which this wiki's own layout follows
+- Updated [How this wiki works](../topics/how-this-wiki-works.md) — its schema layer names
+  `AGENTS.md` and `.claude/rules/`, and links to the topic explaining why
 
 ## Unresolved
 
 - Vendor behaviour dated to one day goes stale silently. Nothing re-checks that Copilot still reads
   `.claude/skills/`, and the mirror in `.github/` works either way, so nobody would find out.
-- Whether Copilot can invoke a skill by typed name without a prompt file was never established; the
-  prompt-file stub was adopted without settling it.
+- Whether Copilot can invoke a skill by typed name without a prompt file is not established; the
+  prompt files in `.github/prompts/` exist so that it does not have to be.
 
 ## Related
 

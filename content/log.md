@@ -28,5 +28,5 @@ reserved `log.md` (§9). The detail of an entry goes underneath it, indented:
 - **Ingest:** [OKF v0.2 conformance assessment](sources/2026-09-12-okf-v0-2-conformance-assessment.md)
   — conformant; 28 of 41 checks met, none partial. [Open Knowledge Format](topics/open-knowledge-format.md)
   points to it as current.
-- **Initialization:** Reset the log for this wiki's use as a starting point for new wikis. Earlier
-  entries recorded how the template itself was built, and are left to Git history.
+- **Initialization:** Starting point for a new wiki: the schema, the four operations, the checks, and
+  sample pages describing the pattern it implements.

@@ -4,7 +4,8 @@
 **Run by the owner, never by the assistant.** `verified:` is the one signal in this wiki that
 separates "checked" from "merely written", and AGENTS.md forbids the assistant from writing it.
 This script exists so that the owner's confirmation costs one command instead of hand-typing YAML
-that is easy to get subtly wrong — the example AGENTS.md used to show would have failed lint twice.
+that is easy to get subtly wrong: an actor without the `human:` prefix, or a date without a time
+and offset, fails lint.
 
 Usage:
     make verify PAGE=content/topics/llm-wiki.md [WHO=owner]

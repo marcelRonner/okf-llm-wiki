@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Move or re-type a page, rewriting every link that pointed at it.
 
-This exists so that choosing the wrong type is cheap. It used to be expensive — the relative
-links that make the wiki work in both Obsidian and the built site all had to be found and fixed
-by hand — which is why the assistant was told to stop and ask which type to use. Now it can pick
-the obvious one, say what it picked, and you can overrule it in one command.
+This exists so that choosing the wrong type is cheap. Without it, the relative links that make
+the wiki work in both Obsidian and the built site would all have to be found and fixed by hand, and
+the assistant would have to stop and ask which type to use. With it, the assistant picks the obvious
+one, says what it picked, and you can overrule it in one command.
 
 Usage:
     python3 scripts/move_page.py <page> [--type <type>] [--slug <new-slug>]

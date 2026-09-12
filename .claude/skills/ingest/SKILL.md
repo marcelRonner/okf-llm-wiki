@@ -122,7 +122,7 @@ a date beats an invented paragraph.
 say in the source page what you left out, so a future you knows to reopen the original.
 
 **When you are unsure whether something is a project, a system, or a topic**, use the ladder and
-move on. Moving pages later really is cheap now — `make move` re-types the page and rewrites
-every inbound link — so the cost of guessing wrong is one command, while the cost of asking is
-the owner's attention. What is still not cheap is a wiki where the same kind of thing lives in
+move on. Moving pages later is cheap — `make move` re-types the page and rewrites every inbound
+link — so the cost of guessing wrong is one command, while the cost of asking is the owner's
+attention. What is not cheap is a wiki where the same kind of thing lives in
 three folders, so apply the ladder consistently rather than case by case.

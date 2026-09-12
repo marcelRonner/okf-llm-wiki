@@ -3,10 +3,10 @@ title: Checks and finding things
 type: topic
 description: What the wiki checks automatically, why errors and warnings are separated, and the three ways to find a page.
 created: 2026-08-02
-updated: 2026-08-02
+updated: 2026-09-12
 generated:
   by: wiki-keeper/1.0
-  at: 2026-08-02T00:00:00Z
+  at: 2026-09-12T00:00:00Z
 tags: [meta]
 ---
 
@@ -28,9 +28,8 @@ not exist, a file in `content/references/` never written up, dates that contradi
 stub has sat untouched for months, a page has grown past the length where it wants splitting, a
 tag looks like a typo of an established one, material is waiting in `inbox/`.
 
-Only errors fail. That split was added on 2026-08-02, when it became clear the old
-everything-is-an-error rule meant creating a page left the repository broken until you finished
-it — the tooling was punishing the one thing that most needed to be cheap. `make lint STRICT=1`
+Only errors fail. If everything were an error, creating a page would leave the repository broken
+until you finished it — the tooling would punish the one thing that most needs to be cheap. `make lint STRICT=1`
 fails on warnings too, for anyone who wants the higher bar.
 
 Warnings are not a queue to be emptied. An unlinked page or an ageing stub is usually a real
@@ -51,9 +50,10 @@ The index links every page by construction, which is why it does not count as be
 page findable only through a complete catalogue is not really findable — being linked from a page
 someone would actually read is what matters, so that is what the orphan check counts.
 
-That distinction was learned the hard way. The first version of the check started its search from
-the index, and since the index links everything, it passed on every page — including ones nothing
-pointed at. Three files promised the check was being made while it could not fire at all.
+That distinction is easy to get wrong. A check that starts its search from the index passes on
+every page, including ones nothing points at, because the index links everything — and a check
+that can never fire looks exactly like a clean wiki. So the orphan check starts from the log, and
+never walks through a catalogue.
 
 ## Related
 

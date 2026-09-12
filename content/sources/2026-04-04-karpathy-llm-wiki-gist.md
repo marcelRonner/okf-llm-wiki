@@ -56,15 +56,15 @@ can fit it to a setup.
 ## What this changed
 
 - Created [LLM Wiki](../topics/llm-wiki.md) — the pattern, and where this wiki departs from it
-- Updated [How this wiki works](../topics/how-this-wiki-works.md) — its three layers and its
-  operations come from here, which was recorded nowhere until now
+- Updated [How this wiki works](../topics/how-this-wiki-works.md) — it cites this as the origin of
+  its three layers and its operations
 
 ## Unresolved
 
-- The gist lists entity pages as part of the wiki layer. This wiki deleted its `person` and `org`
-  types on 2026-09-11, so that half of the pattern is deliberately unimplemented.
-- The gist's `index.md` is this wiki's `_index.md`, renamed for Hugo. Harmless here, but it is the
-  one place the layout stops matching the pattern it came from.
+- The gist lists entity pages as part of the wiki layer. This wiki has no person or organisation
+  page type, so that half of the pattern is deliberately unimplemented.
+- The gist's `index.md` is this wiki's `_index.md`, the name Hugo requires. Harmless here, but it is
+  the one place the layout stops matching the pattern it came from.
 
 ## Related
 

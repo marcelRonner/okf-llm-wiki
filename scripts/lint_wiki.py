@@ -269,8 +269,8 @@ def check_connected(all_pages: list[Page]) -> None:
 
     The generated catalogues are neither a starting point nor a stepping stone. index.md links
     to every page by construction, so any walk that is allowed to pass *through* it reaches
-    everything and the check silently passes on a wiki full of unreachable pages — which is
-    exactly what the first version of this did. Excluding them from the page list is not enough;
+    everything and the check silently passes on a wiki full of unreachable pages, which looks
+    exactly like a clean wiki. Excluding them from the page list is not enough;
     they have to be excluded from the traversal. Generated backlink blocks are skipped for the
     same reason (see Page.links).
     """
