@@ -13,15 +13,14 @@ share a subject. 4 tags in use, last built 2026-09-12.
 
 See [Index](_index.md) for every page grouped by type instead.
 
-## meta (10)
+## meta (9)
 
 - [Agent instruction formats](topics/agent-instruction-formats.md) — Topic
 - [Checks and finding things](topics/checks-and-finding-things.md) — Topic
 - [How this wiki works](topics/how-this-wiki-works.md) — Topic
 - [Karpathy's LLM Wiki gist](sources/2026-04-04-karpathy-llm-wiki-gist.md) — Source
 - [LLM Wiki](topics/llm-wiki.md) — Topic
-- [OKF v0.2 conformance assessment, 2026-09-12](sources/2026-09-12-okf-v0-2-conformance-assessment.md) — Source
-- [OKF v0.2 conformance checklist](sources/2026-09-11-okf-v0-2-conformance-checklist.md) — Source
+- [OKF v0.2 conformance assessment](sources/2026-09-12-okf-v0-2-conformance-assessment.md) — Source
 - [Open Knowledge Format](topics/open-knowledge-format.md) — Topic
 - [Open Knowledge Format specification](sources/2026-06-12-open-knowledge-format.md) — Source
 - [Research note — agent instruction formats](sources/2026-09-11-agent-instruction-formats.md) — Source
@@ -33,10 +32,9 @@ See [Index](_index.md) for every page grouped by type instead.
 - [Open Knowledge Format](topics/open-knowledge-format.md) — Topic
 - [Open Knowledge Format specification](sources/2026-06-12-open-knowledge-format.md) — Source
 
-## standards (4)
+## standards (3)
 
-- [OKF v0.2 conformance assessment, 2026-09-12](sources/2026-09-12-okf-v0-2-conformance-assessment.md) — Source
-- [OKF v0.2 conformance checklist](sources/2026-09-11-okf-v0-2-conformance-checklist.md) — Source
+- [OKF v0.2 conformance assessment](sources/2026-09-12-okf-v0-2-conformance-assessment.md) — Source
 - [Open Knowledge Format](topics/open-knowledge-format.md) — Topic
 - [Open Knowledge Format specification](sources/2026-06-12-open-knowledge-format.md) — Source
 

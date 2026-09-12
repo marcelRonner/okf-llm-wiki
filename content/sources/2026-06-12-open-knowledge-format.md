@@ -68,6 +68,6 @@ timestamp, yielding trust tiers), lifecycle keys (`status`, `stale_after`), cred
 
 ## Linked from
 
-- [OKF v0.2 conformance checklist](2026-09-11-okf-v0-2-conformance-checklist.md)
+- [OKF v0.2 conformance assessment](2026-09-12-okf-v0-2-conformance-assessment.md)
 - [Open Knowledge Format](../topics/open-knowledge-format.md)
 <!-- backlinks:end -->

@@ -65,9 +65,9 @@ These folders have different jobs:
 | `content/sources/` | One readable wiki page *about* a raw item: its origin, what it says, what it changed, and what remains unresolved. | Normally written once; later understanding belongs on derived pages. |
 | `content/topics/`, `projects/`, `systems/`, `decisions/` | Durable knowledge derived from source pages. | Yes, with provenance in `sources:` frontmatter. |
 
-For example, [content/references/2026-09-11-okf-v0-2-conformance-checklist.md](content/references/2026-09-11-okf-v0-2-conformance-checklist.md)
-is the immutable assessment as received. Its companion,
-[content/sources/2026-09-11-okf-v0-2-conformance-checklist.md](content/sources/2026-09-11-okf-v0-2-conformance-checklist.md),
+For example, [content/references/2026-09-11-agent-instruction-formats.md](content/references/2026-09-11-agent-instruction-formats.md)
+is a research note as it was filed. Its companion,
+[content/sources/2026-09-11-agent-instruction-formats.md](content/sources/2026-09-11-agent-instruction-formats.md),
 is the provenance-aware summary that links it into the wiki. A topic page can then cite that source
 page without repeating the original’s contents.
 

@@ -10,7 +10,6 @@ generated:
 tags: [meta, llm-wiki, standards]
 sources:
   - resource: sources/2026-06-12-open-knowledge-format.md
-  - resource: sources/2026-09-11-okf-v0-2-conformance-checklist.md
   - resource: sources/2026-09-12-okf-v0-2-conformance-assessment.md
 ---
 
@@ -35,12 +34,10 @@ low and interoperability the point.
 
 ## Applying the format here
 
-This wiki is conformant as of 2026-09-12. The current assessment is the
-[2026-09-12 conformance assessment](../sources/2026-09-12-okf-v0-2-conformance-assessment.md), which
-works through every numbered check in the register and records the evidence for each; the earlier
-[2026-09-11 conformance checklist](../sources/2026-09-11-okf-v0-2-conformance-checklist.md) is kept
-for the record. Page status and findings live there, not here, so this page does not go stale with
-each reassessment.
+This wiki is conformant as of 2026-09-12. The
+[conformance assessment](../sources/2026-09-12-okf-v0-2-conformance-assessment.md) works through
+every numbered check in the register and records the evidence for each. Findings live there, not
+here, so this page does not go stale with each reassessment; a reassessment replaces that page.
 
 One recommendation is deliberately not followed: links are relative rather than bundle-absolute,
 which keeps the files working in Obsidian. Directory listings are Hugo's `_index.md` rather than
@@ -57,7 +54,6 @@ OKF's reserved `index.md`; since the spec makes `index.md` optional, that costs 
 
 - [Karpathy's LLM Wiki gist](../sources/2026-04-04-karpathy-llm-wiki-gist.md)
 - [LLM Wiki](llm-wiki.md)
-- [OKF v0.2 conformance assessment, 2026-09-12](../sources/2026-09-12-okf-v0-2-conformance-assessment.md)
-- [OKF v0.2 conformance checklist](../sources/2026-09-11-okf-v0-2-conformance-checklist.md)
+- [OKF v0.2 conformance assessment](../sources/2026-09-12-okf-v0-2-conformance-assessment.md)
 - [Open Knowledge Format specification](../sources/2026-06-12-open-knowledge-format.md)
 <!-- backlinks:end -->
