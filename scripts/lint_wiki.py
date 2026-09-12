@@ -44,7 +44,7 @@ from collections import Counter
 from difflib import get_close_matches
 from datetime import date, datetime
 
-from wikilib import (FENCE_RE, INDEX, LIMITS, LOG, REFERENCES, REQUIRED_KEYS, ROOT, TAGS, TEMPLATES,
+from wikilib import (FENCE_RE, OKF_DATETIME_RE, INDEX, LIMITS, LOG, REFERENCES, REQUIRED_KEYS, ROOT, TAGS, TEMPLATES,
                      TYPE_INFO, TYPES, WIKI, Page, as_date, blank_out, inbound_links, inbox_items,
                      pages)
 
@@ -53,7 +53,6 @@ OKF_RESERVED = ("index.md", "log.md")
 
 # OKF v0.2 enumerates these. `draft` is this wiki's old `stub`, `deprecated` its `superseded`.
 OKF_STATUS = ("draft", "stable", "deprecated")
-OKF_DATETIME_RE = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$")
 OKF_ACTOR_RE = re.compile(r"(?:human|process):[^\s:]+$|[^\s/]+/[^\s/]+$")
 
 errors: list[str] = []
@@ -157,8 +156,8 @@ def check_okf_families(all_pages: list[Page]) -> None:
             timestamp = normalise_okf_datetime(stale_after)
             if not timestamp:
                 error(page.path, 1, "E7", "stale_after must be an ISO 8601 datetime with an explicit UTC offset")
-            elif datetime.fromisoformat(timestamp.replace("Z", "+00:00")).date() <= today:
-                warn(page.path, 1, "W9", f"stale_after passed on {timestamp} — re-read it, then move the date or fix the page")
+            elif page.is_stale():
+                warn(page.path, 1, "W9", f"stale_after passed at {timestamp} — re-read it, then move the date or fix the page")
 
         verified = page.get("verified")
         updated = as_date(page.get("updated"))

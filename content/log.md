@@ -25,6 +25,37 @@ reserved `log.md` (§9). The detail of an entry goes underneath it, indented:
 
 ## 2026-09-12
 
+- **Correction:** Closed the open points from the 2026-09-12 conformance assessment, and two defects
+  found while doing it.
+  - **Input:** the owner asked for every open point to be fixed, with a proposal for each
+  - **Updated:** [Agent instruction formats](topics/agent-instruction-formats.md) — `stale_after`
+    set; `AGENTS.md`, `README.md`, `Makefile`, `scripts/wikilib.py`, `scripts/lint_wiki.py`,
+    `scripts/test_okf_consumer.py`; new `scripts/verify_page.py` and `scripts/test_verify_page.py`
+  - **Flagged:** two defects, both fixed. `AGENTS.md` showed a `verified:` example with `by: owner`
+    and a bare date, which `make lint` rejects twice over — anyone following the instructions
+    would have failed E7. And W9 compared `stale_after` by calendar date, so a page was reported
+    stale up to a day early; OKF defines staleness as an instant, `now >= stale_after`.
+  - **Notes:** What each open point became:
+
+    `OKF-CNF-04` — an acceptance test now reads a bundle containing no `index.md` or `_index.md`
+    and asserts every concept loads. The missing-index clause was true before; now it is proven.
+
+    `OKF-LIF-02` — `stale_after: 2027-03-12T00:00:00Z` on the agent-instruction-formats topic. Six
+    months, because it records how two vendors' tools behave, and both ship changes monthly. It
+    goes on the topic page rather than the source page: the source records what was true on
+    2026-09-11 and cannot go stale, whereas the topic is what a reader relies on today. Staleness
+    is now `Page.is_stale()`, tested at the exact instant and one second before.
+
+    `OKF-TRU-02` and `-05` — not written, and not writable by the assistant. Instead `make verify
+    PAGE=…` gives the owner one command that appends a correct `human:owner` event with a UTC
+    timestamp, keeps earlier confirmations, and leaves `updated:` alone. It refuses originals in
+    `content/references/`, which are evidence rather than claims.
+
+    `status: superseded` in `AGENTS.md` became `deprecated`, the value `make lint` accepts.
+
+    The 2026-09-12 assessment itself is not re-filed, and still records `OKF-CNF-04` as partial and
+    `OKF-LIF-02` as not adopted. Both are fixed after it, and the next reassessment will say so.
+
 - **Ingest:** the 2026-09-12 OKF v0.2 conformance assessment
   - **Input:** the owner asked for the reassessment to be added to the wiki, after acting on its
     findings

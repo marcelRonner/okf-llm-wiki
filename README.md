@@ -124,6 +124,8 @@ go.mod  package.json  pinned versions of the theme and its assets
 | `make new TYPE=project TITLE="Acme Migration" [FROM=content/topics/x.md]` | New page from its template, linked from `FROM` |
 | `make move PAGE=content/topics/x.md TYPE=project` | Re-type or rename a page, rewriting every link to it |
 | `make new-type TYPE=meeting` | Scaffold a type you have declared in `schema.yml` |
+| `make test` | Run the OKF reader acceptance tests and the scripts' own tests |
+| `make verify PAGE=content/topics/x.md [WHO=owner]` | Record that **you** read a page and found it true. Owner only — the assistant never runs it |
 
 ### Errors versus warnings
 

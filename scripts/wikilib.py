@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import re
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 try:
@@ -53,6 +53,9 @@ REQUIRED_KEYS = ("title", "type", "description", "created", "updated")
 FRONTMATTER_RE = re.compile(r"\A---\n(.*?)\n---\n?(.*)\Z", re.DOTALL)
 LINK_RE = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
+
+# OKF v0.2 §5: every timestamp is an ISO 8601 datetime with an explicit UTC offset.
+OKF_DATETIME_RE = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$")
 
 # Blocks written by the scripts. Their contents are regenerated wholesale, so they are stripped
 # before links are counted — otherwise generated backlinks would make every page look connected
@@ -145,10 +148,19 @@ class Page:
         A value that is neither a mapping nor a list comes back unchanged rather than being
         wrapped, so a validator can report the malformed shape instead of this function hiding it.
         """
-        verified = self.get("verified")
-        if verified is None:
-            return []
-        return [verified] if isinstance(verified, dict) else verified
+        return verified_events(self.meta)
+
+    def is_stale(self, now: datetime | None = None) -> bool:
+        """Whether `stale_after` has arrived — OKF v0.2 §5.5: stale once `now >= stale_after`.
+
+        An instant compared as an instant. Comparing dates instead flags a page up to a day early,
+        which is the bug this replaced. Absent or malformed means not stale: a malformed value is
+        the validator's to report, not a reason to call the page out of date.
+        """
+        instant = okf_datetime(self.get("stale_after"))
+        if instant is None:
+            return False
+        return (now or datetime.now(timezone.utc)) >= instant
 
     def is_generated(self) -> bool:
         return self.get("type") in ("index", "log", "tags")
@@ -192,6 +204,29 @@ def inbound_links(all_pages: list[Page]) -> dict[Path, list[Page]]:
             if resolved.suffix == ".md" and resolved in incoming and resolved != page.path.resolve():
                 incoming[resolved].append(page)
     return incoming
+
+
+def verified_events(meta: dict):
+    """`verified` from a parsed frontmatter mapping, as a list — see Page.verified_events()."""
+    verified = meta.get("verified")
+    if verified is None:
+        return []
+    return [verified] if isinstance(verified, dict) else verified
+
+
+def okf_datetime(value) -> datetime | None:
+    """An OKF timestamp as a timezone-aware datetime, or None if the value is not one.
+
+    YAML turns an unquoted timestamp into a datetime before this sees it, and leaves a quoted one
+    as a string, so both arrive here. A datetime with no offset is rejected either way: without
+    one, "now >= stale_after" means something different on every machine that evaluates it.
+    """
+    if isinstance(value, datetime):
+        return value if value.tzinfo else None
+    text = str(value or "")
+    if not OKF_DATETIME_RE.fullmatch(text):
+        return None
+    return datetime.fromisoformat(text.replace("Z", "+00:00"))
 
 
 def as_date(value):

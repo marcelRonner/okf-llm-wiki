@@ -5,8 +5,11 @@ from __future__ import annotations
 
 import tempfile
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from unittest import mock
 
+import wikilib
 from wikilib import Page
 
 
@@ -84,6 +87,42 @@ type: Reference
 # Never confirmed by anyone
 """)
         self.assertEqual(page.verified_events(), [])
+
+    def test_a_bundle_with_no_index_is_read_in_full(self) -> None:
+        """OKF v0.2 §11: a consumer MUST NOT reject a bundle for missing `index.md` files."""
+        directory = tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        bundle = Path(directory.name)
+        (bundle / "topics").mkdir()
+        (bundle / "topics" / "one.md").write_text("---\ntype: Reference\n---\n\n# One\n", encoding="utf-8")
+        (bundle / "two.md").write_text("---\ntype: Reference\n---\n\n# Two\n", encoding="utf-8")
+        with mock.patch.multiple(wikilib, WIKI=bundle, LOG=bundle / "log.md", TAGS=bundle / "tags.md",
+                                 REFERENCES=bundle / "references"):
+            found = wikilib.pages(include_special=True)
+        self.assertFalse(list(bundle.rglob("index.md")) + list(bundle.rglob("_index.md")))
+        self.assertEqual(sorted(p.path.name for p in found), ["one.md", "two.md"])
+        self.assertTrue(all(p.error is None for p in found))
+
+    def test_stale_exactly_at_the_instant_and_not_a_second_before(self) -> None:
+        """OKF v0.2 §5.5: a concept is stale when `now >= stale_after` — an instant, not a day."""
+        page = self.page("""---
+type: Reference
+stale_after: 2027-03-11T12:00:00Z
+---
+""")
+        instant = datetime(2027, 3, 11, 12, 0, tzinfo=timezone.utc)
+        self.assertFalse(page.is_stale(instant - timedelta(seconds=1)))
+        self.assertTrue(page.is_stale(instant))
+        self.assertFalse(page.is_stale(datetime(2027, 3, 11, 0, 0, tzinfo=timezone.utc)),
+                         "the same calendar day, twelve hours early, is not yet stale")
+
+    def test_stale_after_without_an_offset_is_never_stale(self) -> None:
+        page = self.page("""---
+type: Reference
+stale_after: 2020-01-01T00:00:00
+---
+""")
+        self.assertFalse(page.is_stale(), "an offset-less instant is the validator's to reject, not a staleness verdict")
 
 
 if __name__ == "__main__":

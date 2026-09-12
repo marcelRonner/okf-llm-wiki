@@ -120,8 +120,11 @@ Optional keys:
   Format defines, and `make lint` rejects anything else. `draft` is what this wiki used to call a
   stub, and the argument for it is unchanged: a draft is a legitimate page, not a failure. Use
   `deprecated` with a link to whatever replaced the page.
-- `stale_after:` — a date after which the page should be re-read. `make lint` warns once it passes.
-  Use it on anything whose truth has a shelf life; vendor behaviour is the obvious case.
+- `stale_after:` — the instant after which the page should be re-read, as an ISO 8601 datetime with
+  an explicit UTC offset: `stale_after: 2027-03-11T00:00:00Z`. A bare date is rejected, because OKF
+  defines staleness as `now >= stale_after` and a date has no instant to compare. `make lint` warns
+  once it arrives. Use it on anything whose truth has a shelf life; vendor behaviour is the obvious
+  case. Setting it is a judgement about how fast the subject moves, so say why in the log.
 - `resource:` — **on source pages.** A URI for the original: its public URL if it has one,
   otherwise `../references/<file>`.
 - `origin: owner` — **on source pages only.** Marks a source page that records what the owner
@@ -132,11 +135,16 @@ Optional keys:
 
 ```yaml
 verified:
-  - by: owner
-    at: 2026-09-11
+  - by: human:owner
+    at: 2026-09-12T14:30:00Z
 ```
 
-**Never write this.** It records that the owner read the page and found it true, and an assistant
+The owner records it with `make verify PAGE=content/topics/x.md`, which appends an entry in exactly
+this shape. `by` must carry the `human:` prefix — it is how an OKF consumer tells a person's
+sign-off from a machine's — and `at` must be a datetime with an offset; `make lint` rejects either
+written any other way.
+
+**Never write this, and never run `make verify`.** It records that the owner read the page and found it true, and an assistant
 asserting that on the owner's behalf would destroy the only signal in the wiki that separates
 "checked" from "merely written". Add an entry when, and only when, the owner says so; append rather
 than replace, so the history of confirmations survives.
@@ -177,7 +185,7 @@ this wiki is worth more than a folder of notes. **Append to it, never rewrite it
   wants to be its own page. `make lint` warns at that point.
 - **Never delete knowledge silently.** If something turns out to be wrong, correct it and note the
   correction in `content/log.md`. If a page is obsolete, mark it in the frontmatter with
-  `status: superseded` and link to what replaced it.
+  `status: deprecated` and link to what replaced it.
 
 ## After any change — mandatory
 
