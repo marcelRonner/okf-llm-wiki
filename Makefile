@@ -5,13 +5,14 @@ S  := scripts
 # dependency rather than a global install, so `npm install` is all the setup there is.
 HUGO := PATH="$(CURDIR)/node_modules/.bin:$$PATH" hugo
 
-.PHONY: help schema index lint serve build inbox new new-type move clean
+.PHONY: help schema index lint test serve build inbox new new-type move clean
 
 ## Show the available commands
 help:
 	@echo "make index    regenerate content/_index.md, content/tags.md and the backlink blocks"
 	@echo "make schema   restamp the generated type tables in .github/ and README.md"
 	@echo "make lint     regenerate, then check the wiki (errors fail, warnings are reported)"
+	@echo "make test     run OKF reader acceptance checks"
 	@echo "make lint STRICT=1   the same, but warnings fail too"
 	@echo "make serve    live-reload site at http://localhost:1313"
 	@echo "make build    check nothing is stale or broken, then build site/"
@@ -36,6 +37,10 @@ index:
 lint: schema index
 	@$(PY) $(S)/lint_wiki.py $(if $(STRICT),--strict,)
 
+## Exercise the reader behaviour that OKF requires consumers to support.
+test:
+	@$(PY) $(S)/test_okf_consumer.py
+
 ## Live-reload the site while writing
 serve: index
 	$(HUGO) server --buildDrafts
@@ -52,6 +57,7 @@ build:
 	@$(PY) $(S)/build_schema.py --check
 	@$(PY) $(S)/build_index.py --check
 	@$(PY) $(S)/lint_wiki.py $(if $(STRICT),--strict,)
+	@$(PY) $(S)/test_okf_consumer.py
 	$(HUGO) --minify $(if $(STRICT),--panicOnWarning,)
 
 ## What is waiting to be ingested

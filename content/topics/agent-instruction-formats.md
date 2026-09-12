@@ -5,8 +5,8 @@ description: The four kinds of agent instruction, and which of them Claude Code 
 created: 2026-09-11
 updated: 2026-09-11
 generated:
-  by: assistant
-  at: 2026-09-11
+  by: wiki-keeper/1.0
+  at: 2026-09-11T00:00:00Z
 tags: [meta, tooling]
 sources:
   - resource: sources/2026-09-11-agent-instruction-formats.md

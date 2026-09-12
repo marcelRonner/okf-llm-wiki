@@ -3,11 +3,11 @@ title: Research note — agent instruction formats
 type: source
 description: What Claude Code and GitHub Copilot each read as instructions, checked against the binary and the vendor docs on 2026-09-11.
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 generated:
-  by: assistant
-  at: 2026-09-11
-resource: ../../raw/2026-09-11-agent-instruction-formats.md
+  by: wiki-keeper/1.0
+  at: 2026-09-12T00:00:00Z
+resource: ../raw/2026-09-11-agent-instruction-formats.md
 tags: [meta, tooling]
 ---
 
@@ -20,7 +20,7 @@ of the two assistants reads as instructions as of 2026-09-11.
 
 | | |
 |---|---|
-| **File** | [`raw/2026-09-11-agent-instruction-formats.md`](../../raw/2026-09-11-agent-instruction-formats.md) |
+| **File** | [`2026-09-11-agent-instruction-formats.md`](../raw/2026-09-11-agent-instruction-formats.md) |
 | **Kind** | research note |
 | **Date** | 2026-09-11 |
 | **Author** | the assistant, from the Claude Code binary and the VS Code documentation |

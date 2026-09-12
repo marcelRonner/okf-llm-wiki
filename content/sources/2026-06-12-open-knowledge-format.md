@@ -3,10 +3,10 @@ title: Open Knowledge Format specification
 type: source
 description: Google Cloud's open specification for knowledge as a directory of Markdown files with YAML frontmatter, and its conformance criteria.
 created: 2026-09-11
-updated: 2026-09-11
+updated: 2026-09-12
 generated:
-  by: assistant
-  at: 2026-09-11
+  by: wiki-keeper/1.0
+  at: 2026-09-12T00:00:00Z
 resource: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
 tags: [meta, llm-wiki, standards]
 ---
@@ -20,7 +20,7 @@ the first vendor-neutral formalisation of the LLM-wiki pattern.
 
 | | |
 |---|---|
-| **File** | [`raw/2026-06-12-open-knowledge-format.md`](../../raw/2026-06-12-open-knowledge-format.md) |
+| **File** | [`2026-06-12-open-knowledge-format.md`](../raw/2026-06-12-open-knowledge-format.md) |
 | **Kind** | summary of a specification |
 | **Date** | 2026-06-12 (v0.1 publication; the v0.2 text read does not date itself) |
 | **Author** | Google Cloud; summarised here on 2026-09-11 |
@@ -59,9 +59,6 @@ timestamp, yielding trust tiers), lifecycle keys (`status`, `stale_after`), cred
 ## Unresolved
 
 - v0.2 does not date itself, so "current" cannot be verified from the document alone.
-- This wiki independently arrived at `type`, `sources` and `status`, all of which v0.2 specifies.
-  Whether to adopt its spellings for the rest — `description` over `summary`, `generated.at` over
-  `updated` — is undecided.
 
 ## Related
 
@@ -71,5 +68,6 @@ timestamp, yielding trust tiers), lifecycle keys (`status`, `stale_after`), cred
 
 ## Linked from
 
+- [OKF v0.2 conformance checklist](2026-09-11-okf-v0-2-conformance-checklist.md)
 - [Open Knowledge Format](../topics/open-knowledge-format.md)
 <!-- backlinks:end -->

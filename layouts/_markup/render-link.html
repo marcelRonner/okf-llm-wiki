@@ -7,11 +7,14 @@
   — without this hook it emits `href="../projects/acme.md"` verbatim, which 404s on the built site
   because the page is published at `../projects/acme/`.
 
-  A destination that does not resolve to a real page is passed through untouched. That is what
-  links into `raw/` are: the originals live outside `content/`, are deliberately unpublished, and
-  are there for the reader of the repository. They were dead on the built site under MkDocs too.
-  Those are silent, since they are correct; an unresolved link that stays inside `content/` warns,
-  because that one is a typo.
+  A destination that does not resolve to a real page is passed through untouched. Links that climb
+  out of `content/` are the deliberate case — the log links `../README.md` and `../AGENTS.md`, which
+  are repository files and never published — so those are silent. An unresolved link that stays
+  inside `content/` warns, because that one is a typo.
+
+  The originals in `content/raw/` used to be the main example of the silent kind, when they lived
+  outside `content/` and every link to them was dead on the site. Since 2026-09-12 they are inside
+  the bundle, published, and resolved by this hook like any other page.
 */ -}}
 
 {{- $dest := .Destination -}}
@@ -46,12 +49,18 @@
       {{- $href = printf "%s%s" .RelPermalink $frag -}}
     {{- else -}}
       {{- /*
-        A path starting `..` has climbed out of the content directory, which is deliberate: source
-        pages link the original in `raw/`, which is deliberately unpublished. Those links are
-        correct and stay silent. Inside the content directory an unresolved link is a typo worth
+        A path starting `..` has climbed out of the content directory, which is deliberate: a link
+        to a repository file such as README.md, which is not published. Those links are correct
+        and stay silent. Inside the content directory an unresolved link is a typo worth
         hearing about, and `make build STRICT=1` turns it into a failure.
       */ -}}
-      {{- if not (strings.HasPrefix $abs "..") -}}
+      {{- /*
+        Nor does a link inside an original in raw/ warn. Those bodies are evidence, kept exactly as
+        they arrived, so a link that went stale when the file was filed cannot be fixed — only
+        reported, every build, for ever. lint_wiki.py exempts them from its link checks for the
+        same reason.
+      */ -}}
+      {{- if not (or (strings.HasPrefix $abs "..") (strings.HasPrefix $.Page.File.Path "raw/")) -}}
         {{- warnf "render-link: %q in %q does not resolve to a page — left as written" $dest $.Page.File.Path -}}
       {{- end -}}
     {{- end -}}

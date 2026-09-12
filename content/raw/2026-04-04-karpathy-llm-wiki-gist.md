@@ -1,3 +1,11 @@
+---
+title: LLM Wiki — summary of Karpathy's gist
+type: reference
+description: Summary of Andrej Karpathy's LLM Wiki gist, written from the original on 2026-09-11.
+created: 2026-04-04
+resource: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
+---
+
 # LLM Wiki — summary of Andrej Karpathy's gist
 
 Source: https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f

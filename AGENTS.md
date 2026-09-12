@@ -13,7 +13,7 @@ worse than useless.
 
 | Layer | Where | Rule |
 |---|---|---|
-| **Raw sources** | `inbox/` → `raw/` | Immutable. Never edited, never summarised in place. If a page and a source disagree, the source wins. |
+| **Raw sources** | `inbox/` → `content/raw/` | Immutable. The body is never edited, never summarised in place. The one change ever made is a frontmatter header on a Markdown original, added once when it is filed. If a page and a source disagree, the source wins. |
 | **The wiki** | `content/` | Everything you write. Short linked pages, one fact in one place. |
 | **The schema** | `schema.yml`, this file, `.claude/rules/` | The page types, and these instructions. Changing them changes how everything is written. |
 
@@ -30,7 +30,7 @@ Nothing enters or leaves the wiki except through these four. Each is a skill in
 `.claude/skills/` — follow it rather than improvising.
 
 `/note` and `/ingest` differ in what they take, not in what they produce. Ingest starts from a
-document and must preserve it in `raw/`. Note starts from the owner's own words, which never had
+document and must preserve it in `content/raw/`. Note starts from the owner's own words, which never had
 a document, and anchors them in the month's owner-notes source page instead. Both end with pages
 that cite where they came from.
 
@@ -46,7 +46,7 @@ from `schema.yml` — if you need to change it, change that file and run `make s
 | `system` | `content/systems/` | A thing that exists and keeps existing — a service, a tool, a process. How it works, how it fails. |
 | `decision` | `content/decisions/` | One decision — what was chosen, what was rejected, why, and whether it still holds. |
 | `topic` | `content/topics/` | A concept that keeps coming up and does not fit the above. |
-| `source` | `content/sources/` | What one piece of raw material said, and what it changed. One per item in raw/, plus the monthly owner-notes pages. |
+| `source` | `content/sources/` | What one piece of raw material said, and what it changed. One per item in content/raw/, plus the monthly owner-notes pages. |
 <!-- schema-types:end -->
 
 Three special pages are not typed:
@@ -98,8 +98,8 @@ description: One sentence. This is what appears in the index — make it worth r
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
 generated:                         # stamped by `make index` — do not write it by hand
-  by: assistant
-  at: YYYY-MM-DD
+  by: wiki-keeper/1.0
+  at: YYYY-MM-DDTHH:MM:SSZ
 tags: [lowercase-kebab, another]
 sources:                            # source pages this page draws on; omit if none
   - resource: sources/some-source.md
@@ -111,6 +111,9 @@ sources:                            # source pages this page draws on; omit if n
 
 `generated:` is stamped by `make index` from `updated:` — never write it by hand.
 
+Its `by` value follows OKF's `<producer>/<version>` actor convention, and its `at` value is an ISO
+8601 UTC datetime derived from the date-only `updated:` value.
+
 Optional keys:
 
 - `status:` — `draft`, `stable` or `deprecated`. These are the three values the Open Knowledge
@@ -120,9 +123,9 @@ Optional keys:
 - `stale_after:` — a date after which the page should be re-read. `make lint` warns once it passes.
   Use it on anything whose truth has a shelf life; vendor behaviour is the obvious case.
 - `resource:` — **on source pages.** A URI for the original: its public URL if it has one,
-  otherwise `../../raw/<file>`.
+  otherwise `../raw/<file>`.
 - `origin: owner` — **on source pages only.** Marks a source page that records what the owner
-  said rather than a document, so `make lint` does not look for a file in `raw/` that was never
+  said rather than a document, so `make lint` does not look for a file in `content/raw/` that was never
   going to exist. Set it on owner-notes pages and nothing else.
 
 ### `verified:` — the owner's key, not yours
@@ -147,7 +150,7 @@ Three origins, and every claim on every page has exactly one:
 
 | Origin | How it is recorded |
 |---|---|
-| A document | It lives in `raw/`, has a source page, and pages citing it list that page in `sources:` |
+| A document | It lives in `content/raw/`, has a source page, and pages citing it list that page in `sources:` |
 | The owner | It goes in `content/sources/YYYY-MM-owner-notes.md` with a date, and pages citing it list that page in `sources:` |
 | Another page | Link to it. Do not restate it. |
 

@@ -1,3 +1,11 @@
+---
+title: Open Knowledge Format — summary of the specification
+type: reference
+description: Summary of the OKF v0.2 specification and its announcement, written from the originals on 2026-09-11.
+created: 2026-06-12
+resource: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md
+---
+
 # Open Knowledge Format — summary of the specification
 
 Source: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md

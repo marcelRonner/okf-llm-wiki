@@ -3,10 +3,10 @@ title: How this wiki works
 type: topic
 description: The three layers, the four operations, and the rules that keep this wiki trustworthy.
 created: 2026-08-01
-updated: 2026-09-11
+updated: 2026-09-12
 generated:
-  by: assistant
-  at: 2026-09-11
+  by: wiki-keeper/1.0
+  at: 2026-09-12T00:00:00Z
 tags: [meta]
 sources:
   - resource: sources/2026-09-11-agent-instruction-formats.md
@@ -24,10 +24,12 @@ The three layers and the operations below are an implementation of the
 
 ## Three layers
 
-**Raw sources** live in `raw/`, exactly as they arrived, and are never edited. If a page and a
-source disagree, the source wins — that is the whole reason to keep them.
+**Raw sources** live in `content/raw/`, exactly as they arrived. Their bodies are never edited; a
+Markdown original gains a frontmatter header once, when filed, so it can sit inside the Open
+Knowledge Format bundle with the pages written from it. If a page and a source disagree, the
+source wins — that is the whole reason to keep them.
 
-**The wiki** is `content/`: everything written *about* those sources, plus everything you know that
+**The wiki** is the rest of `content/`: everything written *about* those sources, plus everything you know that
 never had a document behind it. This is the only layer that grows.
 
 **The schema** is `schema.yml`, `AGENTS.md` and `.claude/rules/`: the page types, the required
@@ -49,7 +51,7 @@ validator turns the assistant into an agent of data loss.
 Nothing enters or leaves the wiki except through these four.
 
 Note and ingest differ in what they take, not what they produce. Ingest starts from a document
-and must preserve it in `raw/`. Note starts from your own words, which never had a document, and
+and must preserve it in `content/raw/`. Note starts from your own words, which never had a document, and
 anchors them in that month's `sources/YYYY-MM-owner-notes.md` instead. Use ingest when losing the
 exact wording would lose something; otherwise note.
 

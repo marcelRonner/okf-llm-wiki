@@ -1,3 +1,10 @@
+---
+title: Research note — agent instruction formats
+type: reference
+description: What Claude Code and GitHub Copilot each read as instructions, researched on 2026-09-11.
+created: 2026-09-11
+---
+
 # Research note: agent instruction formats across Claude Code and GitHub Copilot
 
 Written 2026-09-11 while moving this wiki's instructions out of `.github/`. Findings come from two

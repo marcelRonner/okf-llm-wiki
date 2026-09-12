@@ -48,12 +48,31 @@ the claim has a dated anchor like any other. This is the fast path, and most day
 one you need.
 
 **To add a document** — drop files into `inbox/` (PDFs, notes, exports, anything), then run
-`/ingest`. The assistant reads them, files the original into `raw/`, writes the pages they
+`/ingest`. The assistant reads them, files the original into `content/raw/`, writes the pages they
 affect, and logs the change. It writes straight away for small, uncontentious material and stops
 to propose a plan when the material contradicts something or spans a lot of pages.
 
 The difference between the two: use `/ingest` when losing the exact wording would lose something.
 Otherwise `/note`.
+
+### `content/raw/` versus `content/sources/`
+
+These folders have different jobs:
+
+| Location | Holds | Can it be edited? |
+|---|---|---|
+| `content/raw/` | The original material as received: a PDF, export, copied note, or other evidence. | **Only its frontmatter.** A Markdown original gets a header once, when filed, so an Open Knowledge Format consumer can read it as part of the bundle. The body below the header stays as received. |
+| `content/sources/` | One readable wiki page *about* a raw item: its origin, what it says, what it changed, and what remains unresolved. | Normally written once; later understanding belongs on derived pages. |
+| `content/topics/`, `projects/`, `systems/`, `decisions/` | Durable knowledge derived from source pages. | Yes, with provenance in `sources:` frontmatter. |
+
+For example, [content/raw/2026-09-11-okf-v0-2-conformance-checklist.md](content/raw/2026-09-11-okf-v0-2-conformance-checklist.md)
+is the immutable assessment as received. Its companion,
+[content/sources/2026-09-11-okf-v0-2-conformance-checklist.md](content/sources/2026-09-11-okf-v0-2-conformance-checklist.md),
+is the provenance-aware summary that links it into the wiki. A topic page can then cite that source
+page without repeating the original’s contents.
+
+The one exception is a monthly owner-notes page in `content/sources/`. It has `origin: owner` and
+no matching raw file, because it preserves something the owner said directly rather than a document.
 
 **To ask something** — `/query`. Answers come with links and a confidence level: well supported,
 single source, inferred, or not in the wiki. If the answer took real work, it offers to keep it
@@ -67,7 +86,6 @@ as a page.
 <!-- schema-layout:start GENERATED from schema.yml by `make schema` — do not edit -->
 ```
 inbox/              drop new material here — should be empty when you are done
-raw/                originals, immutable, never edited
 content/            the vault, and Hugo's content directory
 ├── _index.md   GENERATED catalogue — do not edit, run `make index`
 ├── tags.md     GENERATED tag listing — every tag, and what carries it
@@ -76,7 +94,8 @@ content/            the vault, and Hugo's content directory
 ├── systems/    things that keep running and need maintaining
 ├── decisions/  what was chosen, what was rejected, why
 ├── topics/     concepts that fit nowhere else
-└── sources/    one page per item in raw/, plus monthly owner notes
+├── sources/    one page per item in content/raw/, plus monthly owner notes
+└── raw/        the originals — only ever gains a frontmatter header
 templates/          the shape of each page type
 scripts/            index generation and the mechanical checks
 schema.yml          the page types — edit here, run `make schema`
@@ -133,7 +152,7 @@ if you want that.
 | `.claude/rules/pages.md` | How to write any page |
 | `.claude/rules/projects-systems.md` | Projects and systems |
 | `.claude/rules/decisions.md` | Decision records |
-| `.claude/rules/sources.md` | Source pages, their link to `raw/`, and the owner-notes pages |
+| `.claude/rules/sources.md` | Source pages, their link to `content/raw/`, and the owner-notes pages |
 | `.claude/skills/` | `/note`, `/ingest`, `/query`, `/lint` — one directory each |
 | `.github/instructions/` | **Generated** from `.claude/rules/` — Copilot spells the glob `applyTo:` |
 | `.github/prompts/` | **Generated** typed doors, so `/note` can be typed in Copilot too |
@@ -229,7 +248,7 @@ Two of those are worth explaining here, because they are the ones that would sur
   Markdown links (`../projects/acme.md`) so the same files work in Obsidian, on GitHub, and in the
   built site. MkDocs rewrote those to the published URL by itself; Hugo does not, and would ship
   `href="…jane.md"`, which 404s. This hook resolves them. A link that resolves to no page — one
-  into `raw/`, say — is passed through untouched and warns; `make build STRICT=1` makes that fail.
+  into `content/raw/`, say — is passed through untouched and warns; `make build STRICT=1` makes that fail.
 - **The `mounts:` under the Docsy import.** Docsy's sidebar chrome lives in `layouts/docs/`, which
   Hugo only reaches for pages whose `type` is `docs`. Every page here already has a `type` — this
   wiki's page type — so mounting `layouts/docs` at the layout root makes that chrome the site-wide

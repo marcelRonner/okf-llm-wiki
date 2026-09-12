@@ -339,7 +339,7 @@ def check_raw_pairing(all_pages: list[Page]) -> None:
 
     Source pages with `origin: owner` are exempt: they record what the owner said in a `/note`,
     which never had a document behind it. That exemption is the whole reason the field exists —
-    an owner statement is anchored and citable without a fabricated file in raw/.
+    an owner statement is anchored and citable without a fabricated file in content/raw/.
     """
     source_pages = [p for p in all_pages if p.get("type") == "source"]
 
@@ -347,17 +347,17 @@ def check_raw_pairing(all_pages: list[Page]) -> None:
     for page in source_pages:
         if page.get("origin") == "owner":
             continue
-        raw_links = [t for _, t in page.links() if "/raw/" in t or t.startswith("../../raw/")]
+        raw_links = [t for _, t in page.links() if "/raw/" in t or t.startswith("raw/")]
         if not raw_links:
-            error(page.path, 1, "E5", "source page does not link to its file in raw/ (or set `origin: owner` if it never had one)")
+            error(page.path, 1, "E5", "source page does not link to its file in content/raw/ (or set `origin: owner` if it never had one)")
         for target in raw_links:
             referenced.add(page.resolve(target).resolve())
 
     for item in sorted(RAW.iterdir()):
-        if not item.is_file() or item.name == ".gitkeep":
+        if not item.is_file() or item.name in (".gitkeep", "_index.md"):
             continue
         if item.resolve() not in referenced:
-            error(item, 1, "E5", "file in raw/ has no source page — it was filed but never written up")
+            error(item, 1, "E5", "file in content/raw/ has no source page — it was filed but never written up")
 
 
 # --------------------------------------------------------------------------- W5

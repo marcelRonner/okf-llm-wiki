@@ -5,8 +5,8 @@ description: The pattern this wiki implements — an assistant compiles raw sour
 created: 2026-09-11
 updated: 2026-09-11
 generated:
-  by: assistant
-  at: 2026-09-11
+  by: wiki-keeper/1.0
+  at: 2026-09-11T00:00:00Z
 tags: [meta, llm-wiki]
 sources:
   - resource: sources/2026-04-04-karpathy-llm-wiki-gist.md

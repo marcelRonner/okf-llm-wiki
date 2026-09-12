@@ -15,7 +15,7 @@ except ImportError:  # pragma: no cover
 ROOT = Path(__file__).resolve().parent.parent
 WIKI = ROOT / "content"
 INBOX = ROOT / "inbox"
-RAW = ROOT / "raw"
+RAW = WIKI / "raw"   # inside the bundle: an OKF consumer gets the evidence, not just the pages
 TEMPLATES = ROOT / "templates"
 SCHEMA_FILE = ROOT / "schema.yml"
 
@@ -162,10 +162,21 @@ def pages(include_special: bool = False) -> list[Page]:
     they carry no claim, cite no source, and should not appear in the catalogue or collect
     backlinks. The root `_index.md` is the generated catalogue itself, and is covered by the
     same rule.
+
+    `content/raw/` is excluded unconditionally, `include_special` or not. It sits inside the
+    bundle so that an OKF consumer receives the evidence along with the pages, but it is raw
+    material, not wiki pages: it must never be given a required-key check, a word-count warning,
+    a catalogue entry, a `generated:` stamp or a backlink block, because every one of those would
+    write into a file whose body is supposed to be exactly what arrived. OKF's own two
+    requirements — parseable frontmatter and a non-empty `type` — are checked separately, by the
+    conformance walk that reads every file in the tree.
     """
     special = {LOG.resolve(), TAGS.resolve()}
+    raw = RAW.resolve()
     found = []
     for path in sorted(WIKI.rglob("*.md")):
+        if raw in path.resolve().parents:
+            continue
         if not include_special and (path.name == "_index.md" or path.resolve() in special):
             continue
         found.append(Page(path))

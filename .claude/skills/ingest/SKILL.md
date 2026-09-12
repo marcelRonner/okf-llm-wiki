@@ -7,7 +7,7 @@ description: Fold new material from inbox/ (or pasted text) into the wiki, then 
 
 Bring new material into the wiki — a document, an export, a set of minutes, anything with words
 that were not yours. For something the owner simply knows, with no document behind it, use
-`/note` instead: it skips the `raw/` machinery, which exists to preserve wording that would
+`/note` instead: it skips the `content/raw/` machinery, which exists to preserve wording that would
 otherwise be lost.
 
 ## 1. Find the material
@@ -77,11 +77,30 @@ source page, and raise it.
 
 ## 5. File the original
 
-Move each processed file from `inbox/` to `raw/`, renaming it to match its source page slug:
+Move each processed file from `inbox/` to `content/raw/`, renaming it to match its source page slug:
 
 ```
-git mv inbox/notes.pdf raw/2026-08-01-acme-kickoff.pdf
+git mv inbox/notes.pdf content/raw/2026-08-01-acme-kickoff.pdf
 ```
+
+A **Markdown** original needs a frontmatter header before it is filed, because `content/raw/` is
+inside the Open Knowledge Format bundle and OKF requires every `.md` file in it to carry parseable
+frontmatter with a `type` — `make lint` fails on one without. Add this at the very top, and touch
+nothing below it:
+
+```yaml
+---
+title: What the original is
+type: reference
+description: One sentence saying what it is and when it was written or received.
+created: YYYY-MM-DD          # the date of the material, which is also the filename's date
+resource: https://…          # the original's public URL, if it has one; omit otherwise
+---
+```
+
+A header is metadata *about* the file; the body is the evidence. Everything after the closing
+`---` must stay byte-for-byte what arrived. Other formats — PDF, images, exports — need no header,
+since OKF only governs `.md` files.
 
 The inbox should be empty when you finish.
 

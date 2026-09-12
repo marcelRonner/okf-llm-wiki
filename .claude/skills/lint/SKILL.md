@@ -69,7 +69,7 @@ only thing that makes two assessments comparable.
 
 > Assess the bundle the owner names — `content/` unless they say otherwise — against every check in
 > `.claude/skills/lint/okf-v0-2-checks.md`. State the scope and the date. Read the normative
-> specification at the URL the register names; the repository's `raw/` summary of it is not
+> specification at the URL the register names; the repository's `content/raw/` summary of it is not
 > sufficient to settle a check. Produce one table: check ID, status, evidence, remediation. Cover
 > every ID in the register, in register order, and add no rows of your own — if something needs
 > checking that the register has no ID for, say so under the table and propose the ID. Use only the

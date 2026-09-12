@@ -56,8 +56,8 @@ types:
   source:
     folder: sources
     label: Sources
-    holds: What one piece of raw material said, and what it changed. One per item in raw/, plus the monthly owner-notes pages.
-    short: one page per item in raw/, plus monthly owner notes
+    holds: What one piece of raw material said, and what it changed. One per item in content/raw/, plus the monthly owner-notes pages.
+    short: one page per item in content/raw/, plus monthly owner notes
     dated_filenames: true
     rules: sources
 
