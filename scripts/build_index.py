@@ -159,8 +159,8 @@ def apply_generated(all_pages: list[Page], check: bool) -> list[str]:
 
     v0.2 replaced v0.1's flat `timestamp` with this. It duplicates `updated:`, which is why it is
     stamped rather than hand-written — two dates maintained by hand drift, and the wiki has no way
-    to notice. `by: assistant` is honest: these pages are written by one, and the spec's actor
-    convention exists to say so. A page the owner has confirmed says so separately, under
+    to notice. `by: wiki-keeper/1.0` follows the specification's versioned tool-actor convention;
+    the date-only local field is expressed as midnight UTC. A page the owner has confirmed says so separately, under
     `verified:`.
     """
     changed = []
@@ -168,7 +168,7 @@ def apply_generated(all_pages: list[Page], check: bool) -> list[str]:
         updated = page.get("updated")
         if not updated:
             continue
-        block = f"generated:\n  by: assistant\n  at: {updated}\n"
+        block = f"generated:\n  by: wiki-keeper/1.0\n  at: {updated}T00:00:00Z\n"
         if GENERATED_RE.search(page.text):
             new = GENERATED_RE.sub(block, page.text, count=1)
         else:

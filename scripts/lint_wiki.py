@@ -38,19 +38,23 @@ Exit:   0 = clean (or warnings only), 1 = findings that fail
 
 from __future__ import annotations
 
+import re
 import sys
 from collections import Counter
 from difflib import get_close_matches
-from datetime import date
+from datetime import date, datetime
 
-from wikilib import (INBOX, INDEX, LIMITS, LOG, RAW, REQUIRED_KEYS, ROOT, TAGS, TEMPLATES,
-                     TYPE_INFO, TYPES, WIKI, Page, as_date, inbound_links, inbox_items, pages)
+from wikilib import (FENCE_RE, INDEX, LIMITS, LOG, RAW, REQUIRED_KEYS, ROOT, TAGS, TEMPLATES,
+                     TYPE_INFO, TYPES, WIKI, Page, as_date, blank_out, inbound_links, inbox_items,
+                     pages)
 
 # Filenames the Open Knowledge Format reserves, and so exempts from needing a `type`.
 OKF_RESERVED = ("index.md", "log.md")
 
 # OKF v0.2 enumerates these. `draft` is this wiki's old `stub`, `deprecated` its `superseded`.
 OKF_STATUS = ("draft", "stable", "deprecated")
+OKF_DATETIME_RE = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$")
+OKF_ACTOR_RE = re.compile(r"(?:human|process):[^\s:]+$|[^\s/]+/[^\s/]+$")
 
 errors: list[str] = []
 warnings: list[str] = []
@@ -148,11 +152,13 @@ def check_okf_families(all_pages: list[Page]) -> None:
             elif "://" not in resource and not (page.path.parent / resource).exists():
                 warn(page.path, 1, "W8", f"resource: '{resource}' does not exist")
 
-        stale_after = as_date(page.get("stale_after"))
-        if page.get("stale_after") and not stale_after:
-            error(page.path, 1, "E6", f"stale_after: '{page.get('stale_after')}' is not a YYYY-MM-DD date")
-        elif stale_after and stale_after < today:
-            warn(page.path, 1, "W9", f"stale_after passed on {stale_after} — re-read it, then move the date or fix the page")
+        stale_after = page.get("stale_after")
+        if stale_after is not None:
+            timestamp = normalise_okf_datetime(stale_after)
+            if not timestamp:
+                error(page.path, 1, "E7", "stale_after must be an ISO 8601 datetime with an explicit UTC offset")
+            elif datetime.fromisoformat(timestamp.replace("Z", "+00:00")).date() <= today:
+                warn(page.path, 1, "W9", f"stale_after passed on {timestamp} — re-read it, then move the date or fix the page")
 
         verified = page.get("verified")
         updated = as_date(page.get("updated"))
@@ -170,13 +176,10 @@ def check_okf_conformance() -> None:
     furniture. Those are exactly where conformance was broken when it was first measured, so a
     check that skipped them would be worthless.
 
-    Criterion 3, that reserved files follow the spec's structure, is not mechanically checkable
-    beyond their presence and parseability; `log.md` being genuinely chronological is a judgement
-    the `/lint` skill makes, not this script.
+    Criterion 3 checks the reserved root log's required date-grouped, newest-first list structure.
     """
     for path in sorted(WIKI.rglob("*.md")):
         page = Page(path)
-        rel = path.relative_to(WIKI)
         if page.error:
             error(path, 1, "E7", f"OKF criterion 1: {page.error} — every file in the bundle needs parseable frontmatter")
             continue
@@ -184,6 +187,73 @@ def check_okf_conformance() -> None:
             continue
         if not str(page.get("type") or "").strip():
             error(path, 1, "E7", f"OKF criterion 2: no `type:` — every file that is not {' or '.join(OKF_RESERVED)} needs one")
+
+    if LOG.exists():
+        log = Page(LOG)
+        body = blank_out(log.body, FENCE_RE)
+        headings = [(lineno, text) for lineno, text in enumerate(body.splitlines(), 1)
+                    if text.startswith("## ")]
+        dates = []
+        for lineno, text in headings:
+            value = text[3:].strip()
+            parsed = as_date(value)
+            if not parsed or value != parsed.isoformat():
+                error(LOG, lineno, "E7", "OKF criterion 3: log date headings must use exactly YYYY-MM-DD")
+                continue
+            dates.append((lineno, parsed))
+        if not dates:
+            error(LOG, 1, "E7", "OKF criterion 3: log.md needs at least one YYYY-MM-DD date heading")
+        elif any(later > earlier for (_, earlier), (_, later) in zip(dates, dates[1:])):
+            error(LOG, 1, "E7", "OKF criterion 3: log date headings must be newest first")
+        lines = body.splitlines()
+        for index, (lineno, _) in enumerate(dates):
+            end = dates[index + 1][0] - 1 if index + 1 < len(dates) else len(lines)
+            entries = [line for line in lines[lineno:end] if line.strip()]
+            if not entries or not entries[0].startswith("- "):
+                error(LOG, lineno, "E7", "OKF criterion 3: each date group must begin with a flat-list entry")
+            for entry_line, entry in enumerate(lines[lineno:end], lineno + 1):
+                if entry.strip() and not (entry.startswith("- ") or entry.startswith(("  ", "\t"))):
+                    error(LOG, entry_line, "E7", "OKF criterion 3: log date groups may contain only list items or indented list continuations")
+
+
+def check_okf_metadata(all_pages: list[Page]) -> None:
+    """Validate the shape of adopted optional OKF trust and lifecycle metadata."""
+    for page in all_pages:
+        generated = page.get("generated")
+        if generated is not None:
+            if not isinstance(generated, dict):
+                error(page.path, 1, "E7", "generated: must be a mapping with `by` and `at`")
+                continue
+            actor = str(generated.get("by") or "")
+            timestamp = normalise_okf_datetime(generated.get("at"))
+            if not OKF_ACTOR_RE.fullmatch(actor):
+                error(page.path, 1, "E7", "generated.by must use `producer/version`, `human:<id>`, or `process:<id>`")
+            if not timestamp:
+                error(page.path, 1, "E7", "generated.at must be an ISO 8601 datetime with an explicit UTC offset")
+
+        if page.get("verified") is None:
+            continue
+        events = page.verified_events()
+        if not isinstance(events, list):
+            error(page.path, 1, "E7", "verified: must be a mapping or list of mappings")
+            continue
+        for event in events:
+            if not isinstance(event, dict):
+                error(page.path, 1, "E7", "verified: every event must be a mapping with `by` and `at`")
+                continue
+            actor = str(event.get("by") or "")
+            if not OKF_ACTOR_RE.fullmatch(actor):
+                error(page.path, 1, "E7", "verified.by must use `producer/version`, `human:<id>`, or `process:<id>`")
+            if not normalise_okf_datetime(event.get("at")):
+                error(page.path, 1, "E7", "verified.at must be an ISO 8601 datetime with an explicit UTC offset")
+
+
+def normalise_okf_datetime(value) -> str:
+    """Return an OKF datetime string, including a UTC offset, or an empty string."""
+    if isinstance(value, datetime):
+        value = value.isoformat().replace("+00:00", "Z")
+    value = str(value or "")
+    return value if OKF_DATETIME_RE.fullmatch(value) else ""
 
 
 # --------------------------------------------------------------------------- E3
@@ -339,6 +409,7 @@ def main() -> int:
     check_connected(all_pages)
     check_sources_field(all_pages)
     check_okf_conformance()
+    check_okf_metadata(all_pages)
     check_okf_families(all_pages)
     check_raw_pairing(all_pages)
     check_tags(all_pages)

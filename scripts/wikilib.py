@@ -133,6 +133,23 @@ class Page:
         body = blank_out(blank_out(self.body, FENCE_RE), GENERATED_RE)
         return len(re.findall(r"\b[\w'-]+\b", body))
 
+    def verified_events(self):
+        """`verified:` read as a list of events, in whichever shape it was written.
+
+        OKF v0.2 makes this a consumer MUST (§5.2, §11): a single verifier may be written as a
+        bare `{ by, at }` mapping with no list dash, and a consumer has to read it as a
+        one-element list. Reading `self.get("verified")` and iterating it is how that requirement
+        gets broken by accident — a bare mapping iterates as its own keys — so nothing in this
+        repository does. The reader and the linter share this one function.
+
+        A value that is neither a mapping nor a list comes back unchanged rather than being
+        wrapped, so a validator can report the malformed shape instead of this function hiding it.
+        """
+        verified = self.get("verified")
+        if verified is None:
+            return []
+        return [verified] if isinstance(verified, dict) else verified
+
     def is_generated(self) -> bool:
         return self.get("type") in ("index", "log", "tags")
 
