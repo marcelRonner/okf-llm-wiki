@@ -1,4 +1,4 @@
-# Knowledge Wiki
+# OKF LLM Wiki
 
 A personal knowledge wiki that an AI assistant maintains. You decide what goes in and what is
 true; the assistant reads new material, works out which pages it affects, writes them, keeps the
@@ -6,6 +6,18 @@ links and the catalogue correct, and records what happened.
 
 Plain Markdown files. No database, no lock-in — readable in any editor, on any machine, in ten
 years' time.
+
+## Part of a two-step series
+
+Two educational repositories, each a working example you can copy:
+
+| Step | Repository | What it shows |
+|---|---|---|
+| 1 | **okf-llm-wiki** — this repository | The basics: the [LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f) pattern, where an agent keeps a wiki from sources and a person approves it, with every page an [Open Knowledge Format](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) concept |
+| 2 | [okf-productdocumentation](https://github.com/marcelRonner/okf-productdocumentation) | The same ideas applied to software product documentation: a requirements chain from domain model to user stories, change requests and releases, on the example of an ATM system |
+
+Start here: this repository has fewer moving parts, and step 2 assumes you know them — sources and
+provenance, the operations an agent follows, `generated` and `verified`, and the OKF checks.
 
 ## Setup
 
