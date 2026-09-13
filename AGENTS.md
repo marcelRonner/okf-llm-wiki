@@ -24,7 +24,7 @@ worse than useless.
 | **Note** | `/note` | Write down something the owner knows, with no document behind it. The fast path. |
 | **Ingest** | `/ingest` | Read unprocessed material, fold it into the pages it affects, file the original, log it. |
 | **Query** | `/query` | Answer a question from the pages, with links. A durable answer becomes a page. |
-| **Lint** | `/lint` | Re-read the wiki looking for contradictions, staleness, orphans, and gaps. |
+| **Lint** | `/lint` | Re-read the wiki looking for contradictions, staleness, orphans, and gaps. An OKF reassessment also files its report, one per run, never replacing an earlier one. |
 
 Nothing enters or leaves the wiki except through these four. Each is a skill in
 `.claude/skills/` — follow it rather than improvising.

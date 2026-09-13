@@ -65,6 +65,19 @@ What the source raised but did not settle. Questions for the owner go here.
 - If a source turns out to be worthless, still create the page and say so in one line. Otherwise
   you will re-ingest it in six months.
 
+## Conformance assessments
+
+An OKF reassessment by `/lint` files its report in `content/references/` and gets a source page like
+any document, with three additions:
+
+- The `description` states the verdict and the count per status, because that line is what the
+  catalogue and the log show.
+- *What it says* gives the verdict, the counts, what changed since the previous assessment, and the
+  *Needs attention* list. The per-check tables stay in the original; do not copy them here.
+- **Every run gets its own original and its own page, and none replaces another.** Two assessments
+  are compared check by check, which the register's permanent IDs exist for. The Open Knowledge
+  Format topic points at the newest; the older pages stay where they are.
+
 ## Owner notes — the one source without a document
 
 `content/sources/YYYY-MM-owner-notes.md`, one per month, created by `/note`. It records things the

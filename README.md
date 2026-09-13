@@ -81,6 +81,13 @@ as a page.
 **To check its health** — `make lint` for the mechanical checks, `/lint` for the judgement ones
 (contradictions, staleness, gaps). Monthly is about right.
 
+**To check Open Knowledge Format conformance** — ask `/lint` to reassess OKF v0.2. It works through
+the 41 numbered checks in `.claude/skills/lint/okf-v0-2-checks.md` and files the report as an
+original in `content/references/`, with a source page and a log entry. The report leads with the
+verdict and a count per family, then the three mandatory checks, then one table per family, and every
+row shows the check's name next to its ID. Earlier reports are never replaced, so two can be compared
+check by check.
+
 ## Layout
 
 <!-- schema-layout:start GENERATED from schema.yml by `make schema` — do not edit -->
@@ -211,7 +218,7 @@ summary boundary on the way in is precisely where they would stop being verbatim
 you the typed door — *nothing enters or leaves the wiki except through these four* means four
 things you can type, and an agent cannot be typed.
 
-`/lint` is the exception worth revisiting. It is read-only, it reads every page, it preserves
+`/lint` is the exception worth revisiting. It is read-only apart from filing an OKF report, it reads every page, it preserves
 nothing verbatim, and its output genuinely is a summary — the case agents exist for. If the wiki
 grows enough that a full lint crowds out the conversation it was run from, the move is to keep
 `/lint` as the skill and have it delegate the survey to an agent. Not yet needed at this size.

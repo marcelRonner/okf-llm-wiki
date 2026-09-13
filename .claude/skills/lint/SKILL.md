@@ -1,12 +1,13 @@
 ---
 name: lint
-description: Semantic health check of the wiki — contradictions, staleness, orphans, gaps. Read-only.
+description: Semantic health check of the wiki — contradictions, staleness, orphans, gaps. Read-only, except an OKF reassessment, which files its result.
 ---
 
 # Lint
 
 A health check of the whole wiki. **Read-only** — do not edit anything. Produce a report and let
-the owner decide what to act on.
+the owner decide what to act on. The one exception is an OKF conformance reassessment, whose report
+is filed as described at the end of this file.
 
 Start by running `make lint`. That covers the mechanical checks (frontmatter, broken links,
 orphans, index freshness, misfiled pages, unprocessed inbox). Report its result in one line and
@@ -59,29 +60,91 @@ first, and why.
 ## OKF v0.2 conformance reassessment
 
 When the owner asks to assess or re-assess Open Knowledge Format (OKF) v0.2 conformance, work
-through [okf-v0-2-checks.md](okf-v0-2-checks.md) — the register of numbered checks, each linked to
-the clause of the specification it comes from. Read it first. It also fixes the vocabulary: the
-five statuses an assessment may use, and what `REQUIRED` means as against everything else.
+through [okf-v0-2-checks.md](okf-v0-2-checks.md) — the register of numbered checks, each with a
+short name and a link to the clause of the specification it comes from. Read it first. It also fixes
+the vocabulary: the five statuses an assessment may use, and what `REQUIRED` means as against
+everything else.
 
 Do not restate the checks from memory and do not invent a numbering of your own. The register's IDs
 are the join between one assessment and the next, and a re-run that renumbers them destroys the
 only thing that makes two assessments comparable.
 
 > Assess the bundle the owner names — `content/` unless they say otherwise — against every check in
-> `.claude/skills/lint/okf-v0-2-checks.md`. State the scope and the date. Read the normative
-> specification at the URL the register names; the repository's `content/references/` summary of it is not
-> sufficient to settle a check. Produce one table: check ID, status, evidence, remediation. Cover
-> every ID in the register, in register order, and add no rows of your own — if something needs
-> checking that the register has no ID for, say so under the table and propose the ID. Use only the
-> register's five statuses. Do not record `meets` against a consumer requirement without naming the
-> consumer and the acceptance test that proves it; `partial` is the honest status for a behaviour
-> that is implemented but untested. Keep `not adopted` and `n/a` apart. Give a precise remediation
-> for everything that is not `meets`, and none for what is. Then state the §11 result — conformant
-> or not, on the strength of the three REQUIRED checks alone — and run `make test`, `make lint` and
-> `make build` before reporting it.
+> `.claude/skills/lint/okf-v0-2-checks.md`. Read the normative specification at the URL the register
+> names; the repository's `content/references/` summary of it is not sufficient to settle a check.
+> Cover every ID in the register exactly once, and add no rows of your own — if something needs
+> checking that the register has no ID for, say so under *Register notes* and propose the ID. Use
+> only the register's five statuses. Do not record `meets` against a consumer requirement without
+> naming the consumer and the acceptance test that proves it; `partial` is the honest status for a
+> behaviour that is implemented but untested. Keep `not adopted` and `n/a` apart. Give a precise
+> remediation for everything that is not `meets`, and none for what is. State the §11 result —
+> conformant or not, on the strength of the three mandatory checks alone. Run `make test`,
+> `make lint` and `make build` before filing, and record their results under *Scope*.
 
-Write the result to the owner-specified destination. If none is specified, report it in the chat;
-do not create or ingest a wiki page without the owner asking.
+### The report
+
+A reader must learn what was checked without opening the register, and see the verdict before the
+detail. So every row carries the check's **name** next to its ID, and the rows are grouped: the three
+checks that decide conformance first, then one table per family.
+
+```markdown
+---
+title: OKF v0.2 conformance assessment
+type: reference
+description: This wiki assessed against every check in the OKF v0.2 register on YYYY-MM-DD, keyed by check ID.
+created: YYYY-MM-DD
+---
+
+# Open Knowledge Format v0.2 — conformance assessment
+
+## Scope          → two-column table: Bundle, Assessed, Specification, Register, Validation
+## Result         → conformant or not, on the three mandatory checks alone; then a table
+                    Family | meets | partial | not adopted | deviates | n/a — one row per section
+                    below, and a Total row; then every check whose status changed since the
+                    previous assessment, as `ID` name: before → after
+## Needs attention → one bullet per `partial` or `deviates` check: ID, name, remediation in one
+                    line. "Nothing." if there is none
+## Mandatory checks → OKF-CNF-01, OKF-CNF-02, OKF-CNF-03 — the §11 conformance criteria
+## Bundle structure → OKF-BUN-*
+## Concept documents → OKF-CPT-*
+## Provenance     → OKF-SRC-*
+## Trust          → OKF-TRU-*
+## Lifecycle      → OKF-LIF-*
+## Cross-linking and paths → OKF-LNK-*
+## Reserved files → OKF-RSV-*
+## Attested computations → OKF-CMP-*
+## Consumer floor → OKF-CNF-04
+## Versioning     → OKF-VER-*
+## Register notes → only when the run changed the register, or found something it has no ID for
+```
+
+Every check section is one table, rows in register order:
+
+| Check | Name | Status | Evidence | Remediation |
+|---|---|---|---|---|
+| [`OKF-BUN-01`](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md#3-bundle-structure) | Markdown directory tree | meets | … | |
+
+**Check** links the clause the register links; **Name** is copied verbatim from the register;
+**Status** is one of the five words and nothing more, since decoration breaks the diff. Every
+register ID appears exactly once. The register itself sits outside the bundle, so name its path in
+backticks rather than linking it.
+
+### Filing it
+
+Unless the owner asks for the result in the chat only, a reassessment is filed — it is the one thing
+`/lint` writes, and it enters the wiki the way any document does:
+
+1. Write the report to `content/references/YYYY-MM-DD-okf-v0-2-conformance-assessment.md`, dated the
+   day of the run. It is an original from then on, immutable like every other.
+2. **Never edit or replace an earlier assessment.** Compare against the newest one, which is what
+   the *changed since* list under *Result* is for. Earlier originals and their source pages stay.
+3. Ingest it by `.claude/skills/ingest/SKILL.md`: a source page in `content/sources/` whose
+   description states the verdict and the counts, and whose *What it says* gives the verdict and the
+   *Needs attention* list; the [Open Knowledge Format](../../../content/topics/open-knowledge-format.md)
+   topic updated to point at the new assessment as the current one.
+4. Add an `**Assessment:**` entry to `content/log.md` linking the source page, with the verdict and
+   the counts on the same line.
+5. Run `make lint`, and report the verdict, the counts and *Needs attention* to the owner, with a link.
 
 If a check turns out to be wrongly worded, or the specification gains a clause the register misses,
 change the register and say so in the assessment. Adding a check is normal; renumbering is not.
