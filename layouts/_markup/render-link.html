@@ -1,0 +1,70 @@
+{{- /*
+  Resolve relative Markdown links to the target page's URL.
+
+  Every page in this wiki links to other pages with an ordinary relative Markdown link
+  (`../projects/acme.md`), deliberately: the same files then work unchanged in Obsidian, on GitHub,
+  and in the built site. Hugo does not rewrite those links to the published URL — without this hook
+  it emits `href="../projects/acme.md"` verbatim, which 404s on the built site because the page is
+  published at `../projects/acme/`.
+
+  A destination that does not resolve to a real page is passed through untouched. Links that climb
+  out of `content/` are the deliberate case — a link to a repository file such as `README.md`, which
+  is never published — so those are silent. An unresolved link that stays inside `content/` warns,
+  because that one is a typo. The originals in `content/references/` are pages like any other, and
+  links to them resolve.
+*/ -}}
+
+{{- $dest := .Destination -}}
+{{- $isRemote := or (urls.Parse $dest).Scheme (strings.HasPrefix $dest "//") -}}
+
+{{- /* Split off a #fragment so `page.md#section` resolves and keeps its anchor. */ -}}
+{{- $path := $dest -}}
+{{- $frag := "" -}}
+{{- if and (not $isRemote) (strings.Contains $dest "#") -}}
+  {{- $parts := split $dest "#" -}}
+  {{- $path = index $parts 0 -}}
+  {{- $frag = printf "#%s" (delimit (after 1 $parts) "#") -}}
+{{- end -}}
+
+{{- $href := $dest -}}
+
+{{- if and (not $isRemote) (strings.HasSuffix $path ".md") -}}
+  {{- with .Page.File -}}
+    {{- /* Normalise the link against the linking page's directory: path.Join collapses `..`. */ -}}
+    {{- $abs := path.Join (path.Dir .Path) $path -}}
+
+    {{- /* A link to a branch bundle names the file; Hugo knows that page by its directory. */ -}}
+    {{- $lookup := $abs -}}
+    {{- if eq (path.Base $abs) "_index.md" -}}
+      {{- $lookup = path.Dir $abs -}}
+      {{- if eq $lookup "." -}}
+        {{- $lookup = "/" -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- with site.GetPage $lookup -}}
+      {{- $href = printf "%s%s" .RelPermalink $frag -}}
+    {{- else -}}
+      {{- /*
+        A path starting `..` has climbed out of the content directory, which is deliberate: a link
+        to a repository file such as README.md, which is not published. Those links are correct
+        and stay silent. Inside the content directory an unresolved link is a typo worth
+        hearing about, and `make build STRICT=1` turns it into a failure.
+      */ -}}
+      {{- /*
+        Nor does a link inside an original in references/ warn. Those bodies are evidence, kept exactly as
+        they arrived, so a link that went stale when the file was filed cannot be fixed — only
+        reported, every build, for ever. lint_wiki.py exempts them from its link checks for the
+        same reason.
+      */ -}}
+      {{- if not (or (strings.HasPrefix $abs "..") (strings.HasPrefix $.Page.File.Path "references/")) -}}
+        {{- warnf "render-link: %q in %q does not resolve to a page — left as written" $dest $.Page.File.Path -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+<a href="{{ $href }}"
+  {{- with .Title }} title="{{ . }}"{{ end -}}
+  {{- if $isRemote }} rel="noopener"{{ end -}}
+>{{ .Text }}</a>

@@ -5,6 +5,11 @@ __pycache__/
 
 # Obsidian keeps workspace state and caches here; the useful settings are committed
 # explicitly (see README), the rest is per-machine noise.
-wiki/.obsidian/workspace*.json
-wiki/.obsidian/cache
-wiki/.trash/
+content/.obsidian/workspace*.json
+content/.obsidian/cache
+content/.trash/
+node_modules
+
+# Hugo build artefacts. The site is built into site/ (above); these are caches.
+.hugo_build.lock
+resources/_gen/

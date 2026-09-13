@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """Move or re-type a page, rewriting every link that pointed at it.
 
-This exists so that choosing the wrong type is cheap. It used to be expensive — the relative
-links that make the wiki work in both Obsidian and the built site all had to be found and fixed
-by hand — which is why the assistant was told to stop and ask which type to use. Now it can pick
-the obvious one, say what it picked, and you can overrule it in one command.
+This exists so that choosing the wrong type is cheap. Without it, the relative links that make
+the wiki work in both Obsidian and the built site would all have to be found and fixed by hand, and
+the assistant would have to stop and ask which type to use. With it, the assistant picks the obvious
+one, says what it picked, and you can overrule it in one command.
 
 Usage:
     python3 scripts/move_page.py <page> [--type <type>] [--slug <new-slug>]
 
 Examples:
-    python3 scripts/move_page.py wiki/topics/acme-migration.md --type project
-    python3 scripts/move_page.py wiki/people/jane.md --slug jane-doe
+    python3 scripts/move_page.py content/topics/acme-migration.md --type project
+    python3 scripts/move_page.py content/topics/billing.md --slug billing-pipeline
 """
 
 from __future__ import annotations
@@ -50,7 +50,7 @@ def rewrite_links(old: Path, new: Path) -> list[str]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("page", help="path to the page, e.g. wiki/topics/thing.md")
+    parser.add_argument("page", help="path to the page, e.g. content/topics/thing.md")
     parser.add_argument("--type", dest="new_type", choices=sorted(TYPES), default=None)
     parser.add_argument("--slug", default=None)
     args = parser.parse_args()
@@ -110,7 +110,7 @@ def main() -> int:
     if args.new_type:
         print(f"  type is now '{new_type}'")
     print(f"  rewrote links on {len(changed)} page(s)" + (f": {', '.join(changed)}" if changed else ""))
-    print("  run `make index`, and add a line to wiki/log.md saying why it moved")
+    print("  run `make index`, and add a line to content/log.md saying why it moved")
     return 0
 
 

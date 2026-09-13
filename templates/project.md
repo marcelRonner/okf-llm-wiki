@@ -1,7 +1,7 @@
 ---
 title: {{TITLE}}
 type: project
-summary: {{SUMMARY}}
+description: {{DESCRIPTION}}
 created: {{DATE}}
 updated: {{DATE}}
 tags: []
@@ -19,10 +19,6 @@ One sentence: what this is meant to achieve, and for whom.
 ## Goal
 
 What "done" means.
-
-## People
-
-- [Name](../people/{slug}.md) — their role in this
 
 ## Decisions
 

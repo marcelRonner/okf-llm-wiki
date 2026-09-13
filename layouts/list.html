@@ -1,0 +1,33 @@
+{{/*
+  Docsy's list template, with the same single change as `layouts/_td-content.html`: the page's own
+  `# Heading` is not duplicated. See that file for why.
+
+  The guard matters more here than it does there, because this template serves two kinds of page
+  with opposite needs. The generated section pages (`content/<folder>/_index.md`) carry no heading
+  of their own and need the theme to supply one; the catalogue at `content/_index.md` opens with
+  `# Index`, because it has to read as a file too. Testing the rendered body for an `<h1>` covers
+  both without either needing to know about the other.
+
+  Otherwise identical to the theme's `layouts/docs/list.html` — re-check it after `hugo mod get -u`.
+*/ -}}
+{{ define "main" }}
+<div class="td-content">
+	{{ if not (strings.Contains .Content "<h1") }}<h1>{{ .Title }}</h1>{{ end }}
+	{{ with .Params.description }}<div class="lead">{{ . | markdownify }}</div>{{ end }}
+	<header class="article-meta">
+		{{ partial "taxonomy_terms_article_wrapper.html" . -}}
+		{{ if (and (not .Params.hide_readingtime) (.Site.Params.ui.readingtime.enable)) -}}
+			{{ partial "reading-time.html" . -}}
+		{{ end -}}
+	</header>
+	{{ .Render "_td-content-after-header" -}}
+	{{ .Content }}
+	{{ partial "section-index.html" . -}}
+	{{ partial "feedback.html" . -}}
+	{{ if (.Site.Config.Services.Disqus.Shortname) -}}
+		<br />
+		{{- partial "disqus-comment.html" . -}}
+	{{ end -}}
+	{{ partial "page-meta-lastmod.html" . -}}
+</div>
+{{ end -}}

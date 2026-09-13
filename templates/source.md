@@ -1,7 +1,8 @@
 ---
 title: {{TITLE}}
 type: source
-summary: {{SUMMARY}}
+description: {{DESCRIPTION}}
+resource:   # the original: its public URL, or ../references/<file>
 created: {{DATE}}
 updated: {{DATE}}
 tags: []
@@ -16,7 +17,7 @@ One sentence: what it is, where it came from, and its date.
 
 | | |
 |---|---|
-| **File** | [`raw/FILENAME`](../../raw/{FILENAME}) |
+| **File** | [`FILENAME`](../references/{FILENAME}) |
 | **Kind** | meeting notes / document / article / conversation |
 | **Date** | {{DATE}} |
 | **Author** |  |

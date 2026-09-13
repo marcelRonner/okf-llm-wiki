@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import re
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 try:
@@ -13,13 +13,13 @@ except ImportError:  # pragma: no cover
     raise SystemExit("PyYAML is required — run: pip install -r requirements.txt")
 
 ROOT = Path(__file__).resolve().parent.parent
-WIKI = ROOT / "wiki"
+WIKI = ROOT / "content"
 INBOX = ROOT / "inbox"
-RAW = ROOT / "raw"
+REFERENCES = WIKI / "references"   # the originals, inside the bundle, under the name OKF §6.3 uses
 TEMPLATES = ROOT / "templates"
 SCHEMA_FILE = ROOT / "schema.yml"
 
-INDEX = WIKI / "index.md"
+INDEX = WIKI / "_index.md"
 LOG = WIKI / "log.md"
 TAGS = WIKI / "tags.md"
 
@@ -48,11 +48,14 @@ LIMITS: dict = SCHEMA.get("limits", {})
 TYPES = {name: spec["folder"] for name, spec in TYPE_INFO.items()}
 TYPE_LABELS = {name: spec["label"] for name, spec in TYPE_INFO.items()}
 
-REQUIRED_KEYS = ("title", "type", "summary", "created", "updated")
+REQUIRED_KEYS = ("title", "type", "description", "created", "updated")
 
 FRONTMATTER_RE = re.compile(r"\A---\n(.*?)\n---\n?(.*)\Z", re.DOTALL)
 LINK_RE = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
+
+# OKF v0.2 §5: every timestamp is an ISO 8601 datetime with an explicit UTC offset.
+OKF_DATETIME_RE = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:Z|[+-]\d{2}:\d{2})$")
 
 # Blocks written by the scripts. Their contents are regenerated wholesale, so they are stripped
 # before links are counted — otherwise generated backlinks would make every page look connected
@@ -93,7 +96,7 @@ class Page:
 
     @property
     def wiki_rel(self) -> str:
-        """Path relative to the wiki root — how MkDocs and Obsidian refer to it."""
+        """Path relative to the wiki root — how Hugo and Obsidian refer to it."""
         return str(self.path.relative_to(WIKI))
 
     def get(self, key, default=None):
@@ -133,16 +136,60 @@ class Page:
         body = blank_out(blank_out(self.body, FENCE_RE), GENERATED_RE)
         return len(re.findall(r"\b[\w'-]+\b", body))
 
+    def verified_events(self):
+        """`verified:` read as a list of events, in whichever shape it was written.
+
+        OKF v0.2 makes this a consumer MUST (§5.2, §11): a single verifier may be written as a
+        bare `{ by, at }` mapping with no list dash, and a consumer has to read it as a
+        one-element list. Reading `self.get("verified")` and iterating it is how that requirement
+        gets broken by accident — a bare mapping iterates as its own keys — so nothing in this
+        repository does. The reader and the linter share this one function.
+
+        A value that is neither a mapping nor a list comes back unchanged rather than being
+        wrapped, so a validator can report the malformed shape instead of this function hiding it.
+        """
+        return verified_events(self.meta)
+
+    def is_stale(self, now: datetime | None = None) -> bool:
+        """Whether `stale_after` has arrived — OKF v0.2 §5.5: stale once `now >= stale_after`.
+
+        An instant compared as an instant. Comparing dates instead would flag a page up to a day
+        early. Absent or malformed means not stale: a malformed value is
+        the validator's to report, not a reason to call the page out of date.
+        """
+        instant = okf_datetime(self.get("stale_after"))
+        if instant is None:
+            return False
+        return (now or datetime.now(timezone.utc)) >= instant
+
     def is_generated(self) -> bool:
         return self.get("type") in ("index", "log", "tags")
 
 
 def pages(include_special: bool = False) -> list[Page]:
-    """All wiki pages, sorted. The generated catalogues and the log are excluded by default."""
-    special = {INDEX.resolve(), LOG.resolve(), TAGS.resolve()}
+    """All wiki pages, sorted. The generated catalogues and the log are excluded by default.
+
+    So is every `_index.md`. Those are Hugo section pages — the titles and ordering behind the
+    site's sidebar, stamped from schema.yml by `make schema`. They are furniture, not content:
+    they carry no claim, cite no source, and should not appear in the catalogue or collect
+    backlinks. The root `_index.md` is the generated catalogue itself, and is covered by the
+    same rule.
+
+    `content/references/` is excluded unconditionally, `include_special` or not. It sits inside the
+    bundle so that an OKF consumer receives the evidence along with the pages, but it is raw
+    material, not wiki pages: it must never be given a required-key check, a word-count warning,
+    a catalogue entry, a `generated:` stamp or a backlink block, because every one of those would
+    write into a file whose body is supposed to be exactly what arrived. OKF's own two
+    requirements — parseable frontmatter and a non-empty `type` — are checked separately, by the
+    conformance walk that reads every file in the tree.
+    """
+    special = {LOG.resolve(), TAGS.resolve()}
+    references = REFERENCES.resolve()
     found = []
     for path in sorted(WIKI.rglob("*.md")):
-        if not include_special and path.resolve() in special:
+        if references in path.resolve().parents:
+            continue
+        if not include_special and (path.name == "_index.md" or path.resolve() in special):
             continue
         found.append(Page(path))
     return found
@@ -157,6 +204,29 @@ def inbound_links(all_pages: list[Page]) -> dict[Path, list[Page]]:
             if resolved.suffix == ".md" and resolved in incoming and resolved != page.path.resolve():
                 incoming[resolved].append(page)
     return incoming
+
+
+def verified_events(meta: dict):
+    """`verified` from a parsed frontmatter mapping, as a list — see Page.verified_events()."""
+    verified = meta.get("verified")
+    if verified is None:
+        return []
+    return [verified] if isinstance(verified, dict) else verified
+
+
+def okf_datetime(value) -> datetime | None:
+    """An OKF timestamp as a timezone-aware datetime, or None if the value is not one.
+
+    YAML turns an unquoted timestamp into a datetime before this sees it, and leaves a quoted one
+    as a string, so both arrive here. A datetime with no offset is rejected either way: without
+    one, "now >= stale_after" means something different on every machine that evaluates it.
+    """
+    if isinstance(value, datetime):
+        return value if value.tzinfo else None
+    text = str(value or "")
+    if not OKF_DATETIME_RE.fullmatch(text):
+        return None
+    return datetime.fromisoformat(text.replace("Z", "+00:00"))
 
 
 def as_date(value):

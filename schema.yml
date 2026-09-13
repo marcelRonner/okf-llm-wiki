@@ -3,20 +3,20 @@
 # Everything else is derived from this file or checked against it:
 #
 #   scripts/wikilib.py                 loads it (no hardcoded type list anywhere)
-#   .github/copilot-instructions.md    its page-type table and frontmatter example are GENERATED
+#   AGENTS.md                          its page-type table and frontmatter example are GENERATED
 #   README.md                          its layout tree is GENERATED
-#   wiki/<folder>/, templates/<type>.md  scaffolded by `make new-type`
+#   content/<folder>/, templates/<type>.md  scaffolded by `make new-type`
 #
 # Run `make schema` after editing. `make build` fails if the generated blocks are stale, so
 # the schema and the assistant's instructions cannot drift apart.
 #
 # Fields:
-#   folder            where pages of this type live, under wiki/
+#   folder            where pages of this type live, under content/
 #   label             heading used for this type in the generated index
 #   holds             one sentence for the assistant: what belongs here (goes in the LLM table)
 #   short             a few words for the README layout tree
 #   dated_filenames   true if filenames are prefixed YYYY-MM-DD- (things that sort by date)
-#   instructions      the file in .github/instructions/ that governs this type (optional)
+#   rules             the file in .claude/rules/ that governs this type, without .md (optional)
 
 types:
   project:
@@ -25,7 +25,7 @@ types:
     holds: A piece of work with a goal and an end. What it is for, where it stands, who is involved.
     short: work with a goal and an end
     dated_filenames: false
-    instructions: projects-systems.instructions.md
+    rules: projects-systems
 
   system:
     folder: systems
@@ -33,7 +33,7 @@ types:
     holds: A thing that exists and keeps existing — a service, a tool, a process. How it works, how it fails.
     short: things that keep running and need maintaining
     dated_filenames: false
-    instructions: projects-systems.instructions.md
+    rules: projects-systems
 
   decision:
     folder: decisions
@@ -41,23 +41,9 @@ types:
     holds: One decision — what was chosen, what was rejected, why, and whether it still holds.
     short: what was chosen, what was rejected, why
     dated_filenames: true
-    instructions: decisions.instructions.md
+    rules: decisions
 
-  person:
-    folder: people
-    label: People
-    holds: Someone you work with. Role, context, what they own, how to work with them.
-    short: who does what
-    dated_filenames: false
-    instructions: people-orgs.instructions.md
 
-  org:
-    folder: orgs
-    label: Organisations
-    holds: A company, team, or vendor. What they do, your relationship to them.
-    short: companies, teams, vendors
-    dated_filenames: false
-    instructions: people-orgs.instructions.md
 
   topic:
     folder: topics
@@ -65,22 +51,23 @@ types:
     holds: A concept that keeps coming up and does not fit the above.
     short: concepts that fit nowhere else
     dated_filenames: false
-    instructions: pages.instructions.md
+    rules: pages
 
   source:
     folder: sources
     label: Sources
-    holds: What one piece of raw material said, and what it changed. One per item in raw/, plus the monthly owner-notes pages.
-    short: one page per item in raw/, plus monthly owner notes
+    holds: What one piece of raw material said, and what it changed. One per item in content/references/, plus the monthly owner-notes pages.
+    short: one page per item in content/references/, plus monthly owner notes
     dated_filenames: true
-    instructions: sources.instructions.md
+    rules: sources
 
 # --------------------------------------------------------------------------------------------
 # Thresholds the mechanical checks use. Changing a number here changes what `make lint` warns
 # about — no code edit needed.
 
 limits:
-  summary_chars: 200        # summaries longer than this crowd the index
+  description_chars: 200    # descriptions longer than this crowd the index
   page_words: 400           # past this, look for a section that wants to be its own page
   stub_days: 90             # a stub older than this is either worth filling or worth deleting
-  placeholder: "TODO"       # a summary still containing this was never written
+  placeholder: "TODO"       # a description still containing this was never written
+  unverified_days: 365      # past this with no `verified:` entry, lint asks the owner to read it
