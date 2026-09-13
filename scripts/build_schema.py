@@ -185,7 +185,7 @@ def layout_tree() -> str:
     lines.append("AGENTS.md           the schema in prose: layers, operations, provenance, rules")
     lines.append("CLAUDE.md           one line, importing AGENTS.md for Claude Code")
     lines.append(".claude/            rules/ per-folder writing rules, skills/ the four operations")
-    lines.append(".github/            GENERATED — scoped rules in Copilot's dialect, and typed doors")
+    lines.append(".github/            GENERATED rules and typed doors for Copilot; workflows/ builds and deploys")
     lines.append("hugo.yaml           the site build: Docsy as a Hugo module, and the theme's settings")
     lines.append("layouts/            the four templates this site overrides — each says why in a comment")
     lines.append("go.mod  package.json  pinned versions of the theme and its assets")

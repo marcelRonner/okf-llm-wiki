@@ -4,7 +4,10 @@
 # adding a page never requires editing this file — one less thing that can drift out of sync.
 
 title: OKF LLM Wiki
-baseURL: /
+
+# The wiki is served from https://www.wlrm.ch/okf-llm-wiki/. Hugo writes root-relative URLs, so the
+# path has to be right here, not just on the server. `make serve` overrides the host, and keeps the path.
+baseURL: https://www.wlrm.ch/okf-llm-wiki/
 locale: en-gb
 
 # `site/` rather than Hugo's default `public/`, matching .gitignore and `make clean`.

@@ -5,7 +5,7 @@ S  := scripts
 # dependency rather than a global install, so `npm install` is all the setup there is.
 HUGO := PATH="$(CURDIR)/node_modules/.bin:$$PATH" hugo
 
-.PHONY: help schema index lint test serve build inbox new new-type move verify clean
+.PHONY: help schema index lint test serve build stage inbox new new-type move verify clean
 
 ## Show the available commands
 help:
@@ -14,8 +14,9 @@ help:
 	@echo "make lint     regenerate, then check the wiki (errors fail, warnings are reported)"
 	@echo "make test     run the OKF reader acceptance checks and the script tests"
 	@echo "make lint STRICT=1   the same, but warnings fail too"
-	@echo "make serve    live-reload site at http://localhost:1313"
+	@echo "make serve    live-reload site at http://localhost:1313/okf-llm-wiki/"
 	@echo "make build    check nothing is stale or broken, then build site/"
+	@echo "make stage    build, then assemble deploy/ exactly as the server receives it"
 	@echo "make inbox    list unprocessed material waiting to be ingested"
 	@echo ""
 	@echo "make new TYPE=project TITLE=\"Acme Migration\" [DESCRIPTION=\"...\"] [FROM=content/x.md]"
@@ -61,6 +62,13 @@ build:
 	@$(PY) -m unittest discover -s $(S) -p "test_*.py"
 	$(HUGO) --minify $(if $(STRICT),--panicOnWarning,)
 
+## What CI runs before the deploy: the build, then deploy/ holding exactly what the server serves at
+## https://www.wlrm.ch/okf-llm-wiki/. There is no landing page, so the site is the folder's root.
+stage: build
+	@rm -rf deploy && mkdir -p deploy
+	@cp -R site/. deploy/
+	@echo "stage: deploy/ holds the built site"
+
 ## What is waiting to be ingested
 inbox:
 	@$(PY) -c "from pathlib import Path; \
@@ -90,6 +98,6 @@ verify:
 	@test -n "$(PAGE)" || (echo "usage: make verify PAGE=content/topics/x.md [WHO=owner]"; exit 1)
 	@$(PY) $(S)/verify_page.py "$(PAGE)" $(if $(WHO),--who "$(WHO)",)
 
-## Remove the built site
+## Remove the built site and the deploy staging directory
 clean:
-	rm -rf site
+	rm -rf site deploy
