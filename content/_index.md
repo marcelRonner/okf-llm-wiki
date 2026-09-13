@@ -8,7 +8,28 @@ description: Catalogue of every page in this wiki, grouped by type.
 
 # Index
 
-Every page in the wiki. 9 pages, 0 of them stubs, last built 2026-09-12.
+A personal knowledge wiki that an AI assistant maintains. You decide what goes in and what is true;
+the assistant reads new material, works out which pages it affects, writes them, keeps the links and
+this catalogue correct, and records what happened in the [Log](log.md). The pages are plain Markdown
+files — no database, no lock-in, readable in any editor in ten years' time.
+
+There are two ways in. Tell the assistant something you know, and it writes it down on the page it
+belongs to, with the date you said it. Or hand it a document, and it keeps the original, summarises
+it on a source page and folds what it says into the pages it affects. Either way, every statement in
+the wiki traces back to where it came from, and you can ask questions that are answered from the
+pages, with links. A page counts as checked only once you have confirmed it yourself.
+
+The idea is the [LLM Wiki](topics/llm-wiki.md) pattern: knowledge is compiled into linked pages once,
+rather than looked up in raw documents on every question. Every page is written in the
+[Open Knowledge Format](topics/open-knowledge-format.md), so any other agent can read the wiki
+without special tools. [How this wiki works](topics/how-this-wiki-works.md) explains the details.
+
+This wiki is **step 1** of a two-step educational series. Step 2,
+[okf-productdocumentation](https://github.com/marcelRonner/okf-productdocumentation), applies the
+same ideas to the documentation of a software product. To set up a wiki like this one yourself, see
+the [okf-llm-wiki repository](https://github.com/marcelRonner/okf-llm-wiki).
+
+Below is every page in the wiki: 9 pages, 0 of them stubs, last built 2026-09-13.
 
 See [Tags](tags.md) for the same pages grouped by subject, and [Log](log.md) for what changed
 and when.
