@@ -3,7 +3,7 @@
 # There is no `menu:` or nav list on purpose. Docsy builds the sidebar from the folder tree, so
 # adding a page never requires editing this file — one less thing that can drift out of sync.
 
-title: Knowledge Wiki
+title: OKF LLM Wiki
 baseURL: /
 locale: en-gb
 
@@ -71,7 +71,7 @@ markup:
     endLevel: 4
 
 params:
-  description: A personal knowledge wiki, maintained with an AI assistant
+  description: A personal knowledge wiki, maintained with an AI assistant, in the Open Knowledge Format
 
   # Docsy's built-in client-side search.
   offlineSearch: true

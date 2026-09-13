@@ -1,4 +1,4 @@
-module github.com/marcelRonner/wiki
+module github.com/marcelRonner/okf-llm-wiki
 
 go 1.27.1
 
