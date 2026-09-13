@@ -3,10 +3,10 @@ title: Open Knowledge Format
 type: topic
 description: Google Cloud's specification for knowledge as Markdown with YAML frontmatter, its three conformance criteria, and where this wiki stands against them.
 created: 2026-09-11
-updated: 2026-09-12
+updated: 2026-09-13
 generated:
   by: wiki-keeper/1.0
-  at: 2026-09-12T00:00:00Z
+  at: 2026-09-13T00:00:00Z
 tags: [meta, llm-wiki, standards]
 sources:
   - resource: sources/2026-06-12-open-knowledge-format.md
@@ -34,10 +34,11 @@ low and interoperability the point.
 
 ## Applying the format here
 
-This wiki is conformant as of 2026-09-12. The
+This wiki is conformant as of 2026-09-12. The newest
 [conformance assessment](../sources/2026-09-12-okf-v0-2-conformance-assessment.md) works through
 every numbered check in the register and records the evidence for each. Findings live there, not
-here, so this page does not go stale with each reassessment; a reassessment replaces that page.
+here, so this page does not go stale with each reassessment. A reassessment never replaces an earlier
+one: it is filed as a new assessment beside the others, and this paragraph moves on to point at it.
 
 One recommendation is deliberately not followed: links are relative rather than bundle-absolute,
 which keeps the files working in Obsidian. Directory listings are Hugo's `_index.md` rather than

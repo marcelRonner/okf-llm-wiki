@@ -23,6 +23,12 @@ reserved `log.md` (§9). The detail of an entry goes underneath it, indented:
   - **Notes:** anything a future reader would want to know
 ```
 
+## 2026-09-13
+
+- **Update:** [Open Knowledge Format](topics/open-knowledge-format.md) — OKF reassessments are filed
+  one per run and never replace an earlier one; each report puts the mandatory checks first, groups
+  the rest by family, and names every check next to its ID.
+
 ## 2026-09-12
 
 - **Ingest:** [OKF v0.2 conformance assessment](sources/2026-09-12-okf-v0-2-conformance-assessment.md)
