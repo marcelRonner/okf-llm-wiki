@@ -1,0 +1,59 @@
+name: Build and deploy the wiki
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Hugo fetches the Docsy theme as a Hugo module, which needs Go.
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false
+
+      # Docsy's stylesheets compile with Dart Sass, a project-local npm dependency.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      # The wiki checks, the generators and the tests.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.166.0'
+          extended: true
+
+      # Checks that nothing generated is stale, lints, tests, builds site/, and assembles deploy/.
+      - name: Build
+        run: make stage
+
+      # deploy/ holds exactly what the server should: the built wiki, served at
+      # https://www.wlrm.ch/okf-llm-wiki/.
+      - name: Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./deploy/
+          # server-dir: ./public_html/ # Change this to the folder on your server

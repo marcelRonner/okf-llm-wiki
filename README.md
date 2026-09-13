@@ -31,7 +31,7 @@ python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt                  # PyYAML, for the scripts in scripts/
 npm install                                      # Docsy's assets, and Dart Sass for Hugo
 make lint          # should pass on the empty wiki
-make serve         # http://localhost:1313
+make serve         # http://localhost:1313/okf-llm-wiki/
 ```
 
 Nothing is installed globally beyond those three tools: Dart Sass is a project-local npm
@@ -121,7 +121,7 @@ schema.yml          the page types — edit here, run `make schema`
 AGENTS.md           the schema in prose: layers, operations, provenance, rules
 CLAUDE.md           one line, importing AGENTS.md for Claude Code
 .claude/            rules/ per-folder writing rules, skills/ the four operations
-.github/            GENERATED — scoped rules in Copilot's dialect, and typed doors
+.github/            GENERATED rules and typed doors for Copilot; workflows/ builds and deploys
 hugo.yaml           the site build: Docsy as a Hugo module, and the theme's settings
 layouts/            the four templates this site overrides — each says why in a comment
 go.mod  package.json  pinned versions of the theme and its assets
@@ -135,10 +135,11 @@ go.mod  package.json  pinned versions of the theme and its assets
 | `make lint` | Regenerate the catalogue, then check the wiki. **Errors fail, warnings are reported.** |
 | `make index` | Regenerate `content/_index.md`, `content/tags.md` and the backlink blocks |
 | `make schema` | Restamp the type tables in `.github/` and this README from `schema.yml` |
-| `make serve` | Live-reload site at <http://localhost:1313> |
+| `make serve` | Live-reload site at <http://localhost:1313/okf-llm-wiki/> |
 | `make build` | Check nothing is stale or broken, then build the site into `site/` |
 | `make lint STRICT=1` | The same checks, but warnings fail too — for CI, if you want the higher bar |
 | `make build STRICT=1` | The same, and Hugo's own warnings fail too — an unresolved Markdown link, say |
+| `make stage` | `make build`, then assemble `deploy/` exactly as the server receives it |
 | `make inbox` | What is waiting to be ingested |
 | `make new TYPE=project TITLE="Acme Migration" [FROM=content/topics/x.md]` | New page from its template, linked from `FROM` |
 | `make move PAGE=content/topics/x.md TYPE=project` | Re-type or rename a page, rewriting every link to it |
@@ -285,14 +286,22 @@ Two of those are worth explaining here, because they are the ones that would sur
 
 ## Publishing
 
-`make build` produces a static site in `site/`. Nothing is wired up to host it — that is a
-deliberate gap, since where this goes depends on how private the contents are. Options, roughly
-in order of how much thought they need:
+`make build` produces a static site in `site/`.
+[`.github/workflows/deploy-docs.yml`](.github/workflows/deploy-docs.yml) publishes it on every push
+to `main`, and on demand from the Actions tab:
 
-- **Nowhere.** Obsidian locally is enough for most personal wikis.
-- **A private host** over FTP/rsync/S3 from a CI job, the way a small internal site is deployed.
-- **GitHub Pages** — trivial, but the repository and the site are public unless the repo is
-  private and Pages is set to private, which needs a paid plan.
+1. set up Go, Node LTS (with `npm ci`), Python 3.13 (with `requirements.txt`) and Hugo extended 0.166.0;
+2. `make stage` — generated files current, lint, tests, Hugo build, then `deploy/`;
+3. upload `deploy/` with [FTP-Deploy-Action](https://github.com/SamKirkland/FTP-Deploy-Action).
 
-These are your private notes whatever they are about, so decide the hosting question before you
-decide the automation question.
+It needs three repository secrets: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`. `deploy/` holds
+exactly what the server serves, the wiki at <https://www.wlrm.ch/okf-llm-wiki/> — the address
+`baseURL` in `hugo.yaml` names, since Hugo writes root-relative URLs. The action keeps a sync-state
+file on the server and deletes files it uploaded before that are no longer in `deploy/`, so the FTP
+account must point at this wiki's own folder, never one another site shares. Uncomment `server-dir`
+in the workflow if the target folder changes.
+
+This is an educational example, so its wiki is public. For your own notes, decide the hosting
+question before the automation question: Obsidian locally is enough for most personal wikis, and a
+public site publishes whatever the pages say. Without the secrets, the workflow fails at the upload
+step and publishes nothing.
